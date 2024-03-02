@@ -16,14 +16,6 @@ class Translator():
 		event = self.controller.step(action="Crouch")
 		temporary_objects = {}
 		temporary_rules = []
-		# Keys = 'name', 'position', 'rotation', 'visible', 'isInteractable',
-		# 'receptacle', 'toggleable', 'isToggled', 'breakable', 'isBroken',
-		# 'canFillWithLiquid', 'isFilledWithLiquid', 'fillLiquid', 'dirtyable',
-		# 'isDirty', 'canBeUsedUp', 'isUsedUp', 'cookable', 'isCooked', 'temperature',
-		# 'isHeatSource', 'isColdSource', 'sliceable', 'isSliced', 'openable', 'isOpen',
-		# 'openness', 'pickupable', 'isPickedUp', 'moveable', 'mass', 'salientMaterials',
-		# 'receptacleObjectIds', 'distance', 'objectType', 'objectId', 'assetId', 'parentReceptacles',
-		# 'controlledObjects', 'isMoving', 'axisAlignedBoundingBox', 'objectOrientedBoundingBox'])
 		for object in event.metadata["objects"]:
 			name = object["name"].lower()
 			self.objects[name] = object["objectId"]
@@ -120,4 +112,20 @@ class Translator():
 			if rule[0] == "controls":
 				rule[2] = temporary_objects[rule[2]]
 				self.rules.append(rule)
-		print(self.rules)
+
+	def print_rules_to_file(self, included=None, rules_file=None):
+		f = open("../scasp_knowledge_base/generated_scasp.pl", "w")
+		for rule in self.rules:
+			if not included or rule[0] in included:
+				fact = rule.pop(0)
+				f.write(str(fact).lower() + "(")
+				if len(rule) == 1:
+					f.write(str(rule[0]).lower() + ").\n")
+				elif len(rule) == 2:
+					f.write(str(rule[0]).lower() + ", " + str(rule[1]).lower() + ").\n")
+		if rules_file:
+			additional_file = open(rules_file, "r")
+			f.write("\n")
+			f.write(additional_file.read())
+			additional_file.close()
+		f.close()

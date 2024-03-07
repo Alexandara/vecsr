@@ -1,6 +1,30 @@
 import translator
 
 if __name__ == '__main__':
-    program = translator.Translator()
+    """
+    cooked(Food) :- receptacle(Pan), temperature(Pan, hot), type(Pan, pan),
+                in(Food, Pan), materialcontains(Food, 'food').
+
+    materialcontains(Item, Material) :- madeof(Item, L), findinlist(Material, L).
+    findinlist(Material, [Material|_]).
+    findinlist(Material, [_|T]) :- findinlist(Material, T).
+
+    temperature(Item, hot) :- in(Item, Heatsource), heatsource(Heatsource), toggled(Heatsource).
+    """
+    initial_rules = [
+        [["cooked", "Food"],
+            ["receptacle", "Pan"],["temperature", "Pan", "hot"], ["type", "Pan", "pan"],
+            ["in", "Food", "Pan"], ["materialcontains", "Food", "'food'"]],
+
+        [["materialcontains", "Item", "Material"],
+            ["madeof", "Item", "L"], ["findinlist", "Material", "L"]],
+        [["findinlist", "Material", "[Material|_]"]],
+        [["findinlist", "Material", "[_|T]"],
+            ["findinlist", "Material", "T"]],
+
+        [["temperature", "Item", "hot"],
+            ["in", "Item", "Heatsource"], ["heatsource", "Heatsource"], ["toggled", "Heatsource"]]
+    ]
+    program = translator.Translator(initial_rules=initial_rules)
     program.get_metadata()
-    program.print_rules_to_file(included=["type", "broken", "madeof"], rules_file="../scasp_knowledge_base/rules.pl")
+    program.print_rules_to_file()

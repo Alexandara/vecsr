@@ -1,4 +1,5 @@
 import translator
+import subprocess
 
 if __name__ == '__main__':
     """
@@ -28,3 +29,5 @@ if __name__ == '__main__':
     program = translator.Translator(initial_rules=initial_rules)
     program.get_metadata()
     program.print_rules_to_file()
+    program.run_query([["temperature", "X", "Y"]])
+    program.get_counterfactuals([["cooked", "Food"]])

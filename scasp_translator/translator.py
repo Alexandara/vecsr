@@ -1,4 +1,5 @@
 from ai2thor.controller import Controller
+import subprocess
 
 class Translator():
 	def __init__(self, initial_rules=None):
@@ -15,6 +16,10 @@ class Translator():
 		self.objects = {}
 
 	def get_metadata(self):
+		"""
+		This method converts the current state of the AI2-Thor simulation into s(CASP) rules
+		These rules are in a Python list format
+		"""
 		_ = self.controller.step(action="Crouch")
 		event = self.controller.step(action="Crouch")
 		temporary_objects = {}
@@ -24,7 +29,7 @@ class Translator():
 			self.objects[name] = object["objectId"]
 			temporary_objects[object["objectId"]] = name
 			# Rule: type(ObjectIdentifier, ObjectType)
-			self.rules.append([["type", name, object["objectType"]]])
+			self.rules.append([["type", name, object["objectType"].lower()]])
 			# Rule: visible(VisibleObject)
 			if object["visible"]:
 				self.rules.append([["visible", name]])
@@ -51,7 +56,8 @@ class Translator():
 				self.rules.append([["canfillwithliquid", name]])
 			# Rule: filledwith(Object, Liquid)
 			if object["isFilledWithLiquid"]:
-				self.rules.append([["filledwith", name, object["fillLiquid"]]])
+				if object["fillLiquid"]:
+					self.rules.append([["filledwith", name, object["fillLiquid"].lower()]])
 			# Rule: dirtyable(Object)
 			if object["dirtyable"]:
 				self.rules.append([["dirtyable", name]])
@@ -71,7 +77,7 @@ class Translator():
 			if object["isCooked"]:
 				self.rules.append([["cooked", name]])
 			# Rule: temperature(Object, Temperature)
-			self.rules.append([["temperature", name, object["temperature"]]])
+			self.rules.append([["temperature", name, object["temperature"].lower()]])
 			# Rule: heatsource(Object)
 			if object["isHeatSource"]:
 				self.rules.append([["heatsource", name]])
@@ -100,7 +106,12 @@ class Translator():
 			self.rules.append([["hasmass", name, object["mass"]]])
 			# Rule: madeof(Object, Material)
 			if object["salientMaterials"]:
-				self.rules.append([["madeof", name, object["salientMaterials"]]])
+				temp = ["madeof", name]#, object["salientMaterials"].lower()]
+				materials = []
+				for mat in object["salientMaterials"]:
+					materials.append(str(mat).lower())
+				temp.append(materials)
+				self.rules.append([temp])
 			# Rule: in(ObjectInReceptacle, Receptacle)
 			if object["receptacleObjectIds"]:
 				for inside_object in object["receptacleObjectIds"]:
@@ -110,42 +121,152 @@ class Translator():
 				temporary_rules.append(["controls", name, object["controlledObjects"][0]])
 		for rule in temporary_rules:
 			if rule[0] == "in":
-				rule[1] = temporary_objects[rule[1]]
+				rule[1] = temporary_objects[rule[1]].lower()
 				self.rules.append([rule])
 			if rule[0] == "controls":
-				rule[2] = temporary_objects[rule[2]]
+				rule[2] = temporary_objects[rule[2]].lower()
 				self.rules.append([rule])
 
 	def print_rules_to_file(self, file=None):
+		"""
+		This method prints the self.rules to a file.
+		:param file: File to print to, default is generated_scasp.pl
+		"""
 		if file:
 			f = open(file, "w")
 		else:
-			f = open("../scasp_knowledge_base/generated_scasp.pl", "w")
+			f = open("scasp_knowledge_base/generated_scasp.pl", "w")
 		f.write(self.rules_to_string())
 		f.close()
 
 	def rules_to_string(self):
+		"""
+		This converts rules in Python list format to string rules that can be read by a
+		prolog parser.
+		:return: string version of the rules
+		"""
 		final_rules = ""
 		for rule in self.rules:
 			if len(rule) == 1:
 				final_rules += self.build_rule(rule[0]) + ".\n"
 			elif len(rule) > 1:
 				string_rule = ""
-				first_rule = rule.pop(0)
+				first_rule = rule[0]
 				string_rule += self.build_rule(first_rule) + " :- "
 				for r in rule:
-					string_rule += self.build_rule(r) + ", "
+					if r != first_rule:
+						string_rule += self.build_rule(r) + ", "
 				string_rule = string_rule[0:-2] + ".\n"
 				final_rules += string_rule
 		return final_rules
 
+	def run_query(self, query):
+		"""
+		This method runs a passed in query and returns the results from s(CASP)
+		:param query: query to run, in the format of a list
+		:return: results of query
+		"""
+		f = open("scasp_knowledge_base/generated_scasp.pl", "r")
+		lines = f.readlines()
+		if "?" in lines[-1]:
+			lines.pop(-1)
+		f.close()
+		f = open("scasp_knowledge_base/generated_scasp.pl", "w")
+		for line in lines:
+			f.write(line)
+			f.write("\n")
+		f.write("\n?- ")
+		f.write(self.build_rule(query[0], low=False) + ".")
+		f.close()
+		return self.run_generated_scasp()
+
 	@staticmethod
-	def build_rule(rule):
+	def build_rule(list_rule, low=False):
+		"""
+		Takes a single rule as a list and turns it into a s(CASP) format string
+		:param list_rule: rule in list form
+		:param low: whether to lowercase arguments or not
+		:return: stringified rule
+		"""
 		string_rule = ""
+		rule = []
+		if low:
+			for r in list_rule:
+				rule.append(str(r).lower())
+		else:
+			for r in list_rule:
+				rule.append(str(r))
 		fact = rule.pop(0)
-		string_rule += str(fact).lower() + "("
-		if len(rule) == 1:
-			string_rule += str(rule[0]).lower() + ")"
-		elif len(rule) == 2:
-			string_rule += str(rule[0]).lower() + ", " + str(rule[1]).lower() + ")"
+		string_rule += fact + "("
+		for r in rule:
+			string_rule += r + ", "
+		string_rule = string_rule[0:-2] + ")"
 		return string_rule
+
+	@staticmethod
+	def run_generated_scasp():
+		"""
+		Runs the generated_scasp.pl file
+		:return: results of running the file
+		"""
+		output = subprocess.run(["./scasp_knowledge_base/test.sh"], shell=True, capture_output=True, text=True)
+		output = output.stdout
+		if 'BINDINGS' in output:
+			options = []
+			output = output.split('ANSWER:')[1:]
+			for option in output:
+				option = option.replace(" ?", "")
+				opt = option[option.find('BINDINGS') + 10:-2].strip()
+				opt = opt.split('\n')
+				opt = [item.split(' = ') for item in opt]
+				opt = {name: value.strip() for [name, value] in opt}
+				options.append(opt)
+			output = options
+		# If no model found, return an empty dictionary.
+		elif 'no models' in output:
+			output = False
+		else:
+			output = None
+
+		return output
+
+	def get_children(self, query):
+		children = []
+		params = len(query[0])
+		for rule in self.rules:
+			if rule[0][0] == query[0][0] and len(rule[0]) == params:
+				children.append(rule)
+		return children
+
+	def get_counterfactuals(self, query):
+		print(query)
+		result = self.run_query(query)
+		queries = self.get_children(query)
+		# Base case: Query is true
+			# Return None
+		if result:
+			print(1)
+			return None
+		# Base case: Query is false and has no children
+			# Return Query
+		elif len(queries) == 0:
+			print(2)
+			return query
+		elif len(queries[0]) <= 1:
+			print(3)
+			return query
+		# Recursive case: The query fails
+			# for each child, append to answer
+		answer = []
+		print("For loop: ")
+		for related in queries:
+			print(related)
+			related.pop(0)
+			for rule in related:
+				print(rule)
+				queries_to_try = self.get_children(rule) + rule
+				for q in queries_to_try:
+					print(q)
+					ans = self.get_counterfactuals(q)
+					answer.append(ans)
+		return answer

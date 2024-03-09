@@ -14,6 +14,7 @@ class Translator():
 		else:
 			self.rules = []
 		self.objects = {}
+		self.temporary_rules = self.rules
 
 	def get_metadata(self):
 		"""
@@ -174,7 +175,6 @@ class Translator():
 		f = open("scasp_knowledge_base/generated_scasp.pl", "w")
 		for line in lines:
 			f.write(line)
-			f.write("\n")
 		f.write("\n?- ")
 		f.write(self.build_rule(query[0], low=False) + ".")
 		f.close()
@@ -211,7 +211,7 @@ class Translator():
 		"""
 		output = subprocess.run(["./scasp_knowledge_base/test.sh"], shell=True, capture_output=True, text=True)
 		output = output.stdout
-		if 'BINDINGS' in output:
+		if 'BINDINGS' in output and "BINDINGS: ?" not in output:
 			options = []
 			output = output.split('ANSWER:')[1:]
 			for option in output:
@@ -233,40 +233,34 @@ class Translator():
 	def get_children(self, query):
 		children = []
 		params = len(query[0])
-		for rule in self.rules:
-			if rule[0][0] == query[0][0] and len(rule[0]) == params:
+		for rule in self.temporary_rules:
+			if rule[0][0] == query[0][0] and len(rule[0]) == params and len(rule[0]) > 1:
 				children.append(rule)
 		return children
 
 	def get_counterfactuals(self, query):
-		print(query)
 		result = self.run_query(query)
 		queries = self.get_children(query)
 		# Base case: Query is true
 			# Return None
 		if result:
-			print(1)
 			return None
 		# Base case: Query is false and has no children
 			# Return Query
 		elif len(queries) == 0:
-			print(2)
-			return query
-		elif len(queries[0]) <= 1:
-			print(3)
 			return query
 		# Recursive case: The query fails
 			# for each child, append to answer
 		answer = []
-		print("For loop: ")
 		for related in queries:
-			print(related)
 			related.pop(0)
 			for rule in related:
-				print(rule)
-				queries_to_try = self.get_children(rule) + rule
+				queries_to_try = self.get_children([rule]) + [rule]
 				for q in queries_to_try:
-					print(q)
-					ans = self.get_counterfactuals(q)
+					try:
+						self.temporary_rules.remove(q)
+						ans = self.get_counterfactuals(q)
+					except:
+						print(q)
 					answer.append(ans)
 		return answer

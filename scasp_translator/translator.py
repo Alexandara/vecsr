@@ -14,7 +14,7 @@ class Translator():
 		else:
 			self.rules = []
 		self.objects = {}
-		self.temporary_rules = self.rules
+		self.knowledge_graph = {}
 
 	def get_metadata(self):
 		"""
@@ -230,37 +230,23 @@ class Translator():
 
 		return output
 
-	def get_children(self, query):
-		children = []
-		params = len(query[0])
-		for rule in self.temporary_rules:
-			if rule[0][0] == query[0][0] and len(rule[0]) == params and len(rule[0]) > 1:
-				children.append(rule)
-		return children
+	@staticmethod
+	def list_to_key(list):
+		key = ""
+		for s in list:
+			key += s
+		return key
+
+	def generate_knowledge_graph(self):
+		# TODO: Convert lists of rules to tuples (kms)
+		for rule in self.rules:
+			if len(rule) > 1:
+				nodes = set()
+				temprule = rule.copy()
+				key = self.list_to_key(temprule.pop(0))
+				for temp in temprule:
+					print(temp)
+
 
 	def get_counterfactuals(self, query):
-		result = self.run_query(query)
-		queries = self.get_children(query)
-		# Base case: Query is true
-			# Return None
-		if result:
-			return None
-		# Base case: Query is false and has no children
-			# Return Query
-		elif len(queries) == 0:
-			return query
-		# Recursive case: The query fails
-			# for each child, append to answer
-		answer = []
-		for related in queries:
-			related.pop(0)
-			for rule in related:
-				queries_to_try = self.get_children([rule]) + [rule]
-				for q in queries_to_try:
-					try:
-						self.temporary_rules.remove(q)
-						ans = self.get_counterfactuals(q)
-					except:
-						print(q)
-					answer.append(ans)
-		return answer
+		print("empty")

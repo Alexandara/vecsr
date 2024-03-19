@@ -30,4 +30,5 @@ if __name__ == '__main__':
     program.get_metadata()
     program.print_rules_to_file()
     program.run_query([["temperature", "X", "Y"]])
+    program.generate_knowledge_graph()
     # program.get_counterfactuals([["cooked", "Food"]])

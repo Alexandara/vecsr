@@ -3,6 +3,7 @@ materialcontains(Item, Material) :- madeof(Item, L), findinlist(Material, L).
 findinlist(Material, [Material|_]).
 findinlist(Material, [_|T]) :- findinlist(Material, T).
 temperature(Item, hot) :- in(Item, Heatsource), heatsource(Heatsource), toggled(Heatsource).
+temperature(Item, hot) :- in(Item, Heatsource), heatsource(Heatsource), toggled(Control), controls(Control, Heatsource).
 type(apple_3fef4551, apple).
 temperature(apple_3fef4551, roomtemp).
 sliceable(apple_3fef4551).
@@ -438,6 +439,7 @@ hasmass(winebottle_39d61bf0, 1.2000000476837158).
 madeof(winebottle_39d61bf0, ['glass']).
 in(plate_82b647b0, cabinet_b69a8cbf).
 in(cup_4c1ceda2, cabinet_41c7fc3b).
+in(dishsponge_2f93679b, cabinet_4223545f).
 in(winebottle_39d61bf0, cabinet_afbfa706).
 in(pan_21173d15, countertop_2fe78146).
 in(kettle_2aef2274, countertop_2fe78146).
@@ -478,4 +480,4 @@ controls(stoveknob_39559252, stoveburner_d506dac6).
 controls(stoveknob_61f5d5b9, stoveburner_a0b460e5).
 controls(stoveknob_b57953af, stoveburner_3397cbe3).
 
-?- temperature(X, Y).
+?- toggled(stoveknob_39559252).

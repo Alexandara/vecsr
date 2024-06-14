@@ -186,6 +186,9 @@ cython_debug/
 .idea/**/gradle.xml
 .idea/**/libraries
 
+# Mac
+.DS_Store
+
 # VirtualHome Simulation
 /virtualhome/
 /scasp_translator/Output/

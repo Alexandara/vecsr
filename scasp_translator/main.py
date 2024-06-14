@@ -1,38 +1,23 @@
-from time import sleep
-
-import translator
-import subprocess
+import scaspharness
+import simulator
+import logging
 
 if __name__ == '__main__':
-    """
-    cooked(Food) :- receptacle(Pan), temperature(Pan, hot), type(Pan, pan),
-                in(Food, Pan), materialcontains(Food, 'food').
-
-    materialcontains(Item, Material) :- madeof(Item, L), findinlist(Material, L).
-    findinlist(Material, [Material|_]).
-    findinlist(Material, [_|T]) :- findinlist(Material, T).
-
-    temperature(Item, hot) :- in(Item, Heatsource), heatsource(Heatsource), toggled(Heatsource).
-    temperature(Item, hot) :- in(Item, Heatsource), heatsource(Heatsource), toggled(Control), controls(Control, Heatsource).
-    """
-    initial_rules = [
-        [("cooked", "Food"),
-            ("receptacle", "Pan"),("temperature", "Pan", "hot"), ("type", "Pan", "pan"),
-            ("in", "Food", "Pan"), ("materialcontains", "Food", "'food'")],
-
-        [("materialcontains", "Item", "Material"),
-            ("madeof", "Item", "L"), ("findinlist", "Material", "L")],
-        [("findinlist", "Material", "[Material|_]")],
-        [("findinlist", "Material", "[_|T]"),
-            ("findinlist", "Material", "T")],
-
-        [("temperature", "Item", "hot"),
-            ("in", "Item", "Heatsource"), ("heatsource", "Heatsource"), ("toggled", "Heatsource")],
-        [("temperature", "Item", "hot"),
-         ("in", "Item", "Heatsource"), ("heatsource", "Heatsource"), ("toggled", "Control"),
-         ("controls", "Control", "Heatsource")]
-    ]
-    program = translator.Translator(initial_rules=initial_rules)
-    program.get_metadata()
+    logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
+    # Create simulator
+    # simulat = simulator.VirtualHomeSimulator(environment=0) # VirtualHome Simulator
+    simulat = simulator.MockVirtualHomeSimulator() # Mock VirtualHome Simulator
+    # Create Harness
+    program = scaspharness.ScaspHarness(simulat, initial_rules="scasp_knowledge_base/knowledge_base_with_time.pl")
+    # Take Actions
+    program.get_scasp()
     program.print_rules_to_file()
-    program.perform_task(("cooked", "egg_67211636"))
+    # program.take_action(("walk", "remotecontrol1"))
+    # program.get_scasp()
+    # program.print_rules_to_file()
+    # program.take_action(("grab", "remotecontrol1"))
+    # program.get_scasp()
+    # program.print_rules_to_file()
+    # program.take_action(("walk", "clothesbasket3"))
+    # program.get_scasp()
+    # program.print_rules_to_file()

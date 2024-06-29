@@ -162,7 +162,7 @@ class MockVirtualHomeSimulator(Simulator):
 		self.state_graph["nodes"].append({"id":100,
 		                                  "class_name":"livingroom",
 		                                  "states":[],
-		                                  "properties":[],
+		                                  "properties":["CONTAINERS"],
 		                                  "category":"Room"})
 		# Character
 		self.state_graph["nodes"].append({"id": 0,
@@ -191,7 +191,7 @@ class MockVirtualHomeSimulator(Simulator):
 		self.state_graph["nodes"].append({"id": id_number,
 		                                  "class_name": "clothesbasket",
 		                                  "states": [],
-		                                  "properties": ["GRABBABLE"],
+		                                  "properties": ["GRABBABLE", "CONTAINERS"],
 		                                  "category": "Receptacle"})
 		living_room_items.append(VirtualHomeObject("clothesbasket", id_number))
 		id_number += 1
@@ -357,6 +357,37 @@ class MockVirtualHomeSimulator(Simulator):
 					self.state_graph["edges"].append({"from_id":param1.identifier, "to_id":edge["from_id"],
 					                                  "relation_type":"CLOSE"})
 			return True
+		elif action[0].lower() == "put":
+			param1 = VirtualHomeObject(action[1])
+			if "CONTAINERS" in self.check_for_node(identifier=param1.identifier)[0]["properties"]:
+				place = "INSIDE"
+			else:
+				place = "ON"
+			# Check preconditions
+			if not (self.check_for_edge(from_id=0, to_id=param1.identifier, relation_type="CLOSE")
+			        or self.check_for_edge(from_id=param1.identifier, to_id=0, relation_type="CLOSE")):
+				logging.warning("Character 0 is not close to %s.", param1.to_string())
+				return False
+			left_hand = self.check_for_edge(from_id=0, relation_type="HOLDS_LH")
+			right_hand = self.check_for_edge(from_id=0, relation_type="HOLDS_RH")
+			if not (left_hand or right_hand):
+				logging.warning("Character 0 is not holding anything.")
+				return False
+			# Execute Action
+			if right_hand:
+				put_object_node = self.check_for_node(identifier=right_hand[0]["to_id"])
+				put_object = VirtualHomeObject(put_object_node[0]["class_name"], put_object_node[0]["id"])
+				logging.debug("Placing right hand object %s.", put_object.to_string())
+				self.remove_edge(right_hand[0])
+				self.state_graph["edges"].append({"from_id":put_object.identifier, "to_id":param1.identifier,
+				                                  "relation_type":place})
+			else:
+				put_object_node = self.check_for_node(identifier=left_hand[0]["to_id"])
+				put_object = VirtualHomeObject(put_object_node[0]["class_name"], put_object_node[0]["id"])
+				logging.debug("Placing left hand object %s.", put_object.to_string())
+				self.remove_edge(left_hand[0])
+				self.state_graph["edges"].append({"from_id": put_object.identifier, "to_id": param1.identifier,
+				                                  "relation_type": place})
 
 	def check_for_node(self, identifier=None, class_name=None, category=None):
 		logging.debug("Checking for node with id %s, class_name %s, and category %s.",

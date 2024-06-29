@@ -1,5 +1,6 @@
 % Current State
-current_time(1).type(character1, character, 1).
+current_time(1).
+type(character1, character, 1).
 type(bathroom11, bathroom, 1).
 type(floor12, floor, 1).
 surfaces(floor12, 1).

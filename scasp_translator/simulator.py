@@ -51,7 +51,7 @@ class VirtualHomeSimulator(Simulator):
 				file_name = file_names[0]
 				self.comm = UnityCommunication(file_name=file_name, port="8082", x_display="0")
 			else:
-				print("Error: executable path not found.")
+				logging.error("Executable path not found.")
 		else:
 			self.comm = UnityCommunication()
 		# Reset the scene
@@ -149,6 +149,7 @@ class MockVirtualHomeSimulator(Simulator):
 		logging.info("Initializing mock virtual home simulator...")
 		self.timestamp = 1
 		self.state_graph = {"nodes":[], "edges":[]}
+		self.node_lookup = {}
 		self.initialize_state_graph()
 		# Living Room ID: 100
 		self.possible_rooms = ["livingroom"]
@@ -211,6 +212,10 @@ class MockVirtualHomeSimulator(Simulator):
 		living_room_items.append(VirtualHomeObject("clothes", id_number))
 		id_number += 1
 
+		# Node lookup
+		for node in self.state_graph["nodes"]:
+			self.node_lookup[node["id"]] = node["class_name"] + str(node["id"])
+
 		# Edges
 		for item in living_room_items:
 			self.state_graph["edges"].append({"from_id":item.identifier,
@@ -220,36 +225,61 @@ class MockVirtualHomeSimulator(Simulator):
 	def get_state(self):
 		return self.knowledge_graph_to_predicates()
 
-	def knowledge_graph_to_predicates(self):
+	def knowledge_graph_to_predicates(self, relationship_list=True):
 		includeType = True
 		includeState = True
 		includeProperties = True
 		includeRelationships = True
 		facts = []
 		ids = {}
+		relationship_dict = {}
 		for node in self.state_graph['nodes']:
 			identifier = node['class_name'] + str(node['id'])
 			ids[node['id']] = identifier
 			if includeType:
-				facts.append([("type", identifier, node['class_name'], self.timestamp)])
+				facts.append([("type", identifier, node['class_name'])])
 			if includeState:
 				for state in node['states']:
 					facts.append([(state.lower(), identifier, self.timestamp)])
 			if includeProperties:
 				for property in node["properties"]:
-					facts.append([(property.lower(), identifier, self.timestamp)])
+					facts.append([(property.lower(), identifier)])
+			relationship_dict[VirtualHomeObject(node['class_name'], node['id']).to_string()] = {}
 		if includeRelationships:
-			for edge in self.state_graph['edges']:
-				if edge["relation_type"] == "ON":
-					facts.append([("ontopof",
+			if relationship_list:
+				for edge in self.state_graph['edges']:
+					if edge["relation_type"] == "ON":
+						rel = "ONTOPOF"
+					else:
+						rel = edge["relation_type"]
+					if not (rel in relationship_dict[self.node_lookup[edge["from_id"]]]):
+						relationship_dict[self.node_lookup[edge["from_id"]]][rel] = []
+					if not (rel + "_FLIPPED" in relationship_dict[self.node_lookup[edge["to_id"]]]):
+						relationship_dict[self.node_lookup[edge["to_id"]]][rel + "_FLIPPED"] = []
+					relationship_dict[self.node_lookup[edge["from_id"]]][rel].append(self.node_lookup[edge["to_id"]])
+					relationship_dict[self.node_lookup[edge["to_id"]]][rel+"_FLIPPED"].append(self.node_lookup[edge["from_id"]])
+				for item in relationship_dict:
+					for relation in relationship_dict[item]:
+						string_list = "["
+						for relationed_item in relationship_dict[item][relation]:
+							string_list += relationed_item + ", "
+						string_list = string_list[:-2] + "]"
+						facts.append([(relation.lower(),
+						               item,
+						               string_list,
+						               self.timestamp)])
+			else:
+				for edge in self.state_graph['edges']:
+					if edge["relation_type"] == "ON":
+						facts.append([("ontopof",
+						               ids[edge["from_id"]],
+						               ids[edge["to_id"]],
+						               self.timestamp)])
+						continue
+					facts.append([(edge["relation_type"].lower(),
 					               ids[edge["from_id"]],
 					               ids[edge["to_id"]],
 					               self.timestamp)])
-					continue
-				facts.append([(edge["relation_type"].lower(),
-				               ids[edge["from_id"]],
-				               ids[edge["to_id"]],
-				               self.timestamp)])
 		return facts
 
 	def take_action(self, action):

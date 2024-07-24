@@ -3,6 +3,9 @@ list_length(Xs,L) :- list_length(Xs, 0, L) .
 list_length([], L, L).
 list_length([_|Xs], T, L) :- T1 .=. T+1, list_length(Xs,T1,L).
 
+member(X, [X|_]).
+member(X, [_|Tail]) :- member(X, Tail).
+
 % Constraints
 % Transitive Properties
 inherited_inside(Inner, Outer, T) :- inside(Inner, Outer, T).
@@ -51,6 +54,7 @@ holds(0,State,[]) :-
     init_holds_item(State).
 holds(Time1, FinalState, [Action|As]) :-
     Time1 .>. 0,
+    Time1 .<. 10,
     Time1 .=. Time + 1,
     allowed_action(Action, PrevState, Time1),
     transition(Action, PrevState, FinalState),
@@ -74,7 +78,8 @@ transition([grab, X], state(character0, Close, Held), state(character0, Close, [
 %prohibited([grab, X], state(character0, _, Held), T) :- list_length(Held, 2).
 
 % Allowed Actions
-allowed_action([grab, X], state(character0, Close, Held), T) :- grabbable(X), member(X, Close), not list_length(Held, 2).
+allowed_action([walk, X], _, _).
+allowed_action([grab, X], state(character0, Close, Held), T) :- grabbable(X), member(X, Close).
 
 % Current working query
-% ?- holds(T, state(character0, [clothes4], [clothes4]), List).
+?- holds(T, state(character0, [clothes4], [clothes4]), List).

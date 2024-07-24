@@ -225,7 +225,7 @@ class MockVirtualHomeSimulator(Simulator):
 	def get_state(self):
 		return self.knowledge_graph_to_predicates()
 
-	def knowledge_graph_to_predicates(self, relationship_list=True):
+	def knowledge_graph_to_predicates(self, relationship_list=True, time=False):
 		includeType = True
 		includeState = True
 		includeProperties = True
@@ -240,7 +240,10 @@ class MockVirtualHomeSimulator(Simulator):
 				facts.append([("type", identifier, node['class_name'])])
 			if includeState:
 				for state in node['states']:
-					facts.append([(state.lower(), identifier, self.timestamp)])
+					if time:
+						facts.append([(state.lower(), identifier, self.timestamp)])
+					else:
+						facts.append([(state.lower(), identifier)])
 			if includeProperties:
 				for property in node["properties"]:
 					facts.append([(property.lower(), identifier)])
@@ -264,22 +267,37 @@ class MockVirtualHomeSimulator(Simulator):
 						for relationed_item in relationship_dict[item][relation]:
 							string_list += relationed_item + ", "
 						string_list = string_list[:-2] + "]"
-						facts.append([(relation.lower(),
-						               item,
-						               string_list,
-						               self.timestamp)])
+						if time:
+							facts.append([(relation.lower(),
+							               item,
+							               string_list,
+							               self.timestamp)])
+						else:
+							facts.append([(relation.lower(),
+							               item,
+							               string_list)])
 			else:
 				for edge in self.state_graph['edges']:
 					if edge["relation_type"] == "ON":
-						facts.append([("ontopof",
+						if time:
+							facts.append([("ontopof",
+							               ids[edge["from_id"]],
+							               ids[edge["to_id"]],
+							               self.timestamp)])
+						else:
+							facts.append([("ontopof",
+							               ids[edge["from_id"]],
+							               ids[edge["to_id"]])])
+						continue
+					if time:
+						facts.append([(edge["relation_type"].lower(),
 						               ids[edge["from_id"]],
 						               ids[edge["to_id"]],
 						               self.timestamp)])
-						continue
-					facts.append([(edge["relation_type"].lower(),
+					else:
+						facts.append([(edge["relation_type"].lower(),
 					               ids[edge["from_id"]],
-					               ids[edge["to_id"]],
-					               self.timestamp)])
+					               ids[edge["to_id"]])])
 		return facts
 
 	def take_action(self, action):

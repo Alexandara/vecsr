@@ -8,7 +8,7 @@ if __name__ == '__main__':
     # simulat = simulator.VirtualHomeSimulator(environment=0) # VirtualHome Simulator
     simulat = simulator.MockVirtualHomeSimulator() # Mock VirtualHome Simulator
     # Create Harness
-    program = scaspharness.ScaspHarness(simulat, initial_rules="scasp_knowledge_base/knowledge_base_with_time.pl")
+    program = scaspharness.ScaspHarness(simulat, initial_rules="scasp_knowledge_base/knowledge_base_without_time.pl")
     # Take Actions
     program.get_scasp()
     program.print_rules_to_file()

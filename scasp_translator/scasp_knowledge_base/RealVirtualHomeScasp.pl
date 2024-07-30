@@ -2612,24 +2612,24 @@ held_by(Object, Person, T) :- holds_lh(Object, Person, T).
 possible_task(turn_on_tv).
 
 
-take_action(walk_to_living_room) :- -sitting(char0), task(Task), -better_action(walk_to_living_room, Task).
+take_action(walk_living_room) :- -sitting(char0), task(Task), -better_action(walk_living_room, Task).
 
-take_action(walk_to_remote) :- -sitting(char0), inside(char0, LR), reachable(Remote), type(Remote, remotecontrol), type(LR, livingroom),
-                                task(Task), -better_action(walk_to_remote, Task).
+take_action(walk_remote) :- -sitting(char0), inside(char0, LR), reachable(Remote), type(Remote, remotecontrol), type(LR, livingroom),
+                                task(Task), -better_action(walk_remote, Task).
 
 take_action(grab_remote) :- grabbable(Remote), reachable(Remote), close(char0, Remote), -holds_rh(_), type(Remote, remotecontrol),
-                                task(Task), -better_action(walk_to_remote, Task).
+                                task(Task), -better_action(walk_remote, Task).
 
 take_action(grab_remote) :- grabbable(Remote), reachable(Remote), close(char0, Remote), -holds_lh(_), type(Remote, remotecontrol),
-                                task(Task), -better_action(walk_to_remote, Task).
+                                task(Task), -better_action(walk_remote, Task).
 
 take_action(turn_on_remote) :- switchable(Remote), held(Remote), off(Remote), type(Remote, remotecontrol),
                                 task(Task), -better_action(turn_on_remote, Task).
 
 
--better_action(walk_to_living_room, turn_on_tv) :- not take(walk_to_remote), not take(grab_remote), not take(turn_on_remote).
--better_action(walk_to_remote, turn_on_tv) :- not take(grab_remote), not take(turn_on_remote).
+-better_action(walk_living_room, turn_on_tv) :- not take(walk_remote), not take(grab_remote), not take(turn_on_remote).
+-better_action(walk_remote, turn_on_tv) :- not take(grab_remote), not take(turn_on_remote).
 -better_action(grab_remote, turn_on_tv) :- not take(turn_on_remote).
 -better_action(turn_on_remote, turn_on_tv).
 
-?- take(walk_to_remote).
+?- take(walk_remote).

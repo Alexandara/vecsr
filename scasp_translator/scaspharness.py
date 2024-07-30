@@ -84,16 +84,24 @@ class ScaspHarness():
 	def run_query(self, query):
 		"""
 		This method runs a passed in query and returns the results from s(CASP)
-		:param query: query to run, in the format of a list
+		:param query: query to run, in the format of a list of tuples
 		:return: results of query
 		"""
 		self.get_scasp()
 		self.print_rules_to_file()
+		str_query = self.build_rule(query[0], low=False) + "."
+		logging.info("Running query: " + str_query)
 		f = open("scasp_knowledge_base/generated_scasp.pl", "a")
 		f.write("\n\n?- ")
-		f.write(self.build_rule(query[0], low=False) + ".")
+		f.write(str_query)
 		f.close()
-		return self.run_generated_scasp()
+		result = self.run_generated_scasp()
+		if result:
+			logging.info("Success! Results: ")
+			logging.info(result)
+		else:
+			logging.info("Failure")
+		return result
 
 	@staticmethod
 	def build_rule(list_rule, low=False):

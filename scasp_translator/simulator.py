@@ -70,7 +70,7 @@ class VirtualHomeSimulator(Simulator):
 		facts = self.knowledge_graph_to_predicates(g)
 		return facts
 
-	def knowledge_graph_to_predicates(self, graph):
+	def knowledge_graph_to_predicates(self, graph, time=False):
 		includeType = True
 		includeState = True
 		includeProperties = True
@@ -81,25 +81,44 @@ class VirtualHomeSimulator(Simulator):
 			identifier = node['class_name'] + str(node['id'])
 			ids[node['id']] = identifier
 			if includeType:
-				facts.append([("type", identifier, node['class_name'], self.timestamp)])
+				if time:
+					facts.append([("type", identifier, node['class_name'], self.timestamp)])
+				else:
+					facts.append([("type", identifier, node['class_name'])])
 			if includeState:
 				for state in node['states']:
-					facts.append([(state.lower(), identifier, self.timestamp)])
+					if time:
+						facts.append([(state.lower(), identifier, self.timestamp)])
+					else:
+						facts.append([(state.lower(), identifier)])
 			if includeProperties:
 				for property in node["properties"]:
-					facts.append([(property.lower(), identifier, self.timestamp)])
+					if time:
+						facts.append([(property.lower(), identifier, self.timestamp)])
+					else:
+						facts.append([(property.lower(), identifier)])
 		if includeRelationships:
 			for edge in graph['edges']:
 				if edge["relation_type"] == "ON":
-					facts.append([("ontopof",
+					if time:
+						facts.append([("ontopof",
+						               ids[edge["from_id"]],
+						               ids[edge["to_id"]],
+						               self.timestamp)])
+					else:
+						facts.append([("ontopof",
+						               ids[edge["from_id"]],
+						               ids[edge["to_id"]])])
+					continue
+				if time:
+					facts.append([(edge["relation_type"].lower(),
 					               ids[edge["from_id"]],
 					               ids[edge["to_id"]],
 					               self.timestamp)])
-					continue
-				facts.append([(edge["relation_type"].lower(),
-				               ids[edge["from_id"]],
-				               ids[edge["to_id"]],
-				               self.timestamp)])
+				else:
+					facts.append([(edge["relation_type"].lower(),
+					               ids[edge["from_id"]],
+					               ids[edge["to_id"]])])
 		return facts
 
 	def get_actions(self):
@@ -110,10 +129,11 @@ class VirtualHomeSimulator(Simulator):
 		to be substituted with the actual arguments.
 		:return: dict of predicates -> actions
 		"""
+		self.actions["walk"] = ["<CHARX> [walk] PARAM1"]
 		self.actions["on"] = ["<CHARX> [walk] PARAM1",
 		                 "<CHARX> [switchon] PARAM1"]
-		self.actions["grab"] = ["<CHARX> [walk] PARAM1",
-		                 "<CHARX> [grab] PARAM1"]
+		self.actions["grab"] = ["<CHARX> [grab] PARAM1"]
+		self.actions["sit"] = ["<CHARX> [sit] PARAM1"]
 
 	def take_action(self, query, character=0):
 		"""
@@ -257,10 +277,11 @@ class MockVirtualHomeSimulator(Simulator):
 						rel = edge["relation_type"]
 					if not (rel in relationship_dict[self.node_lookup[edge["from_id"]]]):
 						relationship_dict[self.node_lookup[edge["from_id"]]][rel] = []
-					if not (rel + "_FLIPPED" in relationship_dict[self.node_lookup[edge["to_id"]]]):
-						relationship_dict[self.node_lookup[edge["to_id"]]][rel + "_FLIPPED"] = []
+					if rel.lower() == "close" and not (rel in relationship_dict[self.node_lookup[edge["to_id"]]]):
+						relationship_dict[self.node_lookup[edge["to_id"]]][rel] = []
+						relationship_dict[self.node_lookup[edge["to_id"]]][rel].append(
+							self.node_lookup[edge["from_id"]])
 					relationship_dict[self.node_lookup[edge["from_id"]]][rel].append(self.node_lookup[edge["to_id"]])
-					relationship_dict[self.node_lookup[edge["to_id"]]][rel+"_FLIPPED"].append(self.node_lookup[edge["from_id"]])
 				for item in relationship_dict:
 					for relation in relationship_dict[item]:
 						string_list = "["

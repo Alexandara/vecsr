@@ -2,16 +2,20 @@ import logging
 import subprocess
 
 class ScaspHarness():
-	def __init__(self, simulator, initial_rules=None):
+	def __init__(self, simulator, initial_rules=None, optimize_rules=True):
 		if simulator:
 			self.simulator = simulator
+		self.optimize_rules = optimize_rules
 		# A prolog rule is represented here as a list of the form:
 		# [("name_of_predicate", "parameter1", ..., "parameterN"), (...)...]
-		self.initial_rules = ""
 		if initial_rules:
 			rules = open(initial_rules, "r")
 			self.initial_rules = rules.read()
 			rules.close()
+		else:
+			self.initial_rules = ""
+		self.dependency_graph = {}
+		self.generate_dependency_graph()
 		self.rules = []
 		self.objects = {}
 
@@ -22,11 +26,12 @@ class ScaspHarness():
 		"""
 		self.rules = self.simulator.get_state()
 
-	def print_rules_to_file(self, file=None, past_file=None):
+	def print_rules_to_file(self, file=None, past_file=None, query=None):
 		"""
 		This method prints the self.rules to a file.
 		:param file: File to print to, default is generated_scasp.pl
 		"""
+		facts_and_rules = ""
 		if file:
 			filename = file
 		else:
@@ -45,11 +50,13 @@ class ScaspHarness():
 				.replace("% Previous States\n", "")\
 				.replace("% Rules\n", "")
 		f = open(filename, "w")
-		f.write("% Current State\n")
-		f.write("current_time(" + str(self.simulator.timestamp) + ").\n")
-		f.write(self.rules_to_string())
-		f.write("% Rules\n")
-		f.write(self.initial_rules)
+		facts_and_rules = "% Current State\n" + \
+		                  "current_time(" + str(self.simulator.timestamp) + ").\n" + \
+		                  self.rules_to_string() + "% Rules\n" + self.initial_rules
+		if self.optimize_rules and query:
+			f.write(self.get_relevant_rules(facts_and_rules, query))
+		else:
+			f.write(facts_and_rules)
 		f.close()
 		if past_file:
 			prev_file = open(past_file, "w")
@@ -88,7 +95,7 @@ class ScaspHarness():
 		:return: results of query
 		"""
 		self.get_scasp()
-		self.print_rules_to_file()
+		self.print_rules_to_file(query=query)
 		str_query = self.build_rule(query[0], low=False) + "."
 		logging.info("Running query: " + str_query)
 		f = open("scasp_knowledge_base/generated_scasp.pl", "a")
@@ -180,3 +187,89 @@ class ScaspHarness():
 	def perform_task(self, query):
 		# TODO: Implement
 		logging.warning("perform_task called, method currently a stub")
+
+	def generate_dependency_graph(self):
+		rules = self.sterilize_rules(self.initial_rules)
+		rules = [r for r in rules if ":-" in r]
+		for rule in rules:
+			if "%" in rule:
+				rule = rule.split("%")[0]
+			rule = self.remove_inner_brackets(rule)
+			main_rule = rule.split(":-")[0]
+			main_rule = self.prolog_count(main_rule)
+			sub_rules = rule.split(":-")[1].split(")")
+			dependencies = []
+			for sub in sub_rules:
+				while "," in sub and "(" in sub and sub.index(",") < sub.index("("):
+					sub = sub.split(",", 1)[1]
+				new_count = self.prolog_count(sub)
+				if new_count[0] == '' or (new_count[0] == main_rule[0] and new_count[1] == main_rule[1]):
+					continue
+				dependencies.append(new_count)
+			first_list = self.dependency_graph.get(main_rule, [])
+			second_list = dependencies
+			# This should add the list of already known dependencies and new ones together, removing duplicates
+			self.dependency_graph[main_rule] = first_list + list(set(second_list) - set(first_list))
+
+	@staticmethod
+	def remove_inner_brackets(string):
+		brackets = []
+		new_string = ""
+		open_brack = "({["
+		close_brack = ")}]"
+		for s in string:
+			if len(brackets) == 0 or (len(brackets) == 1 and not s in open_brack):# and not s in close_brack):
+				new_string = new_string + s
+			if s in open_brack:
+				brackets.append(s)
+				continue
+			if s in close_brack:
+				brackets.pop()
+				continue
+		return new_string
+
+	@staticmethod
+	def prolog_count(string):
+		new_string = string.replace("not", "").replace(" ", "")
+		count = new_string.count(",")+1
+		new_string = new_string.replace(",", "")
+		return(new_string.split("(")[0], count)
+
+	@staticmethod
+	def print_dict(dct):
+		print("Dictionary:")
+		for item, amount in dct.items():
+			print("{}: {}".format(item, amount))
+
+	@staticmethod
+	def sterilize_rules(rules):
+		new_rules = rules.split("\n")
+		new_rules = [r for r in new_rules if len(r) > 0 and not "%" == r[0]]
+		new_rules = "".join(new_rules)
+		new_rules = new_rules.replace("\n", "").replace(" ", "").split(".")
+		return new_rules
+
+	def get_relevant_rules(self, facts_and_rules, query):
+		r_rules = []
+		query_tup = (query[0][0], len(query[0])-1)
+		# First, we need to get a list of all the relevant rules using DFS
+		relevant_rules = []
+		self.dfs(relevant_rules, self.dependency_graph, query_tup)
+		# Then we need to get a list of the rules for those queries
+		string_rules = self.sterilize_rules(facts_and_rules)
+		for rule in string_rules:
+			main_rule = rule.split(":-")[0]
+			main_rule = self.prolog_count(main_rule)
+			if main_rule in relevant_rules:
+				r_rules.append(rule)
+		r_rules = ".\n".join(r_rules) + "."
+		r_rules = r_rules.replace(",", ", ").replace(":-", " :- ").replace("not", "not ")
+		return r_rules
+
+	def dfs(self, visited, graph, start_node):  # function for dfs
+		if start_node not in visited:
+			visited.append(start_node)
+			if start_node not in graph:
+				return
+			for neighbour in graph[start_node]:
+				self.dfs(visited, graph, neighbour)

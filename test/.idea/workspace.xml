@@ -5,10 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ec4c0c37-11c0-4100-95ea-7628f86e8568" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sample_text.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../scasp_translator/scasp_knowledge_base/knowledge_base_without_time_copy.pl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../scasp_translator/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../scasp_translator/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../scasp_translator/scasp_knowledge_base/generated_scasp.pl" beforeDir="false" afterPath="$PROJECT_DIR$/../scasp_translator/scasp_knowledge_base/generated_scasp.pl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../scasp_translator/scasp_knowledge_base/knowledge_base_with_time.pl" beforeDir="false" afterPath="$PROJECT_DIR$/../scasp_translator/scasp_knowledge_base/knowledge_base_with_time.pl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../scasp_translator/scasp_knowledge_base/knowledge_base_without_time.pl" beforeDir="false" afterPath="$PROJECT_DIR$/../scasp_translator/scasp_knowledge_base/knowledge_base_without_time.pl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../scasp_translator/scasp_knowledge_base/past_states.pl" beforeDir="false" afterPath="$PROJECT_DIR$/../scasp_translator/scasp_knowledge_base/past_states.pl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../scasp_translator/scaspharness.py" beforeDir="false" afterPath="$PROJECT_DIR$/../scasp_translator/scaspharness.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../scasp_translator/simulator.py" beforeDir="false" afterPath="$PROJECT_DIR$/../scasp_translator/simulator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample_text.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/simulator_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulator_test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -27,14 +32,14 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/Users/alexistudor/Desktop/Projects/scasp_translator/test",
-    "settings.editor.selected.configurable": "vcs.Git"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/alexistudor/Desktop/Projects/scasp_translator/test&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

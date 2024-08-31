@@ -37,6 +37,10 @@ close_state([]).
 
 held_state(Held) :- held_by(character0, Held).
 held_state([]).
+
+% TODO: This doesn't work. It just defaults to the base case.
+on_top_array([ontop(X,Y) | OtherItems]) :- ontopof(X, Y), not member(ontop(X, Y), OtherItems), on_top_array(OtherItems).
+on_top_array([]).
 % Get the initial state in regards to what items are close and held
 % In the form: [close(item), held(item), ...]
 initial_state(List) :- close_state(Close), held_state(Held), initial_state(Close, Held, [], List).
@@ -78,4 +82,5 @@ update_walking(X, StateConst, [close(Y) | T], State, State1) :- X \= Y, not memb
 update_walking(X, StateConst, [Y | T], State, [Y | State1]) :- update_walking(X, StateConst, T, State, State1).
 
 % Tasks
-complete_task(use_phone_on_couch, P) :- type(Cell, cellphone), type(Sofa, sofa), transform([close(Cell), held(Cell), close(Sofa), sat_on(Sofa)], P).
+complete_task(grab_remote, P) :- type(Remote, remotecontrol), transform([held(Remote)], P).
+complete_task(use_phone_on_couch, P) :- type(Cell, cellphone), type(Sofa, sofa), transform([held(Cell), sat_on(Sofa)], P).

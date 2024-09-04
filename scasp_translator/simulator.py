@@ -3,6 +3,7 @@ import re
 import glob
 from utils_demo import *
 from abc import ABC, abstractmethod
+import pandas as pd
 
 class VirtualHomeObject:
 	def __init__(self, name, identifier=None):
@@ -29,14 +30,13 @@ class Simulator(ABC):
 	def take_action(self, action):
 		pass
 
-	def knowledge_graph_to_predicates(self, graph, relationship_list=True, time=False):
+	def knowledge_graph_to_predicates(self, graph, time=False, character_perspective=True):
 		includeType = True
 		includeState = True
 		includeProperties = True
 		includeRelationships = True
 		facts = []
 		ids = {}
-		relationship_dict = {}
 		node_lookup = {}
 		for node in graph['nodes']:
 			identifier = node['class_name'] + str(node['id'])
@@ -58,59 +58,58 @@ class Simulator(ABC):
 						facts.append([(property.lower(), identifier, self.timestamp)])
 					else:
 						facts.append([(property.lower(), identifier)])
-			relationship_dict[VirtualHomeObject(node['class_name'], node['id']).to_string()] = {}
 			node_lookup[node["id"]] = node["class_name"] + str(node["id"])
 		if includeRelationships:
-			if relationship_list:
-				for edge in self.state_graph['edges']:
-					if edge["relation_type"] == "ON":
-						rel = "ONTOPOF"
-					else:
-						rel = edge["relation_type"]
-					if not (rel in relationship_dict[node_lookup[edge["from_id"]]]):
-						relationship_dict[node_lookup[edge["from_id"]]][rel] = []
-					if rel.lower() == "close" and not (rel in relationship_dict[node_lookup[edge["to_id"]]]):
-						relationship_dict[node_lookup[edge["to_id"]]][rel] = []
-						relationship_dict[node_lookup[edge["to_id"]]][rel].append(
-							node_lookup[edge["from_id"]])
-					relationship_dict[node_lookup[edge["from_id"]]][rel].append(node_lookup[edge["to_id"]])
-				for item in relationship_dict:
-					for relation in relationship_dict[item]:
-						string_list = "["
-						for relationed_item in relationship_dict[item][relation]:
-							string_list += relationed_item + ", "
-						string_list = string_list[:-2] + "]"
-						if time:
-							facts.append([(relation.lower(),
-							               item,
-							               string_list,
-							               self.timestamp)])
-						else:
-							facts.append([(relation.lower(),
-							               item,
-							               string_list)])
-			else:
-				for edge in graph['edges']:
-					if edge["relation_type"] == "ON":
-						if time:
-							facts.append([("ontopof",
-							               ids[edge["from_id"]],
-							               ids[edge["to_id"]],
-							               self.timestamp)])
-						else:
-							facts.append([("ontopof",
-							               ids[edge["from_id"]],
-							               ids[edge["to_id"]])])
-						continue
+			relationships = {}
+			character_relationships = {}
+			# This section makes rules where the relationships are represented as a list of
+			# the items having that relationship with that object.
+			for edge in graph['edges']:
+				# There are two "ON" states, a node and an edge. For the edge we clarify to ontopof to avoid
+				# unclear facts in our final knowledge base.
+				if "ON" == edge["relation_type"]:
+					rel = "ONTOPOF"
+				elif "HOLDS_LH" == edge["relation_type"] or "HOLDS_RH" == edge["relation_type"]:
+					rel = "HOLDS"
+				else:
+					rel = edge["relation_type"]
+				# We create string representations of state in the form relationship(to_id, from_id)
+				# unless they pertain to the character and character_perspective is true, in which case
+				# only the non-character fact is maintained
+				if "char" in node_lookup[edge["from_id"]]:
+					character_rule_state = rel.lower() + "(" + node_lookup[edge["to_id"]] + ")"
+					if not rel in character_relationships or character_relationships[rel] is None:
+						character_relationships[rel] = []
+					character_relationships[rel].append(character_rule_state)
+				elif "char" in node_lookup[edge["to_id"]]:
+					character_rule_state = rel.lower() + "(" + node_lookup[edge["from_id"]] + ")"
+					if not rel in character_relationships or character_relationships[rel] is None:
+						character_relationships[rel] = []
+					character_relationships[rel].append(character_rule_state)
+				rule_state = rel.lower() + "(" + node_lookup[edge["from_id"]] + ", " + node_lookup[edge["to_id"]] + ")"
+				if not rel in relationships or relationships[rel] is None:
+					relationships[rel] = []
+				relationships[rel].append(rule_state)
+			# Create facts based on the list of relationships
+			for rule in relationships.keys():
+				string_list = "["
+				for relationed_item in relationships[rule]:
+					string_list += relationed_item + ", "
+				string_list = string_list[:-2] + "]"
+				if time:
+					facts.append([(rule.lower(), string_list, self.timestamp)])
+				else:
+					facts.append([(rule.lower(), string_list)])
+			if character_perspective:
+				for rule in character_relationships.keys():
+					string_list = "["
+					for relationed_item in character_relationships[rule]:
+						string_list += relationed_item + ", "
+					string_list = string_list[:-2] + "]"
 					if time:
-						facts.append([(edge["relation_type"].lower(),
-						               ids[edge["from_id"]],
-						               ids[edge["to_id"]],
-						               self.timestamp)])
+						facts.append([(rule.lower() + "_character", string_list, self.timestamp)])
 					else:
-						facts.append([(edge["relation_type"].lower(),
-						               ids[edge["from_id"]],
-						               ids[edge["to_id"]])])
+						facts.append([(rule.lower() + "_character", string_list)])
 		return facts
 
 	@staticmethod
@@ -297,18 +296,18 @@ class MockVirtualHomeSimulator(Simulator):
 		id_number += 1
 		# Clothes (multiple)
 		self.state_graph["nodes"].append({"id": id_number,
-		                                  "class_name": "clothes",
+		                                  "class_name": "clothesshirt",
 		                                  "states": [],
 		                                  "properties": ["GRABBABLE"],
 		                                  "category": "Clothes"})
-		living_room_items.append(VirtualHomeObject("clothes", id_number))
+		living_room_items.append(VirtualHomeObject("clothesshirt", id_number))
 		id_number += 1
 		self.state_graph["nodes"].append({"id": id_number,
-		                                  "class_name": "clothes",
+		                                  "class_name": "clothesshirt",
 		                                  "states": [],
 		                                  "properties": ["GRABBABLE"],
 		                                  "category": "Clothes"})
-		living_room_items.append(VirtualHomeObject("clothes", id_number))
+		living_room_items.append(VirtualHomeObject("clothesshirt", id_number))
 		id_number += 1
 
 		# Edges
@@ -383,7 +382,6 @@ class MockVirtualHomeSimulator(Simulator):
 						new_id = close["from_id"] if close["from_id"] != param1.identifier else close["to_id"]
 						self.state_graph["edges"].append({"from_id":item, "to_id":new_id, "relation_type": "CLOSE"})
 			self.timestamp += 1
-			return True
 		elif action[0].lower() == "grab":
 			param1 = VirtualHomeObject(action[1])
 			# Check preconditions
@@ -425,7 +423,6 @@ class MockVirtualHomeSimulator(Simulator):
 				if param1.identifier != edge["from_id"]:
 					self.state_graph["edges"].append({"from_id":param1.identifier, "to_id":edge["from_id"],
 					                                  "relation_type":"CLOSE"})
-			return True
 		elif action[0].lower() == "put":
 			param1 = VirtualHomeObject(action[1])
 			if "CONTAINERS" in self.check_for_node(self.state_graph, identifier=param1.identifier)[0]["properties"]:
@@ -457,6 +454,13 @@ class MockVirtualHomeSimulator(Simulator):
 				self.remove_edge(left_hand[0])
 				self.state_graph["edges"].append({"from_id": put_object.identifier, "to_id": param1.identifier,
 				                                  "relation_type": place})
+		# Remove duplicate edges
+		new_edges = []
+		for edge in self.state_graph["edges"]:
+			if not edge in new_edges:
+				new_edges.append(edge)
+		self.state_graph["edges"] = new_edges
+		return True
 
 	def remove_edge(self, edge):
 		self.state_graph["edges"] = self.remove_element(0, self.state_graph["edges"], edge, [])

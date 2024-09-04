@@ -1,23 +1,29 @@
 import scaspharness
 import simulator
 import logging
+import time
+import datetime
 
 if __name__ == '__main__':
     logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
-    real_simulator = False
+    real_simulator = True
+    task_selection = 2
+    tasks = ["use_phone_on_couch", "grab_remote_and_clothes", "grab_remote"]
+    start_time = time.time()
+    logging.info("Start Time: %s", datetime.datetime.now())
     # Create simulator
     if real_simulator:
         simulat = simulator.VirtualHomeSimulator(environment=0) # VirtualHome Simulator
     else:
         simulat = simulator.MockVirtualHomeSimulator() # Mock VirtualHome Simulator
     # Create Harness
-    program = scaspharness.ScaspHarness(simulat, initial_rules="scasp_knowledge_base/knowledge_base_without_time.pl")
-
+    program = scaspharness.ScaspHarness(simulat, initial_rules="scasp_knowledge_base/knowledge_base_without_time.pl", optimize_rules=False)
+    logging.info("Program Initialized Time: %s seconds" % (time.time() - start_time))
+    start_time = time.time()
     # Full loop
-    if real_simulator:
-        results = program.run_query([("complete_task", "use_phone_on_couch", "P")])
-    else:
-        results = program.run_query([("complete_task", "grab_remote", "P")])
+    results = program.run_query([("complete_task", tasks[task_selection], "P")])
+    logging.info("s(CASP) Query Run: %s seconds" % (time.time() - start_time))
+    start_time = time.time()
     if results:
         results = results[0]
     else:
@@ -27,3 +33,6 @@ if __name__ == '__main__':
     for action in actions:
         a = action.strip(")").split("(")
         program.take_action(tuple(a))
+    logging.info("Actions taken in simulation: %s seconds" % (time.time() - start_time))
+    program.print_rules_to_file()
+    logging.info("End Time: %s", datetime.datetime.now())

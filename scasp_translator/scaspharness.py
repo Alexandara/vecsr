@@ -31,7 +31,7 @@ class ScaspHarness():
 		This method prints the self.rules to a file.
 		:param file: File to print to, default is generated_scasp.pl
 		"""
-		facts_and_rules = ""
+		self.get_scasp()
 		if file:
 			filename = file
 		else:

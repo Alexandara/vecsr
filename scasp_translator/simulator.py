@@ -22,6 +22,9 @@ class Simulator(ABC):
 	def __init__(self):
 		self.timestamp = 1
 
+	def get_graph(self):
+		pass
+
 	@abstractmethod
 	def get_state(self):
 		pass
@@ -35,36 +38,46 @@ class Simulator(ABC):
 		includeState = True
 		includeProperties = True
 		includeRelationships = True
-		facts = []
-		ids = {}
-		node_lookup = {}
-		for node in graph['nodes']:
-			identifier = node['class_name'] + str(node['id'])
-			ids[node['id']] = identifier
-			if includeType:
-				if time:
-					facts.append([("type", identifier, node['class_name'], self.timestamp)])
-				else:
-					facts.append([("type", identifier, node['class_name'])])
-			if includeState:
-				for state in node['states']:
+		# Get all rooms
+		room_nodes = self.check_for_node(graph, category="Rooms")
+		node_lookup = self.node_lookup_dict(graph)
+		room_facts = {}
+		for room in room_nodes:
+			facts = []
+			ids = {}
+			for node in graph['nodes']:
+				if not self.check_for_edge(graph, to_id=room["id"], from_id=node["id"], relation_type="INSIDE")\
+						and not node == room:
+					continue
+				identifier = node['class_name'] + str(node['id'])
+				ids[node['id']] = identifier
+				if includeType:
 					if time:
-						facts.append([(state.lower(), identifier, self.timestamp)])
+						facts.append([("type", identifier, node['class_name'], self.timestamp)])
 					else:
-						facts.append([(state.lower(), identifier)])
-			if includeProperties:
-				for property in node["properties"]:
-					if time:
-						facts.append([(property.lower(), identifier, self.timestamp)])
-					else:
-						facts.append([(property.lower(), identifier)])
-			node_lookup[node["id"]] = node["class_name"] + str(node["id"])
-		if includeRelationships:
+						facts.append([("type", identifier, node['class_name'])])
+				if includeState:
+					for state in node['states']:
+						if time:
+							facts.append([(state.lower(), identifier, self.timestamp)])
+						else:
+							facts.append([(state.lower(), identifier)])
+				if includeProperties:
+					for property in node["properties"]:
+						if time:
+							facts.append([(property.lower(), identifier, self.timestamp)])
+						else:
+							facts.append([(property.lower(), identifier)])
+				node_lookup[node["id"]] = node["class_name"] + str(node["id"])
+			if not includeRelationships:
+				continue
 			relationships = {}
 			character_relationships = {}
 			# This section makes rules where the relationships are represented as a list of
 			# the items having that relationship with that object.
 			for edge in graph['edges']:
+				if not (edge["from_id"] in ids.keys() or edge["to_id"] in ids.keys()):
+					continue
 				# There are two "ON" states, a node and an edge. For the edge we clarify to ontopof to avoid
 				# unclear facts in our final knowledge base.
 				if "ON" == edge["relation_type"]:
@@ -77,15 +90,17 @@ class Simulator(ABC):
 				# unless they pertain to the character and character_perspective is true, in which case
 				# only the non-character fact is maintained
 				if "char" in node_lookup[edge["from_id"]]:
-					character_rule_state = rel.lower() + "(" + node_lookup[edge["to_id"]] + ")"
+					character_rule_state = node_lookup[edge["to_id"]]
 					if not rel in character_relationships or character_relationships[rel] is None:
 						character_relationships[rel] = []
-					character_relationships[rel].append(character_rule_state)
+					if not character_rule_state in character_relationships[rel]:
+						character_relationships[rel].append(character_rule_state)
 				elif "char" in node_lookup[edge["to_id"]]:
-					character_rule_state = rel.lower() + "(" + node_lookup[edge["from_id"]] + ")"
+					character_rule_state = node_lookup[edge["from_id"]]
 					if not rel in character_relationships or character_relationships[rel] is None:
 						character_relationships[rel] = []
-					character_relationships[rel].append(character_rule_state)
+					if not character_rule_state in character_relationships[rel]:
+						character_relationships[rel].append(character_rule_state)
 				rule_state = rel.lower() + "(" + node_lookup[edge["from_id"]] + ", " + node_lookup[edge["to_id"]] + ")"
 				if not rel in relationships or relationships[rel] is None:
 					relationships[rel] = []
@@ -110,7 +125,8 @@ class Simulator(ABC):
 						facts.append([(rule.lower() + "_character", string_list, self.timestamp)])
 					else:
 						facts.append([(rule.lower() + "_character", string_list)])
-		return facts
+			room_facts[room["id"]] = facts
+		return room_facts
 
 	@staticmethod
 	def check_for_node(graph, identifier=None, class_name=None, category=None):
@@ -123,7 +139,6 @@ class Simulator(ABC):
 					and (node["class_name"] == class_name or class_name is None) \
 					and (node["category"] == category or category is None):
 				nodes_to_return.append(node)
-				return nodes_to_return
 			elif node["id"] == identifier:
 				logging.warning("Id %s does not correspond to class_name %s and category %s. "
 				                "It has a class_name of %s and category %s.",
@@ -154,6 +169,33 @@ class Simulator(ABC):
 				edges_to_return.append(edge)
 		logging.debug("Found %s edges.", str(len(edges_to_return)))
 		return edges_to_return
+
+	def character_room(self):
+		graph = self.get_graph()
+		nodes = self.check_for_node(graph, class_name="character")
+		rooms = set()
+		for node in nodes:
+			edges = self.check_for_edge(graph, from_id=node["id"], relation_type="INSIDE")
+			if edges:
+				for edge in edges:
+					rooms.add(edge["to_id"])
+		if len(rooms) == 0:
+			logging.warning("No characters in simulation.")
+		return rooms
+
+	def get_rooms(self):
+		graph = self.get_graph()
+		room_nodes = self.check_for_node(graph, category="Rooms")
+		rooms = {}
+		for room in room_nodes:
+			rooms[room["id"]] = room["class_name"]
+		return rooms
+	@staticmethod
+	def node_lookup_dict(graph):
+		node_lookup = {}
+		for node in graph['nodes']:
+			node_lookup[node["id"]] = node["class_name"] + str(node["id"])
+		return node_lookup
 
 class VirtualHomeSimulator(Simulator):
 	def __init__(self, environment=0, automatic=False):
@@ -188,6 +230,10 @@ class VirtualHomeSimulator(Simulator):
 		self.actions = {}
 		self.get_actions()
 		self.comm.add_character('Chars/Male2', initial_room='kitchen')
+
+	def get_graph(self):
+		_, g = self.comm.environment_graph()
+		return g
 
 	def get_state(self):
 		"""
@@ -315,6 +361,9 @@ class MockVirtualHomeSimulator(Simulator):
 			self.state_graph["edges"].append({"from_id":item.identifier,
 			                                  "to_id":100,
 			                                  "relation_type":"INSIDE"})
+
+	def get_graph(self):
+		return self.state_graph
 
 	def get_state(self):
 		return self.knowledge_graph_to_predicates(self.state_graph)

@@ -16,7 +16,7 @@ class ScaspHarness():
 			self.initial_rules = ""
 		self.dependency_graph = {}
 		self.generate_dependency_graph()
-		self.rules = []
+		self.rules = {}
 		self.objects = {}
 
 	def get_scasp(self):
@@ -26,7 +26,7 @@ class ScaspHarness():
 		"""
 		self.rules = self.simulator.get_state()
 
-	def print_rules_to_file(self, file=None, past_file=None, query=None):
+	def print_rules_to_file(self, rooms, file=None, past_file=None, query=None):
 		"""
 		This method prints the self.rules to a file.
 		:param file: File to print to, default is generated_scasp.pl
@@ -51,8 +51,12 @@ class ScaspHarness():
 				.replace("% Rules\n", "")
 		f = open(filename, "w")
 		facts_and_rules = "% Current State\n" + \
-		                  "current_time(" + str(self.simulator.timestamp) + ").\n" + \
-		                  self.rules_to_string() + "% Rules\n" + self.initial_rules
+			                  "current_time(" + str(self.simulator.timestamp) + ").\n"
+		for room_num in rooms.keys():
+			facts_and_rules = facts_and_rules + \
+			                  self.rules_to_string(room_num)
+		facts_and_rules = facts_and_rules + \
+		                  "% Rules\n" + self.initial_rules
 		if self.optimize_rules and query:
 			f.write(self.get_relevant_rules(facts_and_rules, query))
 		else:
@@ -67,14 +71,14 @@ class ScaspHarness():
 		prev_file.write(new_file_info)
 		prev_file.close()
 
-	def rules_to_string(self):
+	def rules_to_string(self, room):
 		"""
 		This converts rules in Python list format to string rules that can be read by a
 		prolog parser.
 		:return: string version of the rules
 		"""
 		final_rules = ""
-		for rule in self.rules:
+		for rule in self.rules[room]:
 			if len(rule) == 1:
 				final_rules += self.build_rule(rule[0]) + ".\n"
 			elif len(rule) > 1:
@@ -94,8 +98,9 @@ class ScaspHarness():
 		:param query: query to run, in the format of a list of tuples
 		:return: results of query
 		"""
+		rooms = self.simulator.get_rooms()
 		self.get_scasp()
-		self.print_rules_to_file(query=query)
+		self.print_rules_to_file(rooms, query=query)
 		str_query = self.build_rule(query[0], low=False) + "."
 		logging.info("Running query: " + str_query)
 		f = open("scasp_knowledge_base/generated_scasp.pl", "a")
@@ -258,12 +263,13 @@ class ScaspHarness():
 		# Then we need to get a list of the rules for those queries
 		string_rules = self.sterilize_rules(facts_and_rules)
 		for rule in string_rules:
-			main_rule = rule.split(":-")[0]
+			main_rule = self.remove_inner_brackets(rule)
+			main_rule = main_rule.split(":-")[0]
 			main_rule = self.prolog_count(main_rule)
 			if main_rule in relevant_rules:
 				r_rules.append(rule)
 		r_rules = ".\n".join(r_rules) + "."
-		r_rules = r_rules.replace(",", ", ").replace(":-", " :- ").replace("not", "not ")
+		r_rules = r_rules.replace(",", ", ").replace(":-", " :- ") #.replace("not", "not ")
 		return r_rules
 
 	def dfs(self, visited, graph, start_node):  # function for dfs

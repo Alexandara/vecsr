@@ -3,10 +3,12 @@ import simulator
 import logging
 import time
 import datetime
+import os
 
 if __name__ == '__main__':
     logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
     real_simulator = True
+    optimize_rules = False
     task_selection = 2
     tasks = ["use_phone_on_couch", "grab_remote_and_clothes", "grab_remote"]
     start_time = time.time()
@@ -17,7 +19,7 @@ if __name__ == '__main__':
     else:
         simulat = simulator.MockVirtualHomeSimulator() # Mock VirtualHome Simulator
     # Create Harness
-    program = scaspharness.ScaspHarness(simulat, initial_rules="scasp_knowledge_base/knowledge_base_without_time.pl", optimize_rules=False)
+    program = scaspharness.ScaspHarness(simulat, initial_rules="scasp_knowledge_base/knowledge_base_without_time.pl", optimize_rules=optimize_rules)
     logging.info("Program Initialized Time: %s seconds" % (time.time() - start_time))
     start_time = time.time()
     # Full loop

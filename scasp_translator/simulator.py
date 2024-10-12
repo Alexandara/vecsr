@@ -308,7 +308,7 @@ class MockVirtualHomeSimulator(Simulator):
 		                                  "class_name":"livingroom",
 		                                  "states":[],
 		                                  "properties":["CONTAINERS"],
-		                                  "category":"Room"})
+		                                  "category":"Rooms"})
 		# Character
 		self.state_graph["nodes"].append({"id": 0,
 		                                  "class_name": "character",

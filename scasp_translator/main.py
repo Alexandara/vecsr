@@ -7,7 +7,7 @@ import os
 
 if __name__ == '__main__':
     logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
-    real_simulator = True
+    real_simulator = False
     optimize_rules = False
     task_selection = 2
     tasks = ["use_phone_on_couch", "grab_remote_and_clothes", "grab_remote"]

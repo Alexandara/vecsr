@@ -9,6 +9,14 @@ not_member(X, [Y | T]) :- X \= Y, not_member(X, T).
 subset([], _).
 subset([X | T], List) :- member(X, List), subset(T, List).
 
+% testing examples:
+% state_subset([close([]), holds([]), sat_on([])], [close([]), holds([]), sat_on([])]).
+% state_subset([close([]), holds([remotecontrol1]), sat_on([])], [close([remotecontrol1]), holds([television2, remotecontrol1]), sat_on([])]).
+% state_subset([close([remotecontrol1]), holds([remotecontrol1]), sat_on([])], [close([remotecontrol1]), holds([television2, remotecontrol1]), sat_on([])]).
+state_subset([close(CloseFinal), holds(HoldsFinal), sat_on(SatFinal)],
+             [close(Close), holds(Holds), sat_on(Sat)]) :-
+                    subset(CloseFinal, Close), subset(HoldsFinal, Holds), subset(SatFinal, Sat).
+
 rev(L, R) :- trev(L, [], R). % O(n) time
 trev([], P, P).
 trev([H|T], P, R) :- trev(T, [H|P], R).
@@ -26,7 +34,7 @@ initial_state([Close, Held, sat_on([])]) :- close_state(Close), held_state(Held)
 
 % We want to go from the current state to the final state
 transform(FinalState, Plan) :- initial_state(State1), transform(State1, FinalState, [State1], Plan).
-transform(State1, FinalState,_,[]) :- subset(FinalState, State1).
+transform(State1, FinalState,_,[]) :- state_subset(FinalState, State1).
 transform(State1, State2, Visited, [Action|Actions]) :-
     choose_action(Action, State1, State2),
     update(Action, State1, State),
@@ -36,6 +44,7 @@ transform(State1, State2, Visited, [Action|Actions]) :-
 % We choose an action to take
 % Example test query:
 % choose_action(Action, [close([remotecontrol1]), holds([]), sat_on([])], [close([]), holds([remotecontrol1]), sat_on([])]).
+% choose_action(Action, [close([]), holds([]), sat_on([])], [close([]), holds([remotecontrol1]), sat_on([])]).
 choose_action(Action, State1, State2) :- suggest(Action, State2), legal_action(Action, State1).
 choose_action(Action, State1, _) :- legal_action(Action, State1).
 suggest(walk(X), [close(Close), _, _]) :- member(X, Close).
@@ -47,6 +56,7 @@ suggest(walk(X), [close(Close), _, sat_on(Sat)]) :- member(X, Sat), not_member(X
 % Check if an action is legal given the state
 % Example test query:
 % legal_action(walk(remotecontrol1), [close([]), holds([]), sat_on([])]).
+% legal_action(grab(remotecontrol1), [close([remotecontrol1]), holds([]), sat_on([])]).
 legal_action(walk(X), [close(Close), _, _]) :- type(X, Y), Y \= character, not_member(X, Close).
 legal_action(grab(X), [close(Close), holds(Held), _]) :- type(X, Y), Y \= character, member(X, Close), not_member(X, Held).
 legal_action(sit(X), [close(Close), holds(Held), _]) :- sittable(X), member(X, Close), not_member(X, Held).
@@ -57,6 +67,7 @@ legal_action(sit(X), [close(Close), holds(Held), _]) :- sittable(X), member(X, C
 % update(grab(remotecontrol1), [close([remotecontrol1]), holds([]), sat_on([])], State).
 % update(walk(remotecontrol1), [close([]), holds([]), sat_on([])], State).
 % update(walk(television2), [close([remotecontrol1]), holds([]), sat_on([])], State).
+% update(walk(television2), [close([remotecontrol1]), holds([remotecontrol1]), sat_on([])], State).
 update(walk(X), [close(Close), holds(Held), sat_on(Sat)], [close(Closen), holds(Held), sat_on(Sat)]) :- update_walking(X, [Close, Held], [], Closen).
 update(grab(X), [close(Close), holds(Held), sat_on(Sat)], [close(Close), holds([X | Held]), sat_on(Sat)]).
 update(sit(X), [close(Close), holds(Held), sat_on(Sat)], [close(Close), holds(Held), sat_on([X | Sat])]).
@@ -71,8 +82,8 @@ update_walking(X, [[Y | T], Held], State, State1) :- X \= Y, not_member(Y, Held)
 update_walking(X, [[Y | T], _], State, State1) :- update_walking(X, [T, Held], [Y | State], State1).
 
 % Tasks
-complete_task(grab_remote, P) :- type(Remote, remotecontrol), member(Remote, Holds), transform([_, holds(Holds), _], P).
-%complete_task(grab_remote_and_clothes, P) :- type(Remote, remotecontrol), type(Clothes, clothesshirt),
-%                                             transform([holds(Remote), holds(Clothes)], P).
-%complete_task(use_phone_on_couch, P) :- type(Cell, cellphone), type(Sofa, sofa),
-%                                        transform([holds(Cell), sat_on(Sofa)], P).
+complete_task(grab_remote, P) :- type(Remote, remotecontrol), transform([close([]), holds([Remote]), sat_on([])], P).
+complete_task(grab_remote_and_clothes, P) :- type(Remote, remotecontrol), type(Clothes, clothesshirt),
+                                             transform([close([]), holds([Remote, Clothes]), sat_on([])], P).
+complete_task(use_phone_on_couch, P) :- type(Cell, cellphone), type(Sofa, sofa),
+                                        transform([close([]), holds([Cell]), sat_on([Sofa])], P).

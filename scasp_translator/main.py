@@ -9,7 +9,7 @@ if __name__ == '__main__':
     logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
     real_simulator = False
     optimize_rules = False
-    task_selection = 2
+    task_selection = 0
     tasks = ["use_phone_on_couch", "grab_remote_and_clothes", "grab_remote"]
     start_time = time.time()
     logging.info("Start Time: %s", datetime.datetime.now())
@@ -36,5 +36,4 @@ if __name__ == '__main__':
         a = action.strip(")").split("(")
         program.take_action(tuple(a))
     logging.info("Actions taken in simulation: %s seconds" % (time.time() - start_time))
-    program.print_rules_to_file()
     logging.info("End Time: %s", datetime.datetime.now())

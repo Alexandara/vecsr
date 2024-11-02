@@ -19,17 +19,20 @@ class ScaspHarness():
 		self.rules = {}
 		self.objects = {}
 
-	def get_scasp(self):
+	def get_scasp(self, rooms=None):
 		"""
 		This method gets the state from the simulator and appends it to the
 		initial rules
 		"""
-		self.rules = self.simulator.get_state()
+		self.rules = self.simulator.get_state(rooms)
 
 	def print_rules_to_file(self, rooms, file=None, past_file=None, query=None):
 		"""
 		This method prints the self.rules to a file.
+		:param rooms: list of rooms we're interested in
 		:param file: File to print to, default is generated_scasp.pl
+		:param past_file: file of previous rules
+		:param query: query to optimize for
 		"""
 		self.get_scasp()
 		if file:
@@ -52,11 +55,8 @@ class ScaspHarness():
 		f = open(filename, "w")
 		facts_and_rules = "% Current State\n" + \
 			                  "current_time(" + str(self.simulator.timestamp) + ").\n"
-		for room_num in rooms.keys():
-			facts_and_rules = facts_and_rules + \
-			                  self.rules_to_string(room_num)
-		facts_and_rules = facts_and_rules + \
-		                  "% Rules\n" + self.initial_rules
+		facts_and_rules = facts_and_rules + self.rules_to_string()
+		facts_and_rules = facts_and_rules + "% Rules\n" + self.initial_rules
 		if self.optimize_rules and query:
 			f.write(self.get_relevant_rules(facts_and_rules, query))
 		else:
@@ -71,14 +71,14 @@ class ScaspHarness():
 		prev_file.write(new_file_info)
 		prev_file.close()
 
-	def rules_to_string(self, room):
+	def rules_to_string(self):
 		"""
 		This converts rules in Python list format to string rules that can be read by a
 		prolog parser.
 		:return: string version of the rules
 		"""
 		final_rules = ""
-		for rule in self.rules[room]:
+		for rule in self.rules:
 			if len(rule) == 1:
 				final_rules += self.build_rule(rule[0]) + ".\n"
 			elif len(rule) > 1:

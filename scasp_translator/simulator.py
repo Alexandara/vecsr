@@ -37,9 +37,11 @@ class Simulator(ABC):
 		includeType = True
 		includeState = True
 		includeProperties = True
+		includeCategories = True
 		includeRelationships = True
 		relationships = {}
 		character_relationships = {}
+		states = {}
 		facts = []
 		ids = {}
 		# Get all rooms
@@ -58,22 +60,22 @@ class Simulator(ABC):
 				identifier = node['class_name'] + str(node['id'])
 				ids[node['id']] = identifier
 				if includeType:
-					if time:
-						facts.append([("type", identifier, node['class_name'], self.timestamp)])
-					else:
-						facts.append([("type", identifier, node['class_name'])])
+					facts.append([("type", identifier, node['class_name'])])
 				if includeState:
 					for state in node['states']:
+						if not state.lower() in states or states[state.lower()] is None:
+							states[state.lower()] = []
+						if not identifier in states[state.lower()]:
+							states[state.lower()].append(identifier)
 						if time:
 							facts.append([(state.lower(), identifier, self.timestamp)])
 						else:
 							facts.append([(state.lower(), identifier)])
 				if includeProperties:
 					for propert in node["properties"]:
-						if time:
-							facts.append([(propert.lower(), identifier, self.timestamp)])
-						else:
-							facts.append([(propert.lower(), identifier)])
+						facts.append([(propert.lower(), identifier)])
+				if includeCategories:
+					facts.append([(node["category"].lower(), identifier)])
 				node_lookup[node["id"]] = node["class_name"] + str(node["id"])
 			if not includeRelationships:
 				continue
@@ -105,20 +107,25 @@ class Simulator(ABC):
 						character_relationships[rel] = []
 					if not character_rule_state in character_relationships[rel]:
 						character_relationships[rel].append(character_rule_state)
-				rule_state = rel.lower() + "(" + node_lookup[edge["from_id"]] + ", " + node_lookup[edge["to_id"]] + ")"
+				rule_state = "[" + node_lookup[edge["from_id"]] + ", " + node_lookup[edge["to_id"]] + "]"
 				if not rel in relationships or relationships[rel] is None:
 					relationships[rel] = []
 				relationships[rel].append(rule_state)
 		# Create facts based on the list of relationships
+		for rule in states.keys():
+			string_list = self.string_list(states[rule])
+			if string_list:
+				if time:
+					facts.append([(rule.lower() + "_list", string_list, self.timestamp)])
+				else:
+					facts.append([(rule.lower() + "_list", string_list)])
 		for rule in relationships.keys():
-			string_list = "["
-			for relationed_item in relationships[rule]:
-				string_list += relationed_item + ", "
-			string_list = string_list[:-2] + "]"
-			if time:
-				facts.append([(rule.lower(), string_list, self.timestamp)])
-			else:
-				facts.append([(rule.lower(), string_list)])
+			string_list = self.string_list(relationships[rule])
+			if string_list:
+				if time:
+					facts.append([(rule.lower(), string_list, self.timestamp)])
+				else:
+					facts.append([(rule.lower(), string_list)])
 		if character_perspective:
 			for rule in character_relationships.keys():
 				string_list = "["
@@ -130,6 +137,16 @@ class Simulator(ABC):
 				else:
 					facts.append([(rule.lower() + "_character", string_list)])
 		return facts
+
+	@staticmethod
+	def string_list(items):
+		if not items:
+			return None
+		string_list = "["
+		for item in items:
+			string_list += item + ", "
+		string_list = string_list[:-2] + "]"
+		return string_list
 
 	@staticmethod
 	def check_for_node(graph, identifier=None, class_name=None, category=None):
@@ -231,6 +248,7 @@ class VirtualHomeSimulator(Simulator):
 		# Reset the scene
 		self.comm.reset(environment)
 		self.actions = {}
+		self.non_virtual_home_actions = []
 		self.get_actions()
 		self.comm.add_character('Chars/Male2', initial_room='kitchen')
 
@@ -256,17 +274,19 @@ class VirtualHomeSimulator(Simulator):
 		to be substituted with the actual arguments.
 		:return: dict of predicates -> actions
 		"""
+		self.non_virtual_home_actions = ["lie"]
 		self.actions["walk"] = ["<CHARX> [walk] PARAM1"]
-		self.actions["on"] = ["<CHARX> [walk] PARAM1",
-		                 "<CHARX> [switchon] PARAM1"]
+		self.actions["switchon"] = ["<CHARX> [switchon] PARAM1"]
 		self.actions["grab"] = ["<CHARX> [grab] PARAM1"]
 		self.actions["sit"] = ["<CHARX> [sit] PARAM1"]
 		self.actions["put"] = ["<CHARX> [putback] PARAM1 PARAM2"]
 		self.actions["standup"] = ["<CHARX> [standup]"]
+		self.actions["lie"] = ["<CHARX> [lie] PARAM1"]
 
 	def take_action(self, query, character=0):
 		"""
 		Method to perform the action passed in within the simulator.
+		:param character: the character to use
 		:param query: the action to do
 		:return: boolean representing if the action was completed successfully
 		or not
@@ -289,7 +309,8 @@ class VirtualHomeSimulator(Simulator):
 			new_actions.append(new_action)
 		logging.info("Taking action:")
 		logging.info(new_actions)
-		comm.render_script(new_actions, frame_rate=10, camera_mode=["PERSON_FROM_BACK"], recording=True)
+		if not query[0] in self.non_virtual_home_actions:
+			comm.render_script(new_actions, frame_rate=10, camera_mode=["PERSON_FROM_BACK"], recording=True)
 		self.timestamp += 1
 		return True
 

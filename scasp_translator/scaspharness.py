@@ -267,7 +267,10 @@ class ScaspHarness():
 			main_rule = main_rule.split(":-")[0]
 			main_rule = self.prolog_count(main_rule)
 			if main_rule in relevant_rules:
-				r_rules.append(rule)
+				if "not" in rule and not "not_" in rule:
+					r_rules.append(rule.replace("not", "not "))
+				else:
+					r_rules.append(rule)
 		r_rules = ".\n".join(r_rules) + "."
 		r_rules = r_rules.replace(",", ", ").replace(":-", " :- ") #.replace("not", "not ")
 		return r_rules

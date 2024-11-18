@@ -15,10 +15,11 @@ def run(task):
         results = results[0]
     else:
         logging.warning("No valid results found.")
-    actions = results['P'].strip('][ ').split(',')
+    actions = results['P'].strip('][ ').split(')')
     for action in actions:
-        a = action.strip(")").split("(")
-        program.take_action(tuple(a))
+        a = action.replace("(", " ").replace(",", " ").split()
+        if a:
+            program.take_action(tuple(a))
     logging.info("Actions taken in simulation: %s seconds" % (time.time() - start_time))
     logging.info("Task End Time: %s", datetime.datetime.now())
 
@@ -26,9 +27,15 @@ if __name__ == '__main__':
     logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
     real_simulator = True
     optimize_rules = True
-    dynamic = True
-    task_selection = 2
-    tasks = ["use_phone_on_couch", "grab_remote_and_clothes", "grab_remote"]
+    dynamic = False
+    task_selection = 6
+    tasks = ["use_phone_on_couch",
+             "grab_remote_and_clothes",
+             "grab_remote",
+             "set_remote_on_coffee_table",
+             "turn_on_tv",
+             "go_to_sleep",
+             "browse_internet"]
     start_time = time.time()
     logging.info("Start Time: %s", datetime.datetime.now())
     # Create simulator

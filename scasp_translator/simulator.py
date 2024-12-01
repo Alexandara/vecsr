@@ -140,6 +140,7 @@ class Simulator(ABC):
 
 	@staticmethod
 	def string_list(items):
+		items = list(set(items))
 		if not items:
 			return None
 		string_list = "["

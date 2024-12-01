@@ -225,6 +225,8 @@ class ScaspHarness():
 		for s in string:
 			if len(brackets) == 0 or (len(brackets) == 1 and not s in open_brack):# and not s in close_brack):
 				new_string = new_string + s
+			else:
+				new_string = new_string + "s"
 			if s in open_brack:
 				brackets.append(s)
 				continue

@@ -28,7 +28,7 @@ if __name__ == '__main__':
     real_simulator = True
     optimize_rules = True
     dynamic = False
-    task_selection = 6
+    task_selection = 5
     tasks = ["use_phone_on_couch",
              "grab_remote_and_clothes",
              "grab_remote",

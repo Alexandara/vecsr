@@ -6,6 +6,9 @@ member(X,[Y|T]) :- member(X,T).
 not_member(_, []).
 not_member(X, [Y | T]) :- X \= Y, not_member(X, T).
 
+list_empty([]).
+-list_empty([_|_]).
+
 subset([], _).
 subset([X | T], List) :- member(X, List), subset(T, List).
 
@@ -14,12 +17,22 @@ remove(_, [], NewList, NewList).
 remove(X, [X | T], List, NewList) :- remove(X, T, List, NewList).
 remove(X, [Y | T], List, NewList) :- X \= Y, remove(X, T, [Y | List], NewList).
 
+inside_same_room(Item1, Item2) :- Item1 \= Item2, rooms(Room), inside(Inside), member([Item1, Room], Inside), member([Item2, Room], Inside).
 -rooms(X) :- not rooms(X).
+
+% Test queries
+% ontopof_inherited(X, computer176, [[computer176, desk110], [desk110, floor81]]).
+ontopof_inherited(ItemBelow, ItemOntop, OntopofList) :- member([ItemOntop, ItemBelow], OntopofList).
+ontopof_inherited(ItemBelow, ItemOntop, OntopofList) :- member([ItemOnTop, ItemInBetween], OntopofList),
+    ontopof_inherited(ItemBelow, ItemInBetween, OntopofList).
+ontopof_inherited(ItemBelow, ItemOntop, OntopofList) :- member([ItemInBetween, ItemBelow], OntopofList),
+    ontopof_inherited(ItemInBetween, ItemOntop, OntopofList).
 
 % testing examples:
 % state_subset([close([]), holds([]), sat_on([])], [close([]), holds([]), sat_on([])]).
 % state_subset([close([]), holds([remotecontrol1]), sat_on([])], [close([remotecontrol1]), holds([television2, remotecontrol1]), sat_on([])]).
 % state_subset([close([remotecontrol1]), holds([remotecontrol1]), sat_on([])], [close([remotecontrol1]), holds([television2, remotecontrol1]), sat_on([])]).
+% state_subset([close([computer176]), holds([]), sat_on([chair109]), on_top_of([]), inside([]), on([computer176]), laid_on([])], [close([chair109,computer176]),holds([]),sat_on([chair109]),on_top_of([[chair109,floor81],[computer176,desk110],[desk110,floor81]]),inside([[character1,bedroom74],[computer176,bedroom74]]),on([computer176]),laid_on([])]).
 state_subset([close(CloseFinal), holds(HoldsFinal), sat_on(SatFinal), on_top_of(OtoFinal), inside(InsideFinal), on(OnFinal), laid_on(LaidFinal)],
              [close(Close), holds(Holds), sat_on(Sat), on_top_of(Oto), inside(Inside), on(On), laid_on(Laid)]) :-
                     subset(CloseFinal, Close), subset(HoldsFinal, Holds), subset(SatFinal, Sat),
@@ -66,14 +79,24 @@ transform(State1, State2, Visited, [Action|Actions]) :-
 % We choose an action to take
 % choose_action(action generated, current state, final state)
 % Example test query:
-% choose_action(Action, [close([remotecontrol1]), holds([]), sat_on([])], [close([]), holds([remotecontrol1]), sat_on([])]).
-% choose_action(Action, [close([]), holds([]), sat_on([])], [close([]), holds([remotecontrol1]), sat_on([])]).
-% choose_action(Action, [close([]), holds([]), sat_on([]), on_top_of([]), inside([])], [close([]), holds([]), sat_on([]), on_top_of([[remotecontrol453, coffeetable372]]), inside([])]).
-% choose_action(Action, [close([remotecontrol453]), holds([]), sat_on([]), on_top_of([]), inside([])], [close([]), holds([]), sat_on([]), on_top_of([[remotecontrol453, coffeetable372]]), inside([])]).
-% choose_action(Action,[close([remotecontrol453]),holds([remotecontrol453]),sat_on([]),on_top_of([]),inside([])],[close([]),holds([]),sat_on([]),on_top_of([[remotecontrol453,coffeetable372]]),inside([])]).
-% choose_action(Action,[close([remotecontrol453,coffeetable372]),holds([remotecontrol453]),sat_on([]),on_top_of([]),inside([])],[close([]),holds([]),sat_on([]),on_top_of([[remotecontrol453,coffeetable372]]),inside([])]).
-% choose_action(X, [close([]), holds([]), sat_on([]), on_top_of([]), inside([[bed111, bedroom74], [folder454, livingroom336]]), on([]), laid_on([])], [close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([bed111])]).
-% choose_action(X, [close([]), holds([]), sat_on([]), on_top_of([]), inside([[character1, bedroom74], [bed111, bedroom74], [folder454, livingroom336]]), on([]), laid_on([])], [close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([bed111])]).
+% Browse Internet:
+% choose_action(X, [close([]), holds([]), sat_on([]), on_top_of([[computer176, desk110], [desk110, floor81], [mouse172, desk110], [mousemat173, desk110], [keyboard174, desk110], [cpuscreen177, desk110], [plate195, desk110], [mug196, desk110], [cupcake197, desk110], [cupcake198, desk110]]), inside([[cpuscreen177, bedroom74], [computer176, bedroom74], [desk110, bedroom74], [character1, kitchen207], [floor81, bedroom74], [chair109, bedroom74]]), on([]), laid_on([])], [close([cpuscreen177]), holds([]), sat_on([chair109]), on_top_of([]), inside([]), on([computer176]), laid_on([])]).
+% walk(bedroom74)
+% choose_action(X, [close([bedroom74]),holds([]),sat_on([]),on_top_of([[computer176,desk110],[desk110,floor81],[mouse172,desk110],[mousemat173,desk110],[keyboard174,desk110],[cpuscreen177,desk110],[plate195,desk110],[mug196,desk110],[cupcake197,desk110],[cupcake198,desk110]]),inside([[character1,bedroom74],[chair109,bedroom74],[floor81,bedroom74],[desk110,bedroom74],[computer176,bedroom74],[cpuscreen177,bedroom74]]),on([]),laid_on([])], [close([cpuscreen177]), holds([]), sat_on([chair109]), on_top_of([]), inside([]), on([computer176]), laid_on([])]).
+% walk(computer176)
+% choose_action(X, [close([computer176]),holds([]),sat_on([]),on_top_of([[computer176,desk110],[desk110,floor81],[mouse172,desk110],[mousemat173,desk110],[keyboard174,desk110],[cpuscreen177,desk110],[plate195,desk110],[mug196,desk110],[cupcake197,desk110],[cupcake198,desk110]]),inside([[character1,bedroom74],[chair109,bedroom74],[floor81,bedroom74],[desk110,bedroom74],[computer176,bedroom74],[cpuscreen177,bedroom74]]),on([]),laid_on([])], [close([cpuscreen177]), holds([]), sat_on([chair109]), on_top_of([]), inside([]), on([computer176]), laid_on([])]).
+% switchon(computer176)
+% choose_action(X, [close([computer176]),holds([]),sat_on([]),on_top_of([[computer176,desk110],[desk110,floor81],[mouse172,desk110],[mousemat173,desk110],[keyboard174,desk110],[cpuscreen177,desk110],[plate195,desk110],[mug196,desk110],[cupcake197,desk110],[cupcake198,desk110]]),inside([[character1,bedroom74],[chair109,bedroom74],[floor81,bedroom74],[desk110,bedroom74],[computer176,bedroom74],[cpuscreen177,bedroom74]]),on([computer176]),laid_on([])], [close([cpuscreen177]), holds([]), sat_on([chair109]), on_top_of([]), inside([]), on([computer176]), laid_on([])]).
+% walk(chair109)
+% choose_action(X, [close([chair109]),holds([]),sat_on([]),on_top_of([[computer176,desk110],[desk110,floor81],[mouse172,desk110],[mousemat173,desk110],[keyboard174,desk110],[cpuscreen177,desk110],[plate195,desk110],[mug196,desk110],[cupcake197,desk110],[cupcake198,desk110]]),inside([[character1,bedroom74],[chair109,bedroom74],[floor81,bedroom74],[desk110,bedroom74],[computer176,bedroom74],[cpuscreen177,bedroom74]]),on([computer176]),laid_on([])], [close([cpuscreen177]), holds([]), sat_on([chair109]), on_top_of([]), inside([]), on([computer176]), laid_on([])]).
+% CHANGE
+% grab(chair109)
+% choose_action(X, [close([chair109]),holds([chair109]),sat_on([]),on_top_of([[computer176,desk110],[desk110,floor81],[mouse172,desk110],[mousemat173,desk110],[keyboard174,desk110],[cpuscreen177,desk110],[plate195,desk110],[mug196,desk110],[cupcake197,desk110],[cupcake198,desk110]]),inside([[character1,bedroom74],[chair109,bedroom74],[floor81,bedroom74],[desk110,bedroom74],[computer176,bedroom74],[cpuscreen177,bedroom74]]),on([computer176]),laid_on([])], [close([cpuscreen177]), holds([]), sat_on([chair109]), on_top_of([]), inside([]), on([computer176]), laid_on([])]).
+% walk(cpuscreen177)
+% choose_action(X, [close([cpuscreen177,chair109]),holds([chair109]),sat_on([]),on_top_of([[computer176,desk110],[desk110,floor81],[mouse172,desk110],[mousemat173,desk110],[keyboard174,desk110],[cpuscreen177,desk110],[plate195,desk110],[mug196,desk110],[cupcake197,desk110],[cupcake198,desk110]]),inside([[character1,bedroom74],[chair109,bedroom74],[floor81,bedroom74],[desk110,bedroom74],[computer176,bedroom74],[cpuscreen177,bedroom74]]),on([computer176]),laid_on([])], [close([cpuscreen177]), holds([]), sat_on([chair109]), on_top_of([]), inside([]), on([computer176]), laid_on([])]).
+% put(chair109, floor81)
+% choose_action(X, [close([cpuscreen177,chair109]),holds([]),sat_on([]),on_top_of([[chair109,floor81],[computer176,desk110],[desk110,floor81],[mouse172,desk110],[mousemat173,desk110],[keyboard174,desk110],[cpuscreen177,desk110],[plate195,desk110],[mug196,desk110],[cupcake197,desk110],[cupcake198,desk110]]),inside([[character1,bedroom74],[chair109,bedroom74],[floor81,bedroom74],[desk110,bedroom74],[computer176,bedroom74],[cpuscreen177,bedroom74]]),on([computer176]),laid_on([])], [close([cpuscreen177]), holds([]), sat_on([chair109]), on_top_of([]), inside([]), on([computer176]), laid_on([])]).
+% sit(chair109)
 choose_action(Action, State1, State2) :- suggest(Action, State1, State2), legal_action(Action, State1).
 choose_action(Action, State1, _) :- legal_action(Action, State1).
 % Example test queries:
@@ -81,22 +104,30 @@ choose_action(Action, State1, _) :- legal_action(Action, State1).
 % suggest(Action, [close([remotecontrol453]), holds([]), sat_on([]), on_top_of([]), inside([])], [close([]), holds([]), sat_on([]), on_top_of([[remotecontrol453, coffeetable372]]), inside([])]).
 % suggest(X, [close([]), holds([]), sat_on([]), on_top_of([]), inside([[remotecontrol453, livingroom336], [folder454, livingroom336]]), on([])], [close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([remotecontrol453])]).
 % suggest(X, [close([]), holds([]), sat_on([]), on_top_of([]), inside([[character1, bedroom74], [bed111, bedroom74], [folder454, livingroom336]]), on([]), laid_on([])], [close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([bed111])]).
+% suggest(X, [close([]), holds([]), sat_on([]), on_top_of([]), inside([[character1, bedroom74], [computer176, bedroom74], [chair109, livingroom336]]), on([]), laid_on([])], [close([computer176]), holds([]), sat_on([chair109]), on_top_of([]), inside([]), on([]), laid_on([])]).
+% suggest(X, [close([chair109, computer176]), holds([chair109]), sat_on([]), on_top_of([[computer176, desk110], [desk110, floor81]]), inside([[character1, bedroom74], [computer176, bedroom74]]), on([]), laid_on([])], [close([computer176]), holds([]), sat_on([chair109]), on_top_of([]), inside([]), on([]), laid_on([])]).
+% suggest(grab(chair109), [close([chair109]),holds([]),sat_on([]),on_top_of([[computer176,desk110],[desk110,floor81],[mouse172,desk110],[mousemat173,desk110],[keyboard174,desk110],[cpuscreen177,desk110],[plate195,desk110],[mug196,desk110],[cupcake197,desk110],[cupcake198,desk110]]),inside([[character1,bedroom74],[chair109,bedroom74],[floor81,bedroom74],[desk110,bedroom74],[computer176,bedroom74],[cpuscreen177,bedroom74]]),on([computer176]),laid_on([])], [close([cpuscreen177]), holds([]), sat_on([chair109]), on_top_of([]), inside([]), on([computer176]), laid_on([])]).
+suggest(walk(X), [_, _, _, _, _, on(OnI), _], [_, _, _, _, _, on(OnF), _]) :- not_member(X,OnI), member(X, OnF).
 suggest(switchon(X), _, [_, _, _, _, _, on(On), _]) :- member(X, On).
 suggest(put(X, Y), [_, _, _, _, _, _, _], [_, _, _, on_top_of(Oto), _, _, _]) :- member([X,Y], Oto).
-suggest(walk(X), _, [close(Close), _, _, _, _, _, _]) :- member(X, Close).
+suggest(walk(X), _, [close(Close), _, sat_on(Sat), _, _, _, _]) :- member(X, Sat), not_member(X, Close).
+suggest(grab(X), [close(CloseI), _, _, _, _, _, _], [close(CloseF), _, sat_on(Sat), _, _, _, _]) :-
+    not_member(Y, CloseI), member(Y, CloseF), member(X, Sat), -list_empty(CloseF).
+suggest(walk(X), [_, holds(Held), _, _, _, _, _], [close(Close), _, sat_on(Sat), _, _, _, _]) :- member(X, Close), sittable(Y), X\=Y, member(Y, Sat), member(Y, Held).
+suggest(put(X, Y), [close(CloseI), holds(Held), _, on_top_of(Oto), _, _, _], [close(CloseF), _, sat_on(Sat), _, _, _, _]) :-
+    type(Y, floor), member(X, Sat), member(X, Held), member(Z, CloseI), member(Z, CloseF), ontopof_inherited(Y, Z, Oto).
 suggest(walk(X), _, [_, _, _, on_top_of(Oto), _, _, _]) :- member([X, _], Oto).
 suggest(walk(Y), [_, holds(Held), _, _, _, _, _], [_, _, _, on_top_of(Oto), _, _, _]) :- member([X,Y], Oto), member(X, Held).
-suggest(walk(X), _, [_, _, _, _, _, on(On), _]) :- member(X, On).
 suggest(grab(X), [close(Close), _, _, _, _, _, _], [_, _, _, on_top_of(Oto), _, _, _]) :- member([X, _], Oto), member(X, Close).
 suggest(grab(X), _, [_, holds(Held), _, _, _, _, _]) :- member(X, Held).
-suggest(sit(X), _, [_, _, sat_on(Sat), _, _, _, _]) :- member(X, Sat).
 suggest(lie(X), _, [_, _, _, _, _, _, laid_on(Lie)]) :- member(X, Lie).
 suggest(standup, [_, _, sat_on([_]), _, _, _, _], _).
 suggest(standup, [_, _, _, _, _, _, laid_on([_])], _).
 suggest(walk(X), _, [close(Close), holds(Held), _, _, _, _, _]) :- member(X, Held), not_member(X, Close).
-suggest(walk(X), _, [close(Close), _, sat_on(Sat), _, _, _, _]) :- member(X, Sat), not_member(X, Close).
 suggest(walk(X), _, [close(Close), _, _, _, _, _, laid_on(Laid)]) :- member(X, Laid), not_member(X, Close).
+suggest(sit(X), _, [_, _, sat_on(Sat), _, _, _, _]) :- member(X, Sat).
 suggest(walk(Room), State1, State2) :- item_of_interest(State1, State2, Item), state_inside(State1, Item, Room).
+suggest(walk(X), _, [close(Close), _, _, _, _, _, _]) :- member(X, Close).
 
 % Test Queries
 % state_inside([close([]), holds([]), sat_on([]), on_top_of([]), inside([[remotecontrol453, livingroom336], [folder454, livingroom336]]), on([])], remotecontrol453, Room).
@@ -104,9 +135,6 @@ state_inside([_, _, _, _, inside(Inside), _, _], Item, Room) :- member([Item, Ro
 
 % Test Queries
 % item_of_interest([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([])], [close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([remotecontrol453])], Item).
-item_of_interest([close(CloseI), _, _, _, _, _, _],
-                [close(CloseF), _, _, _, _, _, _],
-                Item) :- member(Item, CloseF), not_member(Item, CloseI).
 item_of_interest([_, holds(HeldI), _, _, _, _, _],
                 [_, holds(HeldF), _, _, _, _, _],
                 Item) :- member(Item, HeldF), not_member(Item, HeldI).
@@ -125,6 +153,9 @@ item_of_interest([_, _, _, _, _, on(OnI), _],
 item_of_interest([_, _, _, _, _, _, laid_on(LaidI)],
                 [_, _, _, _, _, _, laid_on(LaidF)],
                 Item) :- member(Item, LaidF), not_member(Item, LaidI).
+            item_of_interest([close(CloseI), _, _, _, _, _, _],
+                [close(CloseF), _, _, _, _, _, _],
+                Item) :- member(Item, CloseF), not_member(Item, CloseI).
 
 % Check if an action is legal given the state
 % Example test query:
@@ -135,6 +166,7 @@ item_of_interest([_, _, _, _, _, _, laid_on(LaidI)],
 % legal_action(walk(bedroom74), [close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([])]).
 % legal_action(walk(bedroom74), [close([]), holds([]), sat_on([]), on_top_of([]), inside([[character1, kitchen207]]), on([])]).
 % legal_action(walk(livingroom336), [close([]), holds([]), sat_on([]), on_top_of([]), inside([[remotecontrol453, livingroom336], [folder454, livingroom336]]), on([])]).
+% legal_action(put(chair109, floor81), [close([chair109, computer176]), holds([chair109]), sat_on([]), on_top_of([[computer176, desk110], [desk110, floor81]]), inside([[character1, bedroom74], [computer176, bedroom74]]), on([]), laid_on([])]).
 legal_action(walk(X), [_, _, sat_on([]), _, inside(Inside), _, _]) :- rooms(X), not_member([character1, X], Inside).
 legal_action(walk(X), [close(Close), _, sat_on([]), _, inside(Inside), _, _]) :- type(X, Y), -rooms(X), Y \= character,
     member([X, Room], Inside), member([character1, Room], Inside), not_member(X, Close).
@@ -148,6 +180,9 @@ legal_action(standup, [_, _, sat_on([_]), _, _, _, _]).
 legal_action(standup, [_, _, _, _, _, _, laid_on([_])]).
 legal_action(put(X,Y), [close(Close), holds(Held), _, on_top_of(Oto), inside(Inside), _, _]) :-
     member(Y, Close), member(X, Held), not_member([X,Y], Oto).
+legal_action(put(X,Y), [close(Close), holds(Held), _, on_top_of(Oto), inside(Inside), _, _]) :-
+    type(Y, floor), ontopof_inherited(Y, Z, Oto), member(Z, Close),
+    member(X, Held), not_member([X,Y], Oto).
 legal_action(switchon(X), [close(Close), _, _, _, inside(Inside), on(On), _]) :-
     member(X, Close), not_member(X, On), has_switch(X).
 
@@ -160,6 +195,9 @@ legal_action(switchon(X), [close(Close), _, _, _, inside(Inside), on(On), _]) :-
 % update(walk(television2), [close([remotecontrol453]), holds([remotecontrol453]), sat_on([]), on_top_of([]), inside([]), on([])], State).
 % update(walk(bedroom74), [close([remotecontrol453]), holds([]), sat_on([]), on_top_of([]), inside([]), on([])], State).
 % update(walk(bedroom74), [close([bedroom74]),holds([]),sat_on([]),on_top_of([]),inside([[character1,bedroom74]]),on([])], State).
+% update(put(chair109, floor81), [close([chair109, computer176]), holds([chair109]), sat_on([]), on_top_of([[computer176, desk110], [desk110, floor81]]), inside([[character1, bedroom74], [computer176, bedroom74]]), on([]), laid_on([])], State).
+% update(switchon(computer176), [close([chair109,computer176]),holds([]),sat_on([]),on_top_of([[chair109,floor81],[computer176,desk110],[desk110,floor81]]),inside([[character1,bedroom74],[computer176,bedroom74]]),on([]),laid_on([])], State).
+% update(sit(chair109), [close([chair109,computer176]),holds([]),sat_on([]),on_top_of([[chair109,floor81],[computer176,desk110],[desk110,floor81]]),inside([[character1,bedroom74],[computer176,bedroom74]]),on([computer176]),laid_on([])], State).
 update(walk(X), [close(Close), holds(Held), sat_on(Sat), on_top_of(Oto), inside(In), on(On), laid_on(Laid)],
                 [close(Closen), holds(Held), sat_on(Sat), on_top_of(Oto), inside(Inf), on(On), laid_on(Laid)]) :-
     update_walking(X, [Close, Held], [], Closen),
@@ -212,5 +250,9 @@ complete_task(turn_on_tv, P) :- type(Tv, tv),
 % Actual VirtualHome Tasks
 complete_task(go_to_sleep, P) :- type(Bed, bed),
     transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([Bed])], P).
-complete_task(browse_internet, P) :- type(Computer, computer), type(Chair, chair), close(Close), member([Computer, Chair], Close),
-    transform([close([Computer]), holds([]), sat_on([Chair]), on_top_of([]), inside([]), on([]), laid_on([])], P).
+complete_task(browse_internet, P) :-
+    type(Computer, computer), type(Chair, chair), type(Cpuscreen, cpuscreen), inside_same_room(Computer, Chair),
+    transform([close([Cpuscreen]), holds([]), sat_on([Chair]), on_top_of([]), inside([]), on([Computer]), laid_on([])], P).
+complete_task(wash_teeth, P) :-
+    type(Toothbrush, toothbrush), type(Toothpaste, toothpaste), type(Sink, sink),
+    transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([])])

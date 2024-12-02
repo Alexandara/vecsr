@@ -28,14 +28,26 @@ if __name__ == '__main__':
     real_simulator = True
     optimize_rules = True
     dynamic = False
-    task_selection = 5
-    tasks = ["use_phone_on_couch",
-             "grab_remote_and_clothes",
-             "grab_remote",
-             "set_remote_on_coffee_table",
-             "turn_on_tv",
-             "go_to_sleep",
-             "browse_internet"]
+    task_selection = 10
+    tasks = ["use_phone_on_couch",              # 0
+             "grab_remote_and_clothes",         # 1
+             "grab_remote",                     # 2
+             "set_remote_on_coffee_table",      # 3
+             "turn_on_tv",                      # 4
+             "go_to_sleep",                     # 5
+             "browse_internet",                 # 6
+             "wash_teeth",                      # 7
+             "brush_teeth",                     # 8
+             "vacuum",                          # 9
+             "change_sheets_and_pillow_cases"   # 10
+             ]
+    rooms = None
+    if task_selection in [6]:
+        rooms = [74]
+    elif task_selection in [7,8]:
+        rooms = [11]
+    elif task_selection in [10]:
+        rooms = [74, 336]
     start_time = time.time()
     logging.info("Start Time: %s", datetime.datetime.now())
     # Create simulator
@@ -44,7 +56,7 @@ if __name__ == '__main__':
     else:
         simulat = simulator.MockVirtualHomeSimulator() # Mock VirtualHome Simulator
     # Create Harness
-    program = scaspharness.ScaspHarness(simulat, initial_rules="scasp_knowledge_base/knowledge_base_without_time.pl", optimize_rules=optimize_rules)
+    program = scaspharness.ScaspHarness(simulat, initial_rules="scasp_knowledge_base/knowledge_base_without_time.pl", optimize_rules=optimize_rules, rooms=rooms)
     logging.info("Program Initialized Time: %s seconds" % (time.time() - start_time))
     start_time = time.time()
     # Full loop

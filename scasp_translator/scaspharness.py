@@ -2,7 +2,7 @@ import logging
 import subprocess
 
 class ScaspHarness():
-	def __init__(self, simulator, initial_rules=None, optimize_rules=True):
+	def __init__(self, simulator, initial_rules=None, optimize_rules=True, rooms=None):
 		if simulator:
 			self.simulator = simulator
 		self.optimize_rules = optimize_rules
@@ -18,13 +18,14 @@ class ScaspHarness():
 		self.generate_dependency_graph()
 		self.rules = {}
 		self.objects = {}
+		self.rooms = rooms
 
-	def get_scasp(self, rooms=None):
+	def get_scasp(self):
 		"""
 		This method gets the state from the simulator and appends it to the
 		initial rules
 		"""
-		self.rules = self.simulator.get_state(rooms)
+		self.rules = self.simulator.get_state(self.rooms)
 
 	def print_rules_to_file(self, rooms, file=None, past_file=None, query=None):
 		"""

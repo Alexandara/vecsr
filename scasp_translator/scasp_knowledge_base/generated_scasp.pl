@@ -1,3 +1,95 @@
+type(bathroom11, bathroom).
+rooms(bathroom11).
+type(floor12, floor).
+type(floor13, floor).
+type(floor14, floor).
+type(floor15, floor).
+type(floor16, floor).
+type(floor17, floor).
+type(wall18, wall).
+type(wall19, wall).
+type(wall20, wall).
+type(wall21, wall).
+type(wall22, wall).
+type(wall23, wall).
+type(wall24, wall).
+type(ceiling25, ceiling).
+type(ceiling26, ceiling).
+type(ceiling27, ceiling).
+type(ceiling28, ceiling).
+type(ceiling29, ceiling).
+type(ceiling30, ceiling).
+type(rug31, rug).
+grabbable(rug31).
+sittable(rug31).
+lieable(rug31).
+type(curtains32, curtains).
+type(curtains33, curtains).
+type(curtains34, curtains).
+type(ceilinglamp35, ceilinglamp).
+type(walllamp36, walllamp).
+type(walllamp37, walllamp).
+type(walllamp38, walllamp).
+type(bathtub39, bathtub).
+sittable(bathtub39).
+lieable(bathtub39).
+type(towelrack40, towelrack).
+grabbable(towelrack40).
+type(towelrack41, towelrack).
+grabbable(towelrack41).
+type(towelrack42, towelrack).
+grabbable(towelrack42).
+type(towelrack43, towelrack).
+grabbable(towelrack43).
+type(wallshelf44, wallshelf).
+type(stall45, stall).
+type(toilet46, toilet).
+sittable(toilet46).
+type(stall47, stall).
+type(curtains48, curtains).
+type(bathroomcabinet49, bathroomcabinet).
+type(bathroomcounter50, bathroomcounter).
+type(faucet51, faucet).
+has_switch(faucet51).
+type(door52, door).
+type(doorjamb53, doorjamb).
+type(towel54, towel).
+grabbable(towel54).
+type(towel55, towel).
+grabbable(towel55).
+type(towel56, towel).
+grabbable(towel56).
+type(perfume57, perfume).
+type(deodorant58, deodorant).
+type(hairproduct59, hairproduct).
+grabbable(hairproduct59).
+type(hairproduct60, hairproduct).
+grabbable(hairproduct60).
+type(facecream61, facecream).
+grabbable(facecream61).
+type(plate62, plate).
+grabbable(plate62).
+type(toothpaste63, toothpaste).
+grabbable(toothpaste63).
+type(painkillers64, painkillers).
+type(waterglass65, waterglass).
+grabbable(waterglass65).
+type(toothbrush66, toothbrush).
+grabbable(toothbrush66).
+type(barsoap67, barsoap).
+grabbable(barsoap67).
+type(towel68, towel).
+grabbable(towel68).
+type(towel69, towel).
+grabbable(towel69).
+type(candle70, candle).
+grabbable(candle70).
+has_switch(candle70).
+type(window71, window).
+type(lightswitch72, lightswitch).
+has_switch(lightswitch72).
+type(washingmachine73, washingmachine).
+has_switch(washingmachine73).
 type(bedroom74, bedroom).
 rooms(bedroom74).
 type(floor75, floor).
@@ -217,6 +309,237 @@ type(folder205, folder).
 grabbable(folder205).
 type(folder206, folder).
 grabbable(folder206).
+type(character1, character).
+type(kitchen207, kitchen).
+rooms(kitchen207).
+type(floor208, floor).
+type(floor209, floor).
+type(floor210, floor).
+type(floor211, floor).
+type(floor212, floor).
+type(floor213, floor).
+type(wall214, wall).
+type(wall215, wall).
+type(wall216, wall).
+type(wall217, wall).
+type(wall218, wall).
+type(wall219, wall).
+type(wall220, wall).
+type(ceiling221, ceiling).
+type(ceiling222, ceiling).
+type(ceiling223, ceiling).
+type(ceiling224, ceiling).
+type(ceiling225, ceiling).
+type(ceiling226, ceiling).
+type(door227, door).
+type(ceilinglamp228, ceilinglamp).
+type(ceilinglamp229, ceilinglamp).
+type(tvstand230, tvstand).
+type(kitchentable231, kitchentable).
+type(bench232, bench).
+sittable(bench232).
+lieable(bench232).
+type(bench233, bench).
+sittable(bench233).
+lieable(bench233).
+type(kitchencabinet234, kitchencabinet).
+type(kitchencabinet235, kitchencabinet).
+type(kitchencabinet236, kitchencabinet).
+type(kitchencabinet237, kitchencabinet).
+type(kitchencounter238, kitchencounter).
+type(kitchencounterdrawer239, kitchencounterdrawer).
+type(kitchencounterdrawer240, kitchencounterdrawer).
+type(kitchencounterdrawer241, kitchencounterdrawer).
+type(kitchencounterdrawer242, kitchencounterdrawer).
+type(kitchencounterdrawer243, kitchencounterdrawer).
+type(kitchencounterdrawer244, kitchencounterdrawer).
+type(kitchencounterdrawer245, kitchencounterdrawer).
+type(kitchencounterdrawer246, kitchencounterdrawer).
+type(sink247, sink).
+type(sink248, sink).
+type(faucet249, faucet).
+has_switch(faucet249).
+type(bookshelf250, bookshelf).
+type(wallshelf251, wallshelf).
+type(wallshelf252, wallshelf).
+type(rug253, rug).
+grabbable(rug253).
+sittable(rug253).
+lieable(rug253).
+type(rug254, rug).
+grabbable(rug254).
+sittable(rug254).
+lieable(rug254).
+type(wallpictureframe255, wallpictureframe).
+grabbable(wallpictureframe255).
+type(wallpictureframe256, wallpictureframe).
+grabbable(wallpictureframe256).
+type(wallpictureframe257, wallpictureframe).
+grabbable(wallpictureframe257).
+type(wallpictureframe258, wallpictureframe).
+grabbable(wallpictureframe258).
+type(wallpictureframe259, wallpictureframe).
+grabbable(wallpictureframe259).
+type(wallpictureframe260, wallpictureframe).
+grabbable(wallpictureframe260).
+type(orchid261, orchid).
+type(lightswitch262, lightswitch).
+has_switch(lightswitch262).
+type(powersocket263, powersocket).
+type(wallphone264, wallphone).
+grabbable(wallphone264).
+has_switch(wallphone264).
+type(tv265, tv).
+has_switch(tv265).
+type(clock266, clock).
+grabbable(clock266).
+has_switch(clock266).
+type(washingsponge267, washingsponge).
+grabbable(washingsponge267).
+type(dishwashingliquid268, dishwashingliquid).
+grabbable(dishwashingliquid268).
+type(book269, book).
+grabbable(book269).
+type(fryingpan270, fryingpan).
+grabbable(fryingpan270).
+type(waterglass271, waterglass).
+grabbable(waterglass271).
+type(cutleryknife272, cutleryknife).
+grabbable(cutleryknife272).
+type(cutleryfork273, cutleryfork).
+grabbable(cutleryfork273).
+type(plate274, plate).
+grabbable(plate274).
+type(waterglass275, waterglass).
+grabbable(waterglass275).
+type(cutleryknife276, cutleryknife).
+grabbable(cutleryknife276).
+type(cutleryfork277, cutleryfork).
+grabbable(cutleryfork277).
+type(plate278, plate).
+grabbable(plate278).
+type(plate279, plate).
+grabbable(plate279).
+type(cutleryfork280, cutleryfork).
+grabbable(cutleryfork280).
+type(cutleryknife281, cutleryknife).
+grabbable(cutleryknife281).
+type(waterglass282, waterglass).
+grabbable(waterglass282).
+type(waterglass283, waterglass).
+grabbable(waterglass283).
+type(cutleryknife284, cutleryknife).
+grabbable(cutleryknife284).
+type(cutleryfork285, cutleryfork).
+grabbable(cutleryfork285).
+type(plate286, plate).
+grabbable(plate286).
+type(clothespile287, clothespile).
+grabbable(clothespile287).
+type(box288, box).
+grabbable(box288).
+type(dishbowl289, dishbowl).
+grabbable(dishbowl289).
+type(book290, book).
+grabbable(book290).
+type(book291, book).
+grabbable(book291).
+type(book292, book).
+grabbable(book292).
+type(book293, book).
+grabbable(book293).
+type(book294, book).
+grabbable(book294).
+type(condimentbottle295, condimentbottle).
+grabbable(condimentbottle295).
+type(condimentbottle296, condimentbottle).
+grabbable(condimentbottle296).
+type(condimentshaker297, condimentshaker).
+grabbable(condimentshaker297).
+eatable(condimentshaker297).
+type(condimentshaker298, condimentshaker).
+grabbable(condimentshaker298).
+eatable(condimentshaker298).
+type(wineglass299, wineglass).
+grabbable(wineglass299).
+type(wineglass300, wineglass).
+grabbable(wineglass300).
+type(box301, box).
+grabbable(box301).
+type(photoframe302, photoframe).
+type(paper303, paper).
+grabbable(paper303).
+type(paper304, paper).
+grabbable(paper304).
+type(stovefan305, stovefan).
+type(fridge306, fridge).
+has_switch(fridge306).
+type(coffeemaker307, coffeemaker).
+has_switch(coffeemaker307).
+type(coffeepot308, coffeepot).
+grabbable(coffeepot308).
+type(toaster309, toaster).
+has_switch(toaster309).
+type(breadslice310, breadslice).
+grabbable(breadslice310).
+eatable(breadslice310).
+type(breadslice311, breadslice).
+grabbable(breadslice311).
+eatable(breadslice311).
+type(stove312, stove).
+has_switch(stove312).
+type(oventray313, oventray).
+grabbable(oventray313).
+type(microwave314, microwave).
+has_switch(microwave314).
+type(plate315, plate).
+grabbable(plate315).
+type(bananas316, bananas).
+grabbable(bananas316).
+type(bananas317, bananas).
+grabbable(bananas317).
+type(dishbowl318, dishbowl).
+grabbable(dishbowl318).
+type(whippedcream319, whippedcream).
+grabbable(whippedcream319).
+eatable(whippedcream319).
+type(pie320, pie).
+grabbable(pie320).
+eatable(pie320).
+type(bellpepper321, bellpepper).
+grabbable(bellpepper321).
+type(bellpepper322, bellpepper).
+grabbable(bellpepper322).
+type(bellpepper323, bellpepper).
+grabbable(bellpepper323).
+type(bellpepper324, bellpepper).
+grabbable(bellpepper324).
+type(bellpepper325, bellpepper).
+grabbable(bellpepper325).
+type(bellpepper326, bellpepper).
+grabbable(bellpepper326).
+type(dishbowl327, dishbowl).
+grabbable(dishbowl327).
+type(salmon328, salmon).
+grabbable(salmon328).
+type(chips329, chips).
+grabbable(chips329).
+type(chips330, chips).
+grabbable(chips330).
+type(candybar331, candybar).
+grabbable(candybar331).
+eatable(candybar331).
+type(chocolatesyrup332, chocolatesyrup).
+grabbable(chocolatesyrup332).
+eatable(chocolatesyrup332).
+type(crackers333, crackers).
+grabbable(crackers333).
+type(creamybuns334, creamybuns).
+grabbable(creamybuns334).
+eatable(creamybuns334).
+type(cereal335, cereal).
+grabbable(cereal335).
+eatable(cereal335).
 type(livingroom336, livingroom).
 rooms(livingroom336).
 type(floor337, floor).
@@ -408,10 +731,10 @@ grabbable(remotecontrol453).
 has_switch(remotecontrol453).
 type(folder454, folder).
 grabbable(folder454).
-on_list([tablelamp103, tablelamp104, lightswitch175, lightswitch428]).
-inside([[radio178, bookshelf107], [ceiling357, livingroom336], [ceiling94, bedroom74], [hanger130, bedroom74], [wallpictureframe180, bedroom74], [hanger116, closet114], [hanger118, closet114], [lightswitch428, livingroom336], [tablelamp104, bedroom74], [ceiling361, livingroom336], [ceiling354, livingroom336], [closetdrawer160, clothespile162], [ceiling358, livingroom336], [hanger138, bedroom74], [clothespile162, bedroom74], [doorjamb364, livingroom336], [cellphone450, livingroom336], [floor77, bedroom74], [book437, bookshelf371], [clothespile168, bedroom74], [clothespile170, closet129], [clothespile165, bedroom74], [hanger148, bedroom74], [cellphone204, bedroom74], [closetdrawer397, clothespile398], [mousemat173, bedroom74], [bananas440, livingroom336], [closetdrawer122, bedroom74], [ceiling98, bedroom74], [clothespants143, closet129], [wineglass200, bedroom74], [photoframe191, bookshelf107], [wall88, bedroom74], [wall90, bedroom74], [slippers203, bedroom74], [clothespile404, closet375], [closetdrawer156, clothespile158], [floor337, livingroom336], [floor81, bedroom74], [ceiling100, bedroom74], [closetdrawer411, closet375], [hanger376, closet375], [closetdrawer128, closet114], [hanger117, closet114], [book192, bookshelf107], [clothespants139, bedroom74], [clothespants137, bedroom74], [clothespile167, closet129], [clothespants388, closet375], [wallpictureframe181, bedroom74], [mug448, livingroom336], [wallpictureframe420, livingroom336], [chair112, bedroom74], [hanger382, livingroom336], [hanger393, closet375], [closetdrawer125, closet114], [clothespile165, closet129], [closetdrawer405, clothespile407], [computer434, livingroom336], [clothesshirt145, bedroom74], [closetdrawer127, bedroom74], [clothespile395, closet375], [wall89, bedroom74], [hanger392, closet375], [plum445, livingroom336], [chair109, bedroom74], [hanger136, closet129], [ceiling96, bedroom74], [hanger146, bedroom74], [ceiling97, bedroom74], [desk374, livingroom336], [wall351, livingroom336], [clothesshirt131, closet129], [closetdrawer401, livingroom336], [hanger384, livingroom336], [book193, bookshelf107], [clothespants143, bedroom74], [hanger144, closet129], [floor79, bedroom74], [wall86, bedroom74], [clothespile151, closet129], [clothespile163, closet129], [closetdrawer399, livingroom336], [clothesshirt390, livingroom336], [closetdrawer152, bedroom74], [ceiling95, bedroom74], [clothespile157, closet129], [closetdrawer164, bedroom74], [remotecontrol453, livingroom336], [hanger384, closet375], [hanger376, livingroom336], [curtains185, bedroom74], [clothespile400, livingroom336], [closetdrawer409, livingroom336], [clothespile407, closet375], [hanger144, bedroom74], [closetdrawer156, closet129], [book435, livingroom336], [box194, bookshelf107], [closetdrawer405, livingroom336], [hanger386, closet375], [dishbowl446, livingroom336], [clothespants133, bedroom74], [garbagecan105, bedroom74], [closetdrawer152, closet129], [wall347, livingroom336], [hanger121, bedroom74], [hanger389, livingroom336], [wall91, bedroom74], [wallpictureframe417, livingroom336], [tvstand370, livingroom336], [clothespile412, livingroom336], [photoframe447, livingroom336], [floor341, livingroom336], [closetdrawer160, closet129], [wallpictureframe182, bedroom74], [clothesshirt145, closet129], [hanger138, closet129], [cellphone449, livingroom336], [book437, livingroom336], [hanger116, bedroom74], [clothespile403, closet375], [clothespants139, closet129], [clothespile169, closet129], [nightstand108, bedroom74], [clothespile410, livingroom336], [wall85, bedroom74], [wall346, livingroom336], [mouse172, bedroom74], [ceiling93, bedroom74], [floor343, livingroom336], [plate195, bedroom74], [hanger118, bedroom74], [hanger148, closet129], [closetdrawer123, bedroom74], [radio178, bedroom74], [closetdrawer397, closet375], [clothespile398, livingroom336], [pillow188, bedroom74], [hanger378, livingroom336], [bed111, bedroom74], [closetdrawer160, bedroom74], [hanger380, closet375], [clothespants133, closet129], [curtains187, bedroom74], [clothespile167, bedroom74], [floor339, livingroom336], [curtains426, livingroom336], [closetdrawer128, bedroom74], [clothespile162, closet129], [cpuscreen177, bedroom74], [keyboard432, livingroom336], [clothespile157, bedroom74], [clothespile407, livingroom336], [wall352, livingroom336], [closetdrawer397, livingroom336], [clothespile151, bedroom74], [floor82, bedroom74], [clothespile406, livingroom336], [clothespile150, closet129], [closetdrawer123, closet114], [cupcake197, bedroom74], [hanger134, bedroom74], [tv427, livingroom336], [clothesshirt377, livingroom336], [hanger119, closet114], [nightstand106, bedroom74], [hanger147, closet129], [hanger115, closet114], [clothespile408, livingroom336], [paper451, livingroom336], [closetdrawer126, closet114], [clothespile155, bedroom74], [wineglass199, bedroom74], [closetdrawer411, clothespile414], [folder206, bookshelf107], [clothespile395, livingroom336], [book435, bookshelf371], [hanger392, livingroom336], [closetdrawer401, closet375], [closetdrawer154, clothespile155], [cupcake198, bedroom74], [peach443, livingroom336], [clothespants379, livingroom336], [bookshelf371, livingroom336], [walllamp367, livingroom336], [clothespants383, livingroom336], [hanger120, closet114], [wall353, livingroom336], [coffeetable372, livingroom336], [hanger391, closet375], [clothespile155, closet129], [wall348, livingroom336], [closetdrawer166, clothespile169], [closetdrawer411, livingroom336], [hanger391, livingroom336], [clothespants387, livingroom336], [cellphone190, bedroom74], [walllamp368, livingroom336], [hanger378, closet375], [clothespile413, closet375], [closet375, livingroom336], [ceiling362, livingroom336], [photoframe447, bookshelf371], [wall84, bedroom74], [curtains425, livingroom336], [hanger389, closet375], [clothespile168, closet129], [hanger142, bedroom74], [candle183, bedroom74], [clothespile400, closet375], [closetdrawer409, closet375], [clothespile153, bedroom74], [box194, bedroom74], [closetdrawer127, closet114], [closetdrawer405, closet375], [clothespile159, bedroom74], [closetdrawer149, bedroom74], [clothesshirt135, bedroom74], [folder454, livingroom336], [paper452, livingroom336], [clothespants385, closet375], [computer176, bedroom74], [hanger382, closet375], [clothespile404, livingroom336], [clothespile161, closet129], [closetdrawer122, closet114], [bookshelf107, bedroom74], [floor344, livingroom336], [floor340, livingroom336], [closetdrawer154, bedroom74], [lightswitch175, bedroom74], [clothespants137, closet129], [slippers202, bedroom74], [ceiling360, livingroom336], [cabinet416, livingroom336], [ceilinglamp102, bedroom74], [clothespile415, closet375], [hanger142, closet129], [hanger386, livingroom336], [closetdrawer154, closet129], [hanger140, closet129], [floor80, bedroom74], [folder205, bedroom74], [folder206, bedroom74], [peach442, livingroom336], [hanger120, bedroom74], [chair373, livingroom336], [closetdrawer401, clothespile403], [clothespile150, bedroom74], [clothespants388, livingroom336], [hanger147, bedroom74], [floor345, livingroom336], [clothespile412, closet375], [coffeetable113, bedroom74], [hanger119, bedroom74], [clothespants141, bedroom74], [clothespile398, closet375], [ceilinglamp366, livingroom336], [floor76, bedroom74], [closetdrawer394, closet375], [hanger130, closet129], [ceiling355, livingroom336], [hanger136, bedroom74], [hanger393, livingroom336], [rug179, bedroom74], [hanger117, bedroom74], [closet114, bedroom74], [clothespile414, closet375], [powersocket429, livingroom336], [clothespile406, closet375], [cpuscreen433, livingroom336], [window365, livingroom336], [closetdrawer156, bedroom74], [mug196, bedroom74], [clothespile396, closet375], [closetdrawer399, clothespile400], [clothespile158, closet129], [clothesshirt135, closet129], [rug418, livingroom336], [clothespile408, closet375], [orchid184, bedroom74], [pillow422, livingroom336], [clothespile403, livingroom336], [ceiling359, livingroom336], [closetdrawer399, closet375], [closetdrawer164, closet129], [hanger115, bedroom74], [clothesshirt131, bedroom74], [clothespile153, closet129], [closetdrawer394, livingroom336], [clothesshirt390, closet375], [closet129, bedroom74], [sofa369, livingroom336], [clothespile163, bedroom74], [pillow423, livingroom336], [clothespants141, closet129], [closetdrawer124, bedroom74], [box436, livingroom336], [clothespile410, closet375], [doorjamb171, bedroom74], [plum444, livingroom336], [clothesshirt381, livingroom336], [closetdrawer125, bedroom74], [desk110, bedroom74], [closetdrawer166, bedroom74], [ceiling356, livingroom336], [mousemat431, livingroom336], [wallpictureframe421, livingroom336], [floor342, livingroom336], [clothespile169, bedroom74], [ceiling99, bedroom74], [clothesshirt377, closet375], [hanger146, closet129], [tablelamp103, bedroom74], [wallpictureframe419, livingroom336], [hanger132, closet129], [clothespile161, bedroom74], [keyboard174, bedroom74], [clothespile402, livingroom336], [floor75, bedroom74], [wall87, bedroom74], [clothespile396, livingroom336], [hanger132, bedroom74], [paper451, bookshelf371], [curtains186, bedroom74], [apple438, livingroom336], [clothespants385, livingroom336], [ceiling101, bedroom74], [clothespile170, bedroom74], [closetdrawer124, closet114], [clothespile415, livingroom336], [closetdrawer149, closet129], [floor338, livingroom336], [floor83, bedroom74], [doorjamb363, livingroom336], [closetdrawer126, bedroom74], [clothespile413, livingroom336], [hanger134, closet129], [lime441, livingroom336], [clothespile158, bedroom74], [window92, bedroom74], [book192, bedroom74], [curtains424, livingroom336], [clothespile414, livingroom336], [hanger121, closet114], [clothespants387, closet375], [plate201, bedroom74], [closetdrawer152, clothespile153], [pillow189, bedroom74], [floor78, bedroom74], [photoframe191, bedroom74], [clothespile402, closet375], [clothesshirt381, closet375], [clothespile159, closet129], [folder205, bookshelf107], [clothespants383, closet375], [hanger380, livingroom336], [wall349, livingroom336], [hanger140, bedroom74], [book193, bedroom74], [wall350, livingroom336], [closetdrawer166, closet129], [mouse430, livingroom336], [clothespants379, closet375], [apple439, livingroom336]]).
-ontopof([[clothesshirt135, clothespile150], [cupcake198, desk110], [hanger382, clothespants383], [wallpictureframe182, chair112], [tvstand370, floor341], [closetdrawer405, closetdrawer411], [wallpictureframe180, bench233], [dishbowl446, coffeetable372], [cpuscreen177, desk110], [cpuscreen433, desk374], [closetdrawer152, closetdrawer154], [slippers202, rug179], [wineglass200, coffeetable113], [plate195, desk110], [peach442, coffeetable372], [clothespants379, closetdrawer394], [hanger138, clothespants139], [clothespile398, closetdrawer399], [lime441, coffeetable372], [closetdrawer124, closetdrawer127], [closetdrawer399, closetdrawer409], [wallpictureframe180, bench232], [hanger384, clothespants385], [clothespants385, closetdrawer394], [tablelamp103, bed111], [closetdrawer397, closetdrawer399], [clothespile161, closetdrawer166], [clothespile407, closetdrawer411], [paper452, desk374], [hanger136, clothespants137], [tablelamp104, nightstand108], [cellphone190, coffeetable113], [clothesshirt131, closetdrawer149], [closetdrawer149, closetdrawer156], [bookshelf371, floor337], [slippers203, floor76], [tv427, chair373], [pillow188, chair112], [clothespants383, clothespile396], [orchid184, coffeetable113], [mug196, desk110], [mouse430, desk374], [closetdrawer394, closetdrawer401], [keyboard432, desk374], [plate201, coffeetable113], [cellphone449, tvstand370], [pillow422, sofa369], [folder454, cabinet416], [clothesshirt135, closetdrawer149], [clothespile398, chair373], [mousemat173, desk110], [book435, book437], [cupcake197, desk110], [closetdrawer154, closetdrawer164], [clothespile406, closetdrawer411], [clothesshirt381, closetdrawer394], [wallpictureframe421, wall349], [book192, bookshelf107], [mouse430, mousemat431], [clothesshirt390, closetdrawer394], [hanger378, clothespants379], [clothesshirt381, clothespile395], [apple439, coffeetable372], [clothespants133, closetdrawer149], [cellphone204, coffeetable113], [coffeetable113, floor79], [bananas440, coffeetable372], [nightstand106, floor75], [mousemat431, desk374], [cabinet416, floor337], [box436, bookshelf371], [clothespile408, closetdrawer411], [mug448, desk374], [bathroomcounter50, chair112], [clothespile395, closetdrawer401], [tablelamp103, nightstand106], [clothespile153, closetdrawer154], [pillow423, sofa369], [hanger132, clothespants133], [clothespants388, closetdrawer394], [closetdrawer126, closetdrawer128], [tv427, tvstand370], [clothespants388, clothespile396], [desk110, floor81], [mouse172, desk110], [nightstand106, rug179], [clothespants137, closetdrawer149], [apple438, coffeetable372], [clothespile163, closetdrawer166], [bed111, floor76], [clothespile151, closetdrawer156], [hanger142, clothespants143], [clothespants137, clothespile151], [wineglass199, coffeetable113], [clothespants143, closetdrawer149], [clothespile404, chair373], [closetdrawer156, closetdrawer160], [clothespile162, closetdrawer166], [plum445, coffeetable372], [cellphone450, coffeetable372], [wallpictureframe182, bed111], [bed111, rug179], [tablelamp103, chair112], [bookshelf107, floor78], [pillow189, bed111], [tv427, sofa369], [closetdrawer160, closetdrawer166], [closetdrawer397, chair373], [clothespile403, chair373], [closetdrawer125, closetdrawer126], [folder206, bookshelf107], [coffeetable372, rug418], [desk374, floor343], [clothespants383, closetdrawer394], [pillow189, chair112], [closetdrawer401, chair373], [closetdrawer122, closetdrawer125], [tablelamp104, bed111], [closetdrawer123, closetdrawer124], [slippers202, floor76], [clothespile402, chair373], [folder205, bookshelf107], [closetdrawer401, closetdrawer405], [tablelamp104, chair112], [candle183, coffeetable113], [slippers203, rug179], [peach443, coffeetable372], [nightstand108, floor77], [clothesshirt377, closetdrawer394], [plum444, coffeetable372], [clothespile150, closetdrawer156], [clothespants139, closetdrawer149], [sofa369, rug418], [clothespile396, closetdrawer401], [remotecontrol453, tvstand370], [clothesshirt145, closetdrawer149], [clothespants143, clothespile151], [keyboard174, desk110], [pillow188, bed111], [mouse172, mousemat173], [nightstand108, rug179]]).
-close_character([garbagecan105, lightswitch175, computer176, wallpictureframe180, plate195, mug196, cupcake197, cupcake198]).
+on_list([lightswitch428, tablelamp104, lightswitch175, lightswitch72, tablelamp103, lightswitch262]).
+inside([[clothespile414, closet375], [clothespile287, bookshelf250], [cellphone449, livingroom336], [rug179, bedroom74], [wall24, bathroom11], [clothespants379, closet375], [wallpictureframe257, kitchen207], [ceiling100, bedroom74], [hanger120, bedroom74], [cellphone450, livingroom336], [hanger147, closet129], [closetdrawer125, closet114], [closetdrawer399, closet375], [clothespile165, bedroom74], [clothespile398, livingroom336], [hanger380, closet375], [plum444, livingroom336], [ceiling101, bedroom74], [towelrack43, bathroom11], [wall23, bathroom11], [cereal335, kitchen207], [ceiling355, livingroom336], [cutleryfork280, kitchen207], [barsoap67, bathroom11], [wall84, bedroom74], [closetdrawer156, clothespile158], [cutleryknife284, kitchen207], [hairproduct59, bathroom11], [clothespants143, bedroom74], [clothespile151, closet129], [bellpepper324, kitchen207], [lightswitch72, bathroom11], [plate195, bedroom74], [paper452, livingroom336], [closetdrawer124, bedroom74], [plate278, kitchen207], [peach442, livingroom336], [book193, bedroom74], [ceiling223, kitchen207], [clothespile407, closet375], [bookshelf107, bedroom74], [floor210, kitchen207], [photoframe191, bedroom74], [closetdrawer127, closet114], [closetdrawer128, bedroom74], [wall20, bathroom11], [wall21, bathroom11], [clothespants133, bedroom74], [clothespants379, livingroom336], [ceiling225, kitchen207], [mousemat173, bedroom74], [wall352, livingroom336], [clothespile167, closet129], [wallpictureframe256, kitchen207], [whippedcream319, kitchen207], [wall347, livingroom336], [ceilinglamp229, kitchen207], [creamybuns334, kitchen207], [clothesshirt145, closet129], [plate286, kitchen207], [doorjamb364, livingroom336], [clothespile155, bedroom74], [bathroomcounter50, bathroom11], [window71, bathroom11], [floor211, kitchen207], [wallpictureframe420, livingroom336], [clothespile162, bedroom74], [clothespile400, closet375], [hanger146, closet129], [clothespants137, closet129], [photoframe447, bookshelf371], [ceiling93, bedroom74], [wall88, bedroom74], [pie320, kitchen207], [cutleryknife272, kitchen207], [clothespants387, livingroom336], [lightswitch428, livingroom336], [clothespants385, closet375], [kitchencounterdrawer246, kitchen207], [curtains34, bathroom11], [plate279, kitchen207], [bathtub39, bathroom11], [closet114, bedroom74], [cupcake197, bedroom74], [floor213, kitchen207], [dishbowl327, kitchen207], [coffeepot308, coffeemaker307], [perfume57, bathroom11], [hanger119, bedroom74], [book291, bookshelf250], [waterglass65, bathroom11], [clothespants133, closet129], [bookshelf371, livingroom336], [clothespants387, closet375], [clothespile396, livingroom336], [kitchencabinet234, kitchen207], [box436, livingroom336], [candybar331, kitchen207], [closetdrawer154, clothespile155], [rug418, livingroom336], [wineglass200, bedroom74], [clothespants388, livingroom336], [pillow422, livingroom336], [floor343, livingroom336], [bellpepper321, kitchen207], [ceilinglamp35, bathroom11], [wall90, bedroom74], [hanger393, closet375], [ceiling27, bathroom11], [floor82, bedroom74], [floor80, bedroom74], [clothespile168, closet129], [dishbowl318, bookshelf250], [cellphone204, bedroom74], [sink247, kitchen207], [computer434, livingroom336], [floor208, kitchen207], [ceiling25, bathroom11], [wall215, kitchen207], [clothespile169, closet129], [wallpictureframe258, kitchen207], [clothespants388, closet375], [clothespile161, bedroom74], [walllamp38, bathroom11], [clothespile398, closet375], [toothpaste63, bathroom11], [bench232, kitchen207], [microwave314, kitchen207], [photoframe191, bookshelf107], [rug254, kitchen207], [closetdrawer401, closet375], [curtains424, livingroom336], [book193, bookshelf107], [plate201, bedroom74], [clothespile395, livingroom336], [floor75, bedroom74], [hanger148, bedroom74], [clothespile157, closet129], [candle183, bedroom74], [book192, bedroom74], [hanger386, livingroom336], [bathroomcabinet49, bathroom11], [bellpepper325, kitchen207], [clothespile413, livingroom336], [clothespile163, bedroom74], [ceiling26, bathroom11], [hanger389, livingroom336], [paper451, livingroom336], [closetdrawer166, bedroom74], [hanger393, livingroom336], [desk110, bedroom74], [hanger138, bedroom74], [desk374, livingroom336], [curtains185, bedroom74], [floor344, livingroom336], [clothespants137, bedroom74], [floor14, bathroom11], [closetdrawer397, closet375], [ceiling356, livingroom336], [wall216, kitchen207], [doorjamb53, bathroom11], [book269, kitchen207], [hanger392, closet375], [clothespile159, closet129], [toaster309, kitchen207], [chips329, kitchen207], [bananas317, kitchen207], [wall217, kitchen207], [washingmachine73, bathroom11], [slippers202, bedroom74], [clothespants139, bedroom74], [hanger391, closet375], [closetdrawer409, closet375], [clothespile153, bedroom74], [ceiling354, livingroom336], [clothespile402, closet375], [floor212, kitchen207], [radio178, bookshelf107], [stovefan305, kitchen207], [closetdrawer401, livingroom336], [clothespants143, closet129], [chair112, bedroom74], [wineglass199, bedroom74], [book294, bookshelf250], [clothespile169, bedroom74], [wineglass299, kitchen207], [chocolatesyrup332, kitchen207], [window92, bedroom74], [condimentshaker297, kitchen207], [clothespile150, bedroom74], [breadslice311, toaster309], [clothespile162, closet129], [clothespile396, closet375], [breadslice310, kitchen207], [pillow188, bedroom74], [hanger130, closet129], [stall45, bathroom11], [ceilinglamp366, livingroom336], [hanger392, livingroom336], [clothespile165, closet129], [faucet51, bathroom11], [closetdrawer397, livingroom336], [orchid261, kitchen207], [paper451, bookshelf371], [book435, bookshelf371], [wallpictureframe260, kitchen207], [hanger384, closet375], [nightstand108, bedroom74], [floor78, bedroom74], [dishbowl446, livingroom336], [keyboard432, livingroom336], [folder454, livingroom336], [clothespile406, livingroom336], [floor76, bedroom74], [kitchencabinet237, kitchen207], [bellpepper322, kitchen207], [rug31, bathroom11], [closetdrawer123, closet114], [ceiling98, bedroom74], [wall220, kitchen207], [crackers333, kitchen207], [clothespile402, livingroom336], [hanger136, closet129], [kitchencabinet236, kitchen207], [clothespile163, closet129], [door227, kitchen207], [hanger378, livingroom336], [closetdrawer166, clothespile169], [floor337, livingroom336], [doorjamb171, bedroom74], [walllamp368, livingroom336], [coffeemaker307, kitchen207], [closetdrawer405, clothespile407], [floor339, livingroom336], [wall87, bedroom74], [wall218, kitchen207], [ceiling224, kitchen207], [condimentbottle296, kitchen207], [remotecontrol453, livingroom336], [computer176, bedroom74], [closetdrawer124, closet114], [closetdrawer125, bedroom74], [cellphone190, bedroom74], [wallshelf251, kitchen207], [towel55, bathroom11], [lime441, livingroom336], [closetdrawer126, closet114], [wallpictureframe182, bedroom74], [ceiling358, livingroom336], [coffeetable372, livingroom336], [clothespile287, kitchen207], [kitchencounterdrawer241, kitchen207], [closetdrawer411, livingroom336], [clothespile168, bedroom74], [wall348, livingroom336], [radio178, bedroom74], [coffeetable113, bedroom74], [closetdrawer126, bedroom74], [floor81, bedroom74], [window365, livingroom336], [clothesshirt390, livingroom336], [book292, bookshelf250], [curtains33, bathroom11], [clothesshirt131, bedroom74], [closetdrawer152, closet129], [keyboard174, bedroom74], [fridge306, kitchen207], [wallpictureframe181, bedroom74], [dishwashingliquid268, kitchen207], [closetdrawer164, bedroom74], [hanger144, closet129], [garbagecan105, bedroom74], [clothespile157, bedroom74], [wallpictureframe421, livingroom336], [candle70, bathroom11], [wallpictureframe180, bedroom74], [clothespants385, livingroom336], [wallpictureframe259, kitchen207], [mug196, bedroom74], [lightswitch262, kitchen207], [wallpictureframe255, kitchen207], [dishbowl289, bookshelf250], [walllamp36, bathroom11], [hanger117, bedroom74], [clothespile395, closet375], [ceiling221, kitchen207], [condimentshaker297, bookshelf250], [hanger142, closet129], [kitchentable231, kitchen207], [plate315, microwave314], [tv427, livingroom336], [closetdrawer164, closet129], [clothespile403, livingroom336], [clothespants139, closet129], [folder205, bedroom74], [wineglass300, kitchen207], [hanger116, closet114], [tv265, kitchen207], [towelrack42, bathroom11], [ceiling28, bathroom11], [bellpepper326, kitchen207], [condimentbottle296, bookshelf250], [hanger118, bedroom74], [sofa369, livingroom336], [clothesshirt145, bedroom74], [tvstand230, kitchen207], [fryingpan270, kitchen207], [hanger120, closet114], [kitchencounterdrawer240, kitchen207], [rug253, kitchen207], [closetdrawer128, closet114], [hanger140, bedroom74], [waterglass283, kitchen207], [curtains426, livingroom336], [hanger134, closet129], [hanger115, closet114], [clothespants141, closet129], [closetdrawer160, closet129], [hanger115, bedroom74], [book192, bookshelf107], [clothespile400, livingroom336], [clothesshirt381, closet375], [clothespile412, livingroom336], [hanger132, closet129], [dishbowl318, kitchen207], [ceiling362, livingroom336], [closetdrawer123, bedroom74], [hanger142, bedroom74], [hanger378, closet375], [towelrack41, bathroom11], [ceiling97, bedroom74], [cupcake198, bedroom74], [book293, kitchen207], [stall47, bathroom11], [wallpictureframe417, livingroom336], [floor77, bedroom74], [walllamp37, bathroom11], [coffeepot308, kitchen207], [condimentshaker298, kitchen207], [sink248, kitchen207], [plate315, kitchen207], [kitchencounterdrawer245, kitchen207], [bench233, kitchen207], [clothespile413, closet375], [closetdrawer156, closet129], [apple438, livingroom336], [floor12, bathroom11], [clothespile155, closet129], [hanger119, closet114], [cutleryfork277, kitchen207], [closetdrawer127, bedroom74], [faucet249, kitchen207], [folder206, bedroom74], [closetdrawer154, closet129], [book292, kitchen207], [ceiling357, livingroom336], [closetdrawer399, livingroom336], [bananas316, kitchen207], [hanger130, bedroom74], [photoframe447, livingroom336], [towel68, bathroom11], [wall91, bedroom74], [hanger389, closet375], [wall351, livingroom336], [closetdrawer122, bedroom74], [kitchencabinet235, kitchen207], [floor83, bedroom74], [door52, bathroom11], [bed111, bedroom74], [clothespants141, bedroom74], [paper303, bookshelf250], [clothespile415, closet375], [cpuscreen177, bedroom74], [condimentbottle295, bookshelf250], [folder206, bookshelf107], [hanger117, closet114], [ceiling361, livingroom336], [plum445, livingroom336], [floor79, bedroom74], [book290, bookshelf250], [bookshelf250, kitchen207], [wall346, livingroom336], [chair373, livingroom336], [book437, livingroom336], [hanger146, bedroom74], [closetdrawer160, bedroom74], [closetdrawer405, livingroom336], [hanger376, livingroom336], [walllamp367, livingroom336], [oventray313, stove312], [curtains425, livingroom336], [wallphone264, kitchen207], [mouse172, bedroom74], [clothespile412, closet375], [hanger118, closet114], [paper303, kitchen207], [ceiling360, livingroom336], [chair109, bedroom74], [bananas440, livingroom336], [hanger134, bedroom74], [slippers203, bedroom74], [hanger384, livingroom336], [apple439, livingroom336], [salmon328, kitchen207], [toothbrush66, bathroom11], [clothespile150, closet129], [chips330, kitchen207], [wall214, kitchen207], [dishbowl289, kitchen207], [mousemat431, livingroom336], [hanger140, closet129], [hanger376, closet375], [bananas316, bookshelf250], [closetdrawer154, bedroom74], [cabinet416, livingroom336], [cpuscreen433, livingroom336], [floor338, livingroom336], [ceiling99, bedroom74], [closetdrawer122, closet114], [closetdrawer156, bedroom74], [pillow423, livingroom336], [hanger121, closet114], [hanger386, closet375], [clothespile407, livingroom336], [closetdrawer152, bedroom74], [clothesshirt135, bedroom74], [ceiling226, kitchen207], [box301, kitchen207], [stove312, kitchen207], [clothespile415, livingroom336], [cutleryfork273, kitchen207], [hanger148, closet129], [wallshelf252, kitchen207], [washingsponge267, kitchen207], [curtains48, bathroom11], [ceilinglamp102, bedroom74], [wall353, livingroom336], [box288, kitchen207], [box194, bedroom74], [closetdrawer397, clothespile398], [wallshelf44, bathroom11], [tablelamp103, bedroom74], [closet129, bedroom74], [clothesshirt390, closet375], [powersocket263, kitchen207], [clothespile153, closet129], [kitchencounterdrawer239, kitchen207], [ceiling94, bedroom74], [condimentbottle295, kitchen207], [cutleryknife276, kitchen207], [floor13, bathroom11], [wall349, livingroom336], [pillow189, bedroom74], [clothesshirt131, closet129], [folder205, bookshelf107], [clothespile410, livingroom336], [clothespile403, closet375], [closetdrawer149, closet129], [clothespile161, closet129], [mouse430, livingroom336], [wall18, bathroom11], [hanger391, livingroom336], [ceiling96, bedroom74], [clothespile170, bedroom74], [box288, bookshelf250], [floor342, livingroom336], [kitchencounterdrawer242, kitchen207], [floor345, livingroom336], [clothespile414, livingroom336], [closetdrawer401, clothespile403], [cutleryknife281, kitchen207], [floor341, livingroom336], [closetdrawer166, closet129], [cutleryfork285, kitchen207], [hanger136, bedroom74], [facecream61, bathroom11], [floor340, livingroom336], [tvstand370, livingroom336], [clothespile159, bedroom74], [hanger144, bedroom74], [clothespile158, closet129], [clothespile170, closet129], [wall89, bedroom74], [oventray313, kitchen207], [clothespile167, bedroom74], [ceiling95, bedroom74], [hanger132, bedroom74], [hairproduct60, bathroom11], [ceiling30, bathroom11], [character1, kitchen207], [closetdrawer152, clothespile153], [wall85, bedroom74], [hanger380, livingroom336], [clock266, kitchen207], [clothespile151, bedroom74], [ceiling29, bathroom11], [book437, bookshelf371], [closetdrawer394, livingroom336], [floor15, bathroom11], [mug448, livingroom336], [clothespile158, bedroom74], [curtains32, bathroom11], [hanger382, closet375], [towelrack40, bathroom11], [curtains187, bedroom74], [book291, kitchen207], [closetdrawer399, clothespile400], [breadslice310, toaster309], [wall350, livingroom336], [towel56, bathroom11], [orchid184, bedroom74], [plate62, bathroom11], [kitchencounterdrawer243, kitchen207], [waterglass275, kitchen207], [lightswitch175, bedroom74], [powersocket429, livingroom336], [closetdrawer405, closet375], [waterglass282, kitchen207], [clothespile406, closet375], [wall19, bathroom11], [clothesshirt377, livingroom336], [paper304, bookshelf250], [kitchencounter238, kitchen207], [closet375, livingroom336], [photoframe302, kitchen207], [closetdrawer149, bedroom74], [bananas317, bookshelf250], [painkillers64, bathroom11], [clothespile404, closet375], [ceiling359, livingroom336], [bellpepper323, kitchen207], [floor16, bathroom11], [toilet46, bathroom11], [clothesshirt377, closet375], [book435, livingroom336], [breadslice311, kitchen207], [clothesshirt381, livingroom336], [closetdrawer409, livingroom336], [closetdrawer411, closet375], [waterglass271, kitchen207], [book293, bookshelf250], [hanger138, closet129], [wall219, kitchen207], [clothespile410, closet375], [paper304, kitchen207], [hanger116, bedroom74], [hanger147, bedroom74], [ceiling222, kitchen207], [clothespile408, livingroom336], [book290, kitchen207], [floor17, bathroom11], [floor209, kitchen207], [clothespile404, livingroom336], [towel69, bathroom11], [clothesshirt135, closet129], [towel54, bathroom11], [hanger121, bedroom74], [plate274, kitchen207], [book294, kitchen207], [wallpictureframe419, livingroom336], [wall86, bedroom74], [curtains186, bedroom74], [clothespants383, livingroom336], [clothespile408, closet375], [hanger382, livingroom336], [wall22, bathroom11], [doorjamb363, livingroom336], [ceilinglamp228, kitchen207], [peach443, livingroom336], [condimentshaker298, bookshelf250], [clothespants383, closet375], [kitchencounterdrawer244, kitchen207], [deodorant58, bathroom11], [box194, bookshelf107], [closetdrawer394, closet375], [closetdrawer411, clothespile414], [closetdrawer160, clothespile162], [nightstand106, bedroom74], [tablelamp104, bedroom74]]).
+ontopof([[mug196, desk110], [chips329, wallshelf251], [clothesshirt381, closetdrawer394], [folder205, bookshelf107], [dishbowl289, bookshelf250], [hanger384, clothespants385], [mouse172, desk110], [tablelamp104, nightstand108], [closetdrawer123, closetdrawer124], [clothespile162, closetdrawer166], [bananas440, coffeetable372], [nightstand108, floor77], [tablelamp103, bed111], [cellphone450, coffeetable372], [candybar331, wallshelf251], [clothespants139, closetdrawer149], [closetdrawer149, closetdrawer156], [bathroomcabinet49, wall21], [plate278, kitchentable231], [box288, bookshelf250], [clothespants385, closetdrawer394], [clothespile408, closetdrawer411], [dishbowl327, kitchencounter238], [coffeepot308, kitchencounter238], [book435, book437], [cellphone204, coffeetable113], [plate315, kitchencounter238], [clothesshirt381, clothespile395], [bellpepper326, kitchencounter238], [wallpictureframe182, chair112], [bellpepper321, kitchencounter238], [bellpepper321, kitchencounterdrawer244], [peach443, coffeetable372], [closetdrawer160, closetdrawer166], [waterglass271, kitchentable231], [kitchencounterdrawer241, kitchencounterdrawer242], [bellpepper324, kitchencounterdrawer244], [hanger142, clothespants143], [towel54, bathroomcounter50], [bookshelf371, floor337], [paper452, desk374], [wallpictureframe421, wall349], [mouse430, mousemat431], [dishbowl446, coffeetable372], [cellphone190, coffeetable113], [clothesshirt131, closetdrawer149], [tv265, bench233], [lime441, coffeetable372], [sofa369, rug418], [chips330, wallshelf251], [cutleryknife284, kitchentable231], [clothesshirt135, closetdrawer149], [pie320, kitchentable231], [closetdrawer401, chair373], [plate279, kitchentable231], [clothespants388, closetdrawer394], [waterglass282, rug253], [book192, bookshelf107], [closetdrawer124, closetdrawer127], [candle183, coffeetable113], [cupcake198, desk110], [plum444, coffeetable372], [tvstand230, floor213], [toothpaste63, bathroomcounter50], [tablelamp103, nightstand106], [tablelamp104, bed111], [clothespants143, closetdrawer149], [apple439, coffeetable372], [wallpictureframe180, bench233], [bench233, rug254], [bellpepper325, kitchencounter238], [closetdrawer405, closetdrawer411], [book269, rug253], [nightstand106, floor75], [barsoap67, bathroomcounter50], [clothespile396, closetdrawer401], [towel55, bathroomcounter50], [cutleryfork280, kitchentable231], [waterglass271, rug253], [cabinet416, floor337], [closetdrawer401, closetdrawer405], [waterglass275, kitchentable231], [towel56, towel54], [tablelamp104, chair112], [coffeemaker307, kitchencounterdrawer243], [mouse430, desk374], [hanger138, clothespants139], [clothespants388, clothespile396], [remotecontrol453, tvstand370], [plate195, desk110], [hanger132, clothespants133], [orchid261, tvstand230], [clothespile161, closetdrawer166], [toothbrush66, bathroomcounter50], [wallpictureframe182, bed111], [waterglass283, kitchentable231], [closetdrawer154, closetdrawer164], [wineglass300, tvstand230], [photoframe302, tvstand230], [clothespile163, closetdrawer166], [closetdrawer125, closetdrawer126], [bellpepper323, kitchencounterdrawer244], [cupcake197, desk110], [cutleryknife276, kitchentable231], [closetdrawer394, closetdrawer401], [pillow188, chair112], [chocolatesyrup332, wallshelf251], [pie320, rug253], [bookshelf250, floor212], [desk374, floor343], [mousemat431, desk374], [hanger136, clothespants137], [closetdrawer397, chair373], [wineglass199, coffeetable113], [pillow423, sofa369], [wallpictureframe180, bench232], [clothespile153, closetdrawer154], [candle70, wallshelf44], [wallpictureframe257, wallpictureframe255], [clothespile398, closetdrawer399], [toaster309, kitchencounter238], [bellpepper325, kitchencounterdrawer244], [bookshelf107, floor78], [clothesshirt390, closetdrawer394], [nightstand108, rug179], [perfume57, bathroomcounter50], [mousemat173, desk110], [bellpepper322, kitchencounterdrawer244], [clothespants137, clothespile151], [closetdrawer122, closetdrawer125], [whippedcream319, kitchentable231], [wallpictureframe258, wall219], [microwave314, kitchencounterdrawer244], [wallpictureframe258, wallpictureframe260], [plate274, kitchentable231], [clothesshirt145, closetdrawer149], [pillow188, bed111], [clothespants133, closetdrawer149], [cutleryknife272, kitchentable231], [peach442, coffeetable372], [clothespile407, closetdrawer411], [clothesshirt377, closetdrawer394], [plate62, wallshelf44], [closetdrawer152, closetdrawer154], [clothespants137, closetdrawer149], [cutleryfork285, kitchentable231], [kitchencounterdrawer240, kitchencounterdrawer239], [deodorant58, bathroomcounter50], [clothespants383, closetdrawer394], [coffeemaker307, kitchencounter238], [hanger378, clothespants379], [folder206, bookshelf107], [closetdrawer399, closetdrawer409], [plate201, coffeetable113], [clothespile402, chair373], [clothespile403, chair373], [clothespile406, closetdrawer411], [wineglass299, tvstand230], [faucet51, bathroomcounter50], [folder454, cabinet416], [kitchencounterdrawer244, kitchencounterdrawer246], [tv265, tvstand230], [mouse172, mousemat173], [tv427, tvstand370], [washingsponge267, kitchencounter238], [bench233, floor210], [tv427, chair373], [slippers203, floor76], [cpuscreen433, desk374], [clothespants383, clothespile396], [waterglass275, rug253], [towel56, towel55], [clothespile150, closetdrawer156], [kitchencounterdrawer243, kitchencounterdrawer241], [washingmachine73, floor16], [toaster309, kitchencounterdrawer243], [crackers333, wallshelf252], [box301, tvstand230], [waterglass282, kitchentable231], [desk110, floor81], [coffeetable113, floor79], [keyboard174, desk110], [pillow189, bed111], [kitchencounterdrawer243, kitchencounter238], [rug253, kitchentable231], [whippedcream319, rug253], [hanger382, clothespants383], [waterglass65, bathroomcounter50], [painkillers64, bathroomcounter50], [slippers202, rug179], [clothespile395, closetdrawer401], [creamybuns334, wallshelf252], [book269, kitchentable231], [fridge306, floor208], [wineglass200, coffeetable113], [faucet249, kitchencounter238], [microwave314, kitchencounter238], [mug448, desk374], [bed111, floor76], [bench232, rug254], [tv427, sofa369], [coffeetable372, rug418], [cpuscreen177, desk110], [bellpepper324, kitchencounter238], [clothespile404, chair373], [dishwashingliquid268, kitchencounter238], [waterglass283, rug253], [cutleryfork273, kitchentable231], [plate286, kitchentable231], [salmon328, microwave314], [kitchencounterdrawer246, toilet46], [tvstand370, floor341], [cereal335, wallshelf252], [keyboard432, desk374], [bathroomcounter50, chair112], [kitchencounterdrawer240, toilet46], [bench232, floor210], [kitchencounterdrawer244, kitchencounter238], [tv265, bench232], [kitchencounterdrawer246, kitchencounterdrawer245], [nightstand106, rug179], [orchid184, coffeetable113], [tablelamp103, chair112], [clothespants143, clothespile151], [closetdrawer126, closetdrawer128], [pillow189, chair112], [slippers203, rug179], [kitchencounterdrawer241, toilet46], [clothesshirt135, clothespile150], [fryingpan270, stove312], [cutleryknife281, kitchentable231], [bathtub39, floor14], [bed111, rug179], [cutleryfork277, kitchentable231], [bellpepper322, kitchencounter238], [closetdrawer397, closetdrawer399], [box436, bookshelf371], [clothespile151, closetdrawer156], [plum445, coffeetable372], [wallshelf251, wall217], [bellpepper323, kitchencounter238], [apple438, coffeetable372], [clothespile398, chair373], [cellphone449, tvstand370], [closetdrawer156, closetdrawer160], [pillow422, sofa369], [clothespants379, closetdrawer394], [slippers202, floor76]]).
+close_character([lightswitch175, computer176, cupcake198, kitchentable231, bench232, bench233, rug253, rug254, wallpictureframe255, wallpictureframe257, lightswitch262, powersocket263, wallphone264, clock266, book269, waterglass271, cutleryknife272, cutleryfork273, plate274, waterglass275, cutleryknife276, cutleryfork277, plate278, plate279, cutleryfork280, cutleryknife281, waterglass282, waterglass283, cutleryknife284, cutleryfork285, plate286, clothespile287, dishbowl289, book290, book291, book292, condimentbottle295, condimentbottle296, condimentshaker297, condimentshaker298, paper303, whippedcream319, pie320]).
 type(vacuum0, vacuum).
 has_switch(vacuum0).
 grabbable(vacuum0).
@@ -504,7 +827,8 @@ item_of_interest([_, _, _, _, _, _, _, _, eaten(EatenI)], [_, _, _, _, _, _, _, 
 item_of_interest([close(CloseI), _, _, _, _, _, _, _, _], [close(CloseF), _, _, _, _, _, _, _, _], Item) :- member(Item, CloseF), not_member(Item, CloseI).
 legal_action(walk(X), [_, _, sat_on([]), _, inside(Inside), _, _, _, _]) :- rooms(X), not_member([character1, X], Inside).
 legal_action(walk(X), [close(Close), _, sat_on([]), _, inside(Inside), _, _, _, _]) :- type(X, Y), -rooms(X), Y\=character, member([X, Room], Inside), member([character1, Room], Inside), not_member(X, Close).
-legal_action(grab(X), [close(Close), holds(Held), _, _, inside(Inside), _, _, _, _]) :- type(X, Y), Y\=character, member(X, Close), not_member(X, Held).
+legal_action(grab(X), [close(Close), holds([]), _, _, inside(Inside), _, _, _, _]) :- type(X, Y), Y\=character, member(X, Close).
+legal_action(grab(X), [close(Close), holds([HeldItem]), _, _, inside(Inside), _, _, _, _]) :- type(X, Y), Y\=character, member(X, Close), X\=HeldItem.
 legal_action(sit(X), [close(Close), holds(Held), sat_on([]), _, inside(Inside), _, _, _, _]) :- sittable(X), member(X, Close), not_member(X, Held).
 legal_action(lie(X), [close(Close), holds(Held), _, _, inside(Inside), _, laid_on([]), _, _]) :- lieable(X), member(X, Close), not_member(X, Held).
 legal_action(standup, [_, _, sat_on([_]), _, _, _, _, _, _]).
@@ -516,7 +840,7 @@ legal_action(use(X), [close(Close), _, _, _, _, _, _, used(Used), _]) :- member(
 legal_action(eat(X), [close(Close), _, _, _, _, _, _, _, eaten(Eaten)]) :- member(X, Close), not_member(X, Eaten), notgrabbable(X), eatable(X).
 legal_action(eat(X), [_, holds(Held), _, _, _, _, _, _, eaten(Eaten)]) :- member(X, Held), not_member(X, Eaten), eatable(X).
 update(walk(X), [close(Close), holds(Held), sat_on(Sat), on_top_of(Oto), inside(In), on(On), laid_on(Laid), used(Used), eaten(Eaten)], [close(Closen), holds(Held), sat_on(Sat), on_top_of(Oto), inside(Inf), on(On), laid_on(Laid), used(Used), eaten(Eaten)]) :- update_walking(X, [Close, Held], [], Closen), update_room(X, In, [], Inf).
-update(grab(X), [close(Close), holds(Held), sat_on(Sat), on_top_of(Oto), inside(In), on(On), laid_on(Laid), used(Used), eaten(Eaten)], [close(Close), holds([X|Held]), sat_on(Sat), on_top_of(OtoN), inside(In), on(On), laid_on(Laid), used(Used), eaten(Eaten)]) :- update_grabbing(X, Oto, [], OtoN).
+update(grab(X), [close(Close), holds(Held), sat_on(Sat), on_top_of(Oto), inside(In), on(On), laid_on(Laid), used(Used), eaten(Eaten)], [close(Close), holds([X|Held]), sat_on(Sat), on_top_of(OtoN), inside(In), on(On), laid_on(Laid), used(Used), eaten(Eaten)]).
 update(sit(X), [close(Close), holds(Held), sat_on(Sat), on_top_of(Oto), inside(In), on(On), laid_on(Laid), used(Used), eaten(Eaten)], [close(Close), holds(Held), sat_on([X|Sat]), on_top_of(Oto), inside(In), on(On), laid_on(Laid), used(Used), eaten(Eaten)]).
 update(lie(X), [close(Close), holds(Held), sat_on(Sat), on_top_of(Oto), inside(In), on(On), laid_on(Laid), used(Used), eaten(Eaten)], [close(Close), holds(Held), sat_on(Sat), on_top_of(Oto), inside(In), on(On), laid_on([X|Laid]), used(Used), eaten(Eaten)]).
 update(standup, [close(Close), holds(Held), sat_on([X]), on_top_of(Oto), inside(In), on(On), laid_on(Laid), used(Used), eaten(Eaten)], [close(Close), holds(Held), sat_on([]), on_top_of(Oto), inside(In), on(On), laid_on(Laid), used(Used), eaten(Eaten)]).
@@ -532,9 +856,6 @@ update_room(X, In, [], In) :- -rooms(X).
 update_room(X, [], In1, [[character1, X]|In1]).
 update_room(X, [[character1, Room]|T], State, State1) :- X\=Room, update_room(X, T, State, State1).
 update_room(X, [[Item, Whatever]|T], State, State1) :- update_room(X, T, [[Item, Whatever]|State], State1).
-update_grabbing(X, [], On, On).
-update_grabbing(X, [[Y, Surface]|T], On, OnN) :- X\=Y, update_grabbing(X, T, [[Y, Surface]|On], OnN).
-update_grabbing(X, [[X, Surface]|T], On, OnN) :- update_grabbing(X, T, On, OnN).
 complete_task(grab_remote, P) :- type(Remote, remotecontrol), transform([close([]), holds([Remote]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 complete_task(grab_remote_and_clothes, P) :- type(Remote, remotecontrol), type(Clothes, clothesshirt), transform([close([]), holds([Remote, Clothes]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 complete_task(use_phone_on_couch, P) :- type(Cell, cellphone), type(Sofa, sofa), transform([close([]), holds([Cell]), sat_on([Sofa]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
@@ -545,6 +866,7 @@ complete_task(browse_internet, P) :- type(Computer, computer), type(Chair, chair
 complete_task(wash_teeth, P) :- type(Toothbrush, toothbrush), type(Toothpaste, toothpaste), type(Faucet, faucet), transform([close([Faucet]), holds([Toothbrush, Toothpaste]), sat_on([]), on_top_of([]), inside([]), on([Faucet]), laid_on([]), used([Toothpaste, Toothbrush]), eaten([])], P).
 complete_task(brush_teeth, P) :- type(Toothbrush, toothbrush), type(Toothpaste, toothpaste), type(Faucet, faucet), transform([close([Faucet]), holds([Toothbrush, Toothpaste]), sat_on([]), on_top_of([]), inside([]), on([Faucet]), laid_on([]), used([Toothpaste, Toothbrush]), eaten([])], P).
 complete_task(vacuum, P) :- type(Vacuum, vacuum), transform([close([]), holds([Vacuum]), sat_on([]), on_top_of([]), inside([]), on([Vacuum]), laid_on([]), used([Vacuum]), eaten([])], P).
-complete_task(change_sheets_and_pillow_cases, P) :- transform([close([]), holds([]), sat_on([]), on_top_of([[pillowcase011, clothespile150], [pillowcase012, clothespile150], [sheets01, clothespile150], [pillowcase021, pillow188], [pillowcase022, pillow189], [sheets02, bed111]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+complete_task(change_sheets_and_pillow_cases, P) :- type(Bed, bed), type(Pillow1, pillow), type(Pillow2, pillow), Pillow1\=Pillow2, inside_same_room(Pillow1, Bed), inside_same_room(Pillow2, Bed), type(Pillowcase1, pillowcase), type(Pillowcase2, pillowcase), Pillowcase1\=Pillowcase2, inside_same_room(Pillowcase1, Pillow1), inside_same_room(Pillowcase2, Pillow2), type(Sheets, sheets), inside_same_room(Sheets, Bed), type(ReplacementPillowcase1, pillowcase), type(ReplacementPillowcase2, pillowcase), type(ReplacementSheets, sheets), ReplacementPillowcase1\=Pillowcase1, ReplacementPillowcase1\=Pillowcase2, ReplacementPillowcase2\=Pillowcase1, ReplacementPillowcase2\=Pillowcase2, ReplacementSheets\=Sheets, type(Clothespile, clothespile), transform([close([]), holds([]), sat_on([]), on_top_of([[Pillowcase1, Clothespile], [Pillowcase2, Clothespile], [Sheets, Clothespile], [ReplacementPillowcase1, Pillow1], [ReplacementPillowcase2, Pillow2], [ReplacementSheets, Bed]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+complete_task(wash_dirty_dishes, P) :- transform([close([]), holds([]), sat_on([]), on_top_of([[wineglass199, sink247], [plate195, sink247]]), inside([]), on([faucet51]), laid_on([]), used([]), eaten([])], P).
 
-?- complete_task(change_sheets_and_pillow_cases, P).
+?- complete_task(vacuum, P).

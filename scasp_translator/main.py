@@ -28,7 +28,7 @@ if __name__ == '__main__':
     real_simulator = True
     optimize_rules = True
     dynamic = False
-    task_selection = 10
+    task_selection = 9
     tasks = ["use_phone_on_couch",              # 0
              "grab_remote_and_clothes",         # 1
              "grab_remote",                     # 2
@@ -39,7 +39,8 @@ if __name__ == '__main__':
              "wash_teeth",                      # 7
              "brush_teeth",                     # 8
              "vacuum",                          # 9
-             "change_sheets_and_pillow_cases"   # 10
+             "change_sheets_and_pillow_cases",  # 10 non-terminating
+             "wash_dirty_dishes"                # 11
              ]
     rooms = None
     if task_selection in [6]:

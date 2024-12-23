@@ -28,7 +28,7 @@ if __name__ == '__main__':
     real_simulator = True
     optimize_rules = True
     dynamic = False
-    task_selection = 9
+    task_selection = 11
     tasks = ["use_phone_on_couch",              # 0
              "grab_remote_and_clothes",         # 1
              "grab_remote",                     # 2
@@ -44,11 +44,13 @@ if __name__ == '__main__':
              ]
     rooms = None
     if task_selection in [6]:
-        rooms = [74]
+        rooms = [74] # bedroom
     elif task_selection in [7,8]:
-        rooms = [11]
+        rooms = [11] # bathroom
     elif task_selection in [10]:
-        rooms = [74, 336]
+        rooms = [74, 336] # bedroom, livingroom
+    elif task_selection in [11]:
+        rooms = [207, 74] # kitchen, bedroom
     start_time = time.time()
     logging.info("Start Time: %s", datetime.datetime.now())
     # Create simulator

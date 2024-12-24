@@ -33,6 +33,15 @@ dirty_in_sink(Sink, [], List, List).
 dirty_in_sink(Sink, [Dish | T], PrevList, List) :- dish(Dish), dirty_in_sink(Sink, T, [[Dish, Sink] | PrevList], List).
 dirty_in_sink(Sink, [_ | T], PrevList, List) :- dirty_in_sink(Sink, T, PrevList, List).
 
+% For the task "Feed Me"
+needs_cooking(X) :- food(X), not eatable(X), not dish(X).
+eatable(X) :- fruit(X).
+eatable(X) :- vegetable(X).
+fruit(X) :- type(X, bananas).
+vegetable(X) :- type(X, bellpepper).
+eatable(X) :- type(X, chips).
+eatable(X) :- type(X, crackers).
+
 rev(L, R) :- trev(L, [], R). % O(n) time
 trev([], P, P).
 trev([H|T], P, R) :- trev(T, [H|P], R).
@@ -136,24 +145,23 @@ suggest(walk(X), [_, _, _, _, _, on(OnI), _, _, _], [_, _, _, _, _, on(OnF), _, 
 suggest(switchon(X), _, [_, _, _, _, _, on(On), _, _, _]) :- member(X, On).
 suggest(walk(Y), [_, holds(Held), _, _, _, _, _, _, _], [_, _, _, on_top_of(Oto), _, _, _, _, _]) :- member([X,Y], Oto), member(X, Held).
 suggest(put(X, Y), _, [_, _, _, on_top_of(Oto), _, _, _, _, _]) :- member([X,Y], Oto).
+suggest(put(X, Y), [close(CloseI), holds(Held), _, on_top_of(Oto), _, _, _, _, _], [close(CloseF), _, sat_on(Sat), _, _, _, _, _, _]) :-
+    type(Y, floor), member(X, Sat), member(X, Held), member(Z, CloseI), member(Z, CloseF), ontopof_inherited(Y, Z, Oto).
+suggest(walk(X), [_, holds(Held), _, on_top_of(OtoI), _, _, _, _, _], [_, _, _, on_top_of(OtoF), _, _, _, _, _]) :- member([X, Y], OtoF), not_member([X, Y], OtoI), Held \= [_, _].
+suggest(grab(X), _, [_, holds(Held), _, _, _, _, _, _, _]) :- member(X, Held).
+suggest(lie(X), _, [_, _, _, _, _, _, laid_on(Lie), _, _]) :- member(X, Lie).
+suggest(walk(X), _, [close(Close), holds(Held), _, _, _, _, _, _, _]) :- member(X, Held), not_member(X, Close).
+suggest(walk(X), _, [close(Close), _, _, _, _, _, laid_on(Laid), _, _]) :- member(X, Laid), not_member(X, Close).
 suggest(walk(X), _, [close(Close), _, sat_on(Sat), _, _, _, _, _, _]) :- member(X, Sat), not_member(X, Close).
 suggest(grab(X), [close(CloseI), _, _, _, _, _, _, _, _], [close(CloseF), _, sat_on(Sat), _, _, _, _, _, _]) :-
     not_member(Y, CloseI), member(Y, CloseF), member(X, Sat), -list_empty(CloseF).
 suggest(walk(X), [_, holds(Held), _, _, _, _, _, _, _], [close(Close), _, sat_on(Sat), _, _, _, _, _, _]) :- member(X, Close), sittable(Y), X\=Y, member(Y, Sat), member(Y, Held).
-suggest(put(X, Y), [close(CloseI), holds(Held), _, on_top_of(Oto), _, _, _, _, _], [close(CloseF), _, sat_on(Sat), _, _, _, _, _, _]) :-
-    type(Y, floor), member(X, Sat), member(X, Held), member(Z, CloseI), member(Z, CloseF), ontopof_inherited(Y, Z, Oto).
-%suggest(walk(X), [_, holds(Held), _, _, _, _, _, _, _], [_, _, _, on_top_of(Oto), _, _, _, _, _]) :- member([X, _], Oto), Held \= [_, _].
-suggest(walk(X), [_, holds(Held), _, on_top_of(OtoI), _, _, _, _, _], [_, _, _, on_top_of(OtoF), _, _, _, _, _]) :- member([X, Y], OtoF), not_member([X, Y], OtoI), Held \= [_, _].
-suggest(grab(X), _, [_, holds(Held), _, _, _, _, _, _, _]) :- member(X, Held).
-suggest(lie(X), _, [_, _, _, _, _, _, laid_on(Lie), _, _]) :- member(X, Lie).
-suggest(standup, [_, _, sat_on([_]), _, _, _, _, _, _], _).
-suggest(standup, [_, _, _, _, _, _, laid_on([_]), _, _], _).
-suggest(walk(X), _, [close(Close), holds(Held), _, _, _, _, _, _, _]) :- member(X, Held), not_member(X, Close).
-suggest(walk(X), _, [close(Close), _, _, _, _, _, laid_on(Laid), _, _]) :- member(X, Laid), not_member(X, Close).
 suggest(sit(X), _, [_, _, sat_on(Sat), _, _, _, _, _, _]) :- member(X, Sat).
 suggest(walk(Room), State1, State2) :- item_of_interest(State1, State2, Item), state_inside(State1, Item, Room).
 suggest(walk(X), _, [close(Close), _, _, _, _, _, _, _, _]) :- member(X, Close).
 suggest(use(X), _, [_, _, _, _, _, _, _, used(Use), _]) :- member(X, Use).
+suggest(standup, [_, _, sat_on([_]), _, _, _, _, _, _], _).
+suggest(standup, [_, _, _, _, _, _, laid_on([_]), _, _], _).
 
 % Test Queries
 state_inside([_, _, _, _, inside(Inside), _, _, _, _], Item, Room) :- member([Item, Room], Inside).
@@ -242,7 +250,8 @@ update(switchon(X), [close(Close), holds(Held), sat_on(Sat), on_top_of(Oto), ins
 update(use(X), [close(Close), holds(Held), sat_on(Sat), on_top_of(Oto), inside(In), on(On), laid_on(Laid), used(Used), eaten(Eaten)],
                [close(Close), holds(Held), sat_on(Sat), on_top_of(Oto), inside(In), on(On), laid_on(Laid), used([X | Used]), eaten(Eaten)]).
 update(eat(X), [close(Close), holds(Held), sat_on(Sat), on_top_of(Oto), inside(In), on(On), laid_on(Laid), used(Used), eaten(Eaten)],
-               [close(Close), holds(Held), sat_on(Sat), on_top_of(Oto), inside(In), on(On), laid_on(Laid), used(Used), eaten([X | Eaten])]).
+               [close(CloseN), holds(HeldN), sat_on(Sat), on_top_of(OtoN), inside(InN), on(On), laid_on(Laid), used(Used), eaten([X | Eaten])]) :-
+    remove(X, Close, CloseN), remove(X, Held, HeldN), remove([X,_], Oto, OtoN), remove([X, _], In, InN).
 
 
 % Example test queries:
@@ -315,3 +324,11 @@ complete_task(wash_dirty_dishes, P) :-
     dirty_in_sink(Sink, Dishes), type(Faucet, faucet), member([Faucet, Kitchen], Inside),
     transform([close([]), holds([]), sat_on([]), on_top_of(Dishes),
         inside([]), on([Faucet]), laid_on([]), used([]), eaten([])], P).
+complete_task(feed_me, P) :- needs_cooking(Food), vegetable(Veggie), type(Pan, fryingpan), type(Stove, stove),
+    transform([close([]), holds([]), sat_on([]), on_top_of([[Food, Pan], [Veggie, Pan], [Pan, Stove]]),
+        inside([]), on([Stove]), laid_on([]), used([]), eaten([Food])], P).
+complete_task(breakfast, P).
+complete_task(read, P) :-
+    readable(Reading), sittable(Comfy), type(Light, lightswitch),
+    transform([close([]), holds([Reading]), sat_on([Comfy]), on_top_of([]),
+        inside([]), on([Light]), laid_on([]), used([Reading]), eaten([])], P).

@@ -5,18 +5,111 @@ import time
 import datetime
 import os
 
-def run(task):
+def run(task, answer=None):
     start_time = time.time()
     logging.info("Task: " + task)
     logging.info("Task received: %s seconds" % start_time)
-    results = program.run_query([("complete_task", task, "P")])
-    logging.info("s(CASP) Query Run: %s seconds" % (time.time() - start_time))
-    if results:
-        results = results[0]
+    if not answer:
+        results = program.run_query([("complete_task", task, "P")])
+        logging.info("s(CASP) Query Run: %s seconds" % (time.time() - start_time))
+        if results:
+            results = results[0]
+        else:
+            logging.warning("No valid results found.")
+            return
+        actions = results['P'].strip('][ ').split(')')
     else:
-        logging.warning("No valid results found.")
-    actions = results['P'].strip('][ ').split(')')
+        logging.info("Answer received: %s", answer)
+        actions = answer.strip('][ ').split(')')
     for action in actions:
+        a = action.replace("(", " ").replace(",", " ").split()
+        if a:
+            program.take_action(tuple(a))
+    logging.info("Actions taken in simulation: %s seconds" % (time.time() - start_time))
+    logging.info("Task End Time: %s", datetime.datetime.now())
+
+def state_subset(final_state, curr_state):
+    """
+    Checks if the task is accomplished or not
+    [close(Close), holds(Holds), sat_on(Sat), on_top_of(Oto), inside(Inside), on(On), laid_on(Laid), used(Used), eaten(Eaten)]
+    :param final_state: desired final state, already in a list
+    :param curr_state: current state as a string
+    :return: boolean representing success
+    """
+    def make_list_regular(string_state):
+        new_list = string_state.replace("(", "").replace("[", "").replace(")", "").replace("]", "").split(",")
+        new_list = [x for x in new_list if x]
+        return new_list
+    def make_list_doubles(string_state):
+        new_list =  string_state.split("]")
+        new_list = [x[1:] + "]" for x in new_list]
+        new_list.pop()
+        new_list.pop()
+        if new_list:
+            new_list[0] = new_list[0][1:]
+        return new_list
+
+    def machine_state(string_state):
+        close_state = make_list_regular(string_state.split("close")[1].split("holds")[0])
+        holds_state = make_list_regular(string_state.split("holds")[1].split("sat_on")[0])
+        sat_on_state = make_list_regular(string_state.split("sat_on")[1].split("on_top_of")[0])
+        on_top_of_state = make_list_doubles(string_state.split("on_top_of")[1].split("inside")[0])
+        inside_state = make_list_doubles(string_state.split("inside")[1].split(",on(")[0])
+        on_state = make_list_regular(string_state.split(",on(")[1].split("laid_on")[0])
+        laid_on_state = make_list_regular(string_state.split("laid_on")[1].split("used")[0])
+        used_state = make_list_regular(string_state.split("used")[1].split("eaten")[0])
+        eaten_state = make_list_regular(string_state.split("eaten")[1])
+        return [close_state, holds_state, sat_on_state, on_top_of_state, inside_state, on_state, laid_on_state, used_state, eaten_state]
+
+    final = machine_state("".join(final_state.split()))
+    curr = machine_state("".join(curr_state.split()))
+
+    if not set(final[0]) <= set(curr[0]):
+        return False
+    if not set(final[1]) <= set(curr[1]):
+        return False
+    if not set(final[2]) <= set(curr[2]):
+        return False
+    if not set(final[3]) <= set(curr[3]):
+        return False
+    if not set(final[4]) <= set(curr[4]):
+        return False
+    if not set(final[5]) <= set(curr[5]):
+        return False
+    if not set(final[6]) <= set(curr[6]):
+        return False
+    if not set(final[7]) <= set(curr[7]):
+        return False
+    if not set(final[8]) <= set(curr[8]):
+        return False
+    return True
+
+def run_step_by_step(task, final_state):
+    start_time = time.time()
+    logging.info("Step-By-Step Task: " + task)
+    logging.info("Task received: %s seconds" % start_time)
+    def check_results(results):
+        if results:
+            results = results[0]
+            return results
+        else:
+            logging.warning("No valid initial state.")
+            return False
+    curr_state = check_results(program.run_query([("initial_state", "P")]))['P']
+    plan = []
+    success_check = state_subset(final_state, curr_state)
+    # Get plans
+    while not success_check:
+        next_action = check_results(program.run_query([("choose_action", "X", curr_state, final_state)]))['X']
+        logging.info("Choose action: %s seconds" % (time.time() - start_time))
+        logging.info("Action chosen: " + next_action)
+        curr_state = check_results(program.run_query([("update", next_action, curr_state, "S")]))['S']
+        logging.info("Update: %s seconds" % (time.time() - start_time))
+        plan.append(next_action)
+        success_check = state_subset(final_state, curr_state)
+    logging.info("Plan found!")
+    logging.info(plan)
+    for action in plan:
         a = action.replace("(", " ").replace(",", " ").split()
         if a:
             program.take_action(tuple(a))
@@ -28,6 +121,8 @@ if __name__ == '__main__':
     real_simulator = True
     optimize_rules = True
     dynamic = False
+    use_answer_key = True
+    step_by_step = True
     task_selection = 12
     tasks = ["use_phone_on_couch",              # 0
              "grab_remote_and_clothes",         # 1
@@ -39,18 +134,82 @@ if __name__ == '__main__':
              "wash_teeth",                      # 7
              "brush_teeth",                     # 8
              "vacuum",                          # 9
-             "change_sheets_and_pillow_cases",  # 10 non-terminating
+             "change_sheets_and_pillow_cases",  # 10*
              "wash_dirty_dishes",               # 11
-             "feed_me",                         # 12
-             "breakfast",                       # 13
+             "feed_me",                         # 12*
+             "breakfast",                       # 13*
              "read"                             # 14
              ]
+    final_state = [
+        # 0
+        "",
+        # 1
+        "",
+        # 2
+        "",
+        # 3
+        "",
+        # 4
+        "",
+        # 5
+        "",
+        # 6
+        "",
+        # 7
+        "",
+        # 8
+        "",
+        # 9
+        "",
+        # 10
+        "",
+        # 11
+        "",
+        # 12
+        "[close([]), holds([]), sat_on([]), on_top_of([[salmon328, fryingpan270], [bellpepper321, fryingpan270], [fryingpan270, stove312]]), inside([]), on([stove312]), laid_on([]), used([]), eaten([salmon328])]"
+        # 13
+        "",
+        # 14
+        ""
+        ]
+    answer_key = [
+        # 0
+        "",
+        # 1
+        "",
+        # 2
+        "",
+        # 3
+        "",
+        # 4
+        "",
+        # 5
+        "",
+        # 6
+        "",
+        # 7
+        "",
+        # 8
+        "",
+        # 9
+        "",
+        # 10
+        "",
+        # 11
+        "[walk(faucet249),switchon(faucet249),walk(bedroom74),walk(wineglass199),grab(wineglass199),walk(plate195),grab(plate195),walk(kitchen207),walk(sink247),put(wineglass199,sink247),put(plate195,sink247)]",
+        # 12
+        "[grab(salmon328),grab(bellpepper321),walk(stove312),switchon(stove312),walk(fryingpan270),put(salmon328,fryingpan270),put(bellpepper321,fryingpan270),eat(salmon328)]",
+        # 13
+        "",
+        # 14
+        "[walk(bedroom74),walk(book192),grab(book192),walk(livingroom336),walk(sofa369),sit(sofa369),use(book192)]"
+                  ]
     rooms = None
-    if task_selection in [6, 14]:
+    if task_selection in [6]:
         rooms = [74] # bedroom
     elif task_selection in [7,8]:
         rooms = [11] # bathroom
-    elif task_selection in [10]:
+    elif task_selection in [10, 14]:
         rooms = [74, 336] # bedroom, livingroom
     elif task_selection in [11]:
         rooms = [207, 74] # kitchen, bedroom
@@ -68,8 +227,13 @@ if __name__ == '__main__':
     logging.info("Program Initialized Time: %s seconds" % (time.time() - start_time))
     start_time = time.time()
     # Full loop
-    if not dynamic:
-        run(tasks[task_selection])
+    if step_by_step:
+        run_step_by_step(tasks[task_selection], final_state[task_selection])
+    elif not dynamic:
+        if use_answer_key:
+            run(tasks[task_selection], answer_key[task_selection])
+        else:
+            run(tasks[task_selection])
     else:
         while True:
             task = input("Input task:")

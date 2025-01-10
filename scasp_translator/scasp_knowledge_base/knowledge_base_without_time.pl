@@ -41,6 +41,12 @@ fruit(X) :- type(X, bananas).
 vegetable(X) :- type(X, bellpepper).
 eatable(X) :- type(X, chips).
 eatable(X) :- type(X, crackers).
+can_cook(X) :- type(X, stove).
+
+% For the task "Breakfast"
+can_cook(X) :- type(X, toaster).
+breakfast(X) :- type(X, breadslice).
+easy_cooking(Toaster, Bread) :- type(Toaster, toaster), type(Bread, breadslice).
 
 rev(L, R) :- trev(L, [], R). % O(n) time
 trev([], P, P).
@@ -159,7 +165,10 @@ suggest(walk(X), [_, holds(Held), _, _, _, _, _, _, _], [close(Close), _, sat_on
 suggest(sit(X), _, [_, _, sat_on(Sat), _, _, _, _, _, _]) :- member(X, Sat).
 suggest(walk(Room), State1, State2) :- item_of_interest(State1, State2, Item), state_inside(State1, Item, Room).
 suggest(walk(X), _, [close(Close), _, _, _, _, _, _, _, _]) :- member(X, Close).
+suggest(walk(X), [_, _, _, _, _, _, _, used(UseI), _], [_, _, _, _, _, _, _, used(UseF), _]) :- member(X, UseF) not_member(X, UseI).
 suggest(use(X), _, [_, _, _, _, _, _, _, used(Use), _]) :- member(X, Use).
+suggest(walk(X), [_, _, _, _, _, _, _, _, eaten(EatenI)], [_, _, _, _, _, _, _, _, eaten(EatenF)]) :- member(X, EatenF) not_member(X, EatenI).
+suggest(eat(X), _, [_, _, _, _, _, _, _, _, eaten(Eaten)]) :- member(X, Eaten).
 suggest(standup, [_, _, sat_on([_]), _, _, _, _, _, _], _).
 suggest(standup, [_, _, _, _, _, _, laid_on([_]), _, _], _).
 
@@ -224,12 +233,14 @@ legal_action(eat(X), [close(Close), _, _, _, _, _, _, _, eaten(Eaten)]) :-
     member(X, Close), not_member(X, Eaten), not grabbable(X), eatable(X).
 legal_action(eat(X), [_, holds(Held), _, _, _, _, _, _, eaten(Eaten)]) :-
     member(X, Held), not_member(X, Eaten), eatable(X).
+legal_action(eat(X), [close(Close), _, _, on_top_of(Oto), _, on(On), _, _, eaten(Eaten)]) :-
+    member(X, Close), not_member(X, Eaten), can_cook(Heat), ontopof_inherited(Heat, X, Oto), member(Heat, On).
 
 % Update state
 % If we walk to something, anything we are not holding is no longer close
 update(walk(X), [close(Close), holds(Held), sat_on(Sat), on_top_of(Oto), inside(In), on(On), laid_on(Laid), used(Used), eaten(Eaten)],
                 [close(Closen), holds(Held), sat_on(Sat), on_top_of(Oto), inside(Inf), on(On), laid_on(Laid), used(Used), eaten(Eaten)]) :-
-    update_walking(X, [Close, Held], [], Closen),
+    update_walking(X, [Close, Held, Oto], [], Closen),
     update_room(X, In, [], Inf).
 update(grab(X), [close(Close), holds(Held), sat_on(Sat), on_top_of(Oto), inside(In), on(On), laid_on(Laid), used(Used), eaten(Eaten)],
                 [close(Close), holds([X | Held]), sat_on(Sat), on_top_of(OtoN), inside(In), on(On), laid_on(Laid), used(Used), eaten(Eaten)]) :-
@@ -250,18 +261,17 @@ update(switchon(X), [close(Close), holds(Held), sat_on(Sat), on_top_of(Oto), ins
 update(use(X), [close(Close), holds(Held), sat_on(Sat), on_top_of(Oto), inside(In), on(On), laid_on(Laid), used(Used), eaten(Eaten)],
                [close(Close), holds(Held), sat_on(Sat), on_top_of(Oto), inside(In), on(On), laid_on(Laid), used([X | Used]), eaten(Eaten)]).
 update(eat(X), [close(Close), holds(Held), sat_on(Sat), on_top_of(Oto), inside(In), on(On), laid_on(Laid), used(Used), eaten(Eaten)],
-               [close(CloseN), holds(HeldN), sat_on(Sat), on_top_of(OtoN), inside(InN), on(On), laid_on(Laid), used(Used), eaten([X | Eaten])]) :-
-    remove(X, Close, CloseN), remove(X, Held, HeldN), remove([X,_], Oto, OtoN), remove([X, _], In, InN).
+               [close(Close), holds(Held), sat_on(Sat), on_top_of(Oto), inside(In), on(On), laid_on(Laid), used(Used), eaten([X | Eaten])]).
+%update(eat(X), [close(Close), holds(Held), sat_on(Sat), on_top_of(Oto), inside(In), on(On), laid_on(Laid), used(Used), eaten(Eaten)],
+%               [close(CloseN), holds(HeldN), sat_on(Sat), on_top_of(OtoN), inside(InN), on(On), laid_on(Laid), used(Used), eaten([X | Eaten])]) :-
+%    remove(X, Close, CloseN), remove(X, Held, HeldN), remove([X,_], Oto, OtoN), remove([X, _], In, InN).
 
 
 % Example test queries:
-% update_walking(remotecontrol1, [[],[]], [], Closen).
-% update_walking(television2, [[remotecontrol1],[]], [], Closen).
-% update_walking(television2, [[remotecontrol1],[remotecontrol1]], [], Closen).
-update_walking(X, [[], _], State1, [X | State1]).
-update_walking(X, [[Y | T], Held], State, State1) :- X \= Y, not_member(Y, Held),
-                                                                update_walking(X, [T, Held], State, State1).
-update_walking(X, [[Y | T], Held], State, State1) :- update_walking(X, [T, Held], [Y | State], State1).
+update_walking(X, [[], _, _], State1, [X | State1]).
+update_walking(X, [[Y | T], Held, Oto], State, State1) :- X \= Y, not_member(Y, Held), not_member([X, Y], Oto), not_member([Y, X], Oto),
+                                                                update_walking(X, [T, Held, Oto], State, State1).
+update_walking(X, [[Y | T], Held, Oto], State, State1) :- update_walking(X, [T, Held, Oto], [Y | State], State1).
 
 % Example test queries:
 % update_room(plum445, [], [], In).
@@ -324,11 +334,19 @@ complete_task(wash_dirty_dishes, P) :-
     dirty_in_sink(Sink, Dishes), type(Faucet, faucet), member([Faucet, Kitchen], Inside),
     transform([close([]), holds([]), sat_on([]), on_top_of(Dishes),
         inside([]), on([Faucet]), laid_on([]), used([]), eaten([])], P).
-complete_task(feed_me, P) :- needs_cooking(Food), vegetable(Veggie), type(Pan, fryingpan), type(Stove, stove),
+complete_task(feed_me, P) :-
+    needs_cooking(Food), vegetable(Veggie), type(Pan, fryingpan), type(Stove, stove),
     transform([close([]), holds([]), sat_on([]), on_top_of([[Food, Pan], [Veggie, Pan], [Pan, Stove]]),
         inside([]), on([Stove]), laid_on([]), used([]), eaten([Food])], P).
-complete_task(breakfast, P).
+%    transform([close([]), holds([]), sat_on([]), on_top_of([[salmon328, fryingpan270], [bellpepper321, fryingpan270],
+%    [fryingpan270, stove312]]), inside([]), on([stove312]), laid_on([]), used([]), eaten([salmon328])], P).
+complete_task(breakfast, P) :-
+%    breakfast(Food), easy_cooking(Heatsource, Food),
+%    transform([close([]), holds([]), sat_on([]), on_top_of([[Food, Heatsource]]),
+%        inside([]), on([Heatsource]), laid_on([]), used([]), eaten([Food])], P).
+    transform([close([]), holds([]), sat_on([]), on_top_of([[breadslice310, toaster309]]),
+        inside([]), on([toaster309]), laid_on([]), used([]), eaten([breadslice310])], P).
 complete_task(read, P) :-
-    readable(Reading), sittable(Comfy), type(Light, lightswitch),
+    readable(Reading), sittable(Comfy), type(Comfy, sofa), type(Light, lightswitch),
     transform([close([]), holds([Reading]), sat_on([Comfy]), on_top_of([]),
         inside([]), on([Light]), laid_on([]), used([Reading]), eaten([])], P).

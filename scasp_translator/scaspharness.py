@@ -103,15 +103,16 @@ class ScaspHarness():
 		self.get_scasp()
 		self.print_rules_to_file(rooms, query=query)
 		str_query = self.build_rule(query[0], low=False) + "."
-		logging.info("Running query: " + str_query)
+		logging.info("Running query: " + query[0][0])
+		logging.debug("Full query: " + str_query)
 		f = open("scasp_knowledge_base/generated_scasp.pl", "a")
 		f.write("\n\n?- ")
 		f.write(str_query)
 		f.close()
 		result = self.run_generated_scasp()
 		if result:
-			logging.info("Success! Results: ")
-			logging.info(result)
+			logging.info("Success!")
+			logging.debug(result)
 		else:
 			logging.info("Failure")
 		return result

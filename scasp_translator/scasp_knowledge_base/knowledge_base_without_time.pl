@@ -34,7 +34,7 @@ dirty_in_sink(Sink, [Dish | T], PrevList, List) :- dish(Dish), dirty_in_sink(Sin
 dirty_in_sink(Sink, [_ | T], PrevList, List) :- dirty_in_sink(Sink, T, PrevList, List).
 
 % For the task "Feed Me"
-needs_cooking(X) :- food(X), not eatable(X), not dish(X).
+needs_cooking(X) :- food(X), -eatable(X), not dish(X).
 eatable(X) :- fruit(X).
 eatable(X) :- vegetable(X).
 fruit(X) :- type(X, bananas).
@@ -48,15 +48,15 @@ can_cook(X) :- type(X, toaster).
 breakfast(X) :- type(X, breadslice).
 easy_cooking(Toaster, Bread) :- type(Toaster, toaster), type(Bread, breadslice).
 
-rev(L, R) :- trev(L, [], R). % O(n) time
-trev([], P, P).
-trev([H|T], P, R) :- trev(T, [H|P], R).
-
 % Inside and ontopof for added predicates
 extra_inside([[vacuum0, bedroom74], [sheets01, bedroom74], [pillowcase011, bedroom74], [pillowcase012, bedroom74], [sheets02, livingroom336], [pillowcase021, livingroom336], [pillowcase022, livingroom336]]).
 extra_ontopof([[vacuum, floor75], [sheets01, bed111], [pillowcase011, bed111], [pillowcase012, bed111], [sheets02, coffeetable372], [pillowcase021, coffeetable372], [pillowcase022, coffeetable372]]).
 
 % Constraints
+% Abducibles
+-eatable(X) :- not eatable(X).
+movable(X) :- grabbable(X), not -movable(X).
+
 % Helper functions
 member(X,[X|_]).
 member(X,[Y|T]) :- member(X,T).
@@ -165,9 +165,9 @@ suggest(walk(X), [_, holds(Held), _, _, _, _, _, _, _], [close(Close), _, sat_on
 suggest(sit(X), _, [_, _, sat_on(Sat), _, _, _, _, _, _]) :- member(X, Sat).
 suggest(walk(Room), State1, State2) :- item_of_interest(State1, State2, Item), state_inside(State1, Item, Room).
 suggest(walk(X), _, [close(Close), _, _, _, _, _, _, _, _]) :- member(X, Close).
-suggest(walk(X), [_, _, _, _, _, _, _, used(UseI), _], [_, _, _, _, _, _, _, used(UseF), _]) :- member(X, UseF) not_member(X, UseI).
+suggest(walk(X), [_, _, _, _, _, _, _, used(UseI), _], [_, _, _, _, _, _, _, used(UseF), _]) :- member(X, UseF), not_member(X, UseI).
 suggest(use(X), _, [_, _, _, _, _, _, _, used(Use), _]) :- member(X, Use).
-suggest(walk(X), [_, _, _, _, _, _, _, _, eaten(EatenI)], [_, _, _, _, _, _, _, _, eaten(EatenF)]) :- member(X, EatenF) not_member(X, EatenI).
+suggest(walk(X), [_, _, _, _, _, _, _, _, eaten(EatenI)], [_, _, _, _, _, _, _, _, eaten(EatenF)]) :- member(X, EatenF), not_member(X, EatenI).
 suggest(eat(X), _, [_, _, _, _, _, _, _, _, eaten(Eaten)]) :- member(X, Eaten).
 suggest(standup, [_, _, sat_on([_]), _, _, _, _, _, _], _).
 suggest(standup, [_, _, _, _, _, _, laid_on([_]), _, _], _).

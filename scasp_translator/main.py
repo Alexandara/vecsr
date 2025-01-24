@@ -117,13 +117,13 @@ def run_step_by_step(task, final_state):
     logging.info("Task End Time: %s", datetime.datetime.now())
 
 if __name__ == '__main__':
-    logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
+    logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
     real_simulator = True
     optimize_rules = True
     dynamic = False
-    use_answer_key = True
-    step_by_step = True
-    task_selection = 12
+    use_answer_key = False
+    step_by_step = False
+    task_selection = 13
     tasks = ["use_phone_on_couch",              # 0
              "grab_remote_and_clothes",         # 1
              "grab_remote",                     # 2
@@ -136,7 +136,7 @@ if __name__ == '__main__':
              "vacuum",                          # 9
              "change_sheets_and_pillow_cases",  # 10*
              "wash_dirty_dishes",               # 11
-             "feed_me",                         # 12*
+             "feed_me",                         # 12
              "breakfast",                       # 13*
              "read"                             # 14
              ]
@@ -166,9 +166,9 @@ if __name__ == '__main__':
         # 11
         "",
         # 12
-        "[close([]), holds([]), sat_on([]), on_top_of([[salmon328, fryingpan270], [bellpepper321, fryingpan270], [fryingpan270, stove312]]), inside([]), on([stove312]), laid_on([]), used([]), eaten([salmon328])]"
+        "[close([]), holds([]), sat_on([]), on_top_of([[salmon328, fryingpan270], [bellpepper321, fryingpan270], [fryingpan270, stove312]]), inside([]), on([stove312]), laid_on([]), used([]), eaten([salmon328])]",
         # 13
-        "",
+        "[close([]), holds([]), sat_on([]), on_top_of([[breadslice310, toaster309]]), inside([]), on([toaster309]), laid_on([]), used([]), eaten([breadslice310])]",
         # 14
         ""
         ]

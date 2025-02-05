@@ -84,17 +84,18 @@ def state_subset(final_state, curr_state):
         return False
     return True
 
+def check_results(results):
+    if results:
+        results = results[0]
+        return results
+    else:
+        logging.warning("No valid initial state.")
+        return False
+
 def run_step_by_step(task, final_state):
     start_time = time.time()
     logging.info("Step-By-Step Task: " + task)
     logging.info("Task received: %s seconds" % start_time)
-    def check_results(results):
-        if results:
-            results = results[0]
-            return results
-        else:
-            logging.warning("No valid initial state.")
-            return False
     curr_state = check_results(program.run_query([("initial_state", "P")]))['P']
     plan = []
     success_check = state_subset(final_state, curr_state)
@@ -116,28 +117,60 @@ def run_step_by_step(task, final_state):
     logging.info("Actions taken in simulation: %s seconds" % (time.time() - start_time))
     logging.info("Task End Time: %s", datetime.datetime.now())
 
+def get_relevant(task):
+    relevant_items = check_results(program.run_query([("get_relevant", task, "P")]))['P']
+    listified_items = relevant_items.replace("[","").replace("]","").split(",")
+    listified_items.append("character1")
+    logging.info(listified_items)
+    return listified_items
+
 if __name__ == '__main__':
-    logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
-    real_simulator = True
-    optimize_rules = True
-    dynamic = False
-    use_answer_key = False
-    step_by_step = False
-    task_selection = 13
+    logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
+    values = [True,     # Real simulator or not?
+              False,    # Optimize or not?
+              False,    # Remove unnecessary items or not?
+              False,    # Run dynamically or not?
+              False,    # Use an answer key or not?
+              False,    # Get plans step by step or not?
+              False,    # Only use relevant rooms or not?
+              ]
+    best = False
+    best_norelitems = False
+    best_noopt = False
+    best_norelrooms = False
+    only_relitems = False
+    only_opt = False
+    only_relrooms = False
+    if best: values = [True, True, True, False, False, False, True]
+    if best_norelitems: values = [True, True, False, False, False, False, True]
+    if best_noopt: values = [True, False, True, False, False, False, True]
+    if best_norelrooms: values = [True, True, True, False, False, False, False]
+    if only_relitems: values = [True, False, True, False, False, False, False]
+    if only_opt: values = [True, True, False, False, False, False, False]
+    if only_relrooms: values = [True, False, False, False, False, False, True]
+    real_simulator = values[0]
+    optimize_rules = values[1]
+    reduce_items = values[2] # Remove all facts about non-relevant objects
+    dynamic = values[3]
+    use_answer_key = values[4]
+    step_by_step = values[5]
+    few_rooms = values[6]
+    task_selection = 14
     tasks = ["use_phone_on_couch",              # 0
              "grab_remote_and_clothes",         # 1
              "grab_remote",                     # 2
              "set_remote_on_coffee_table",      # 3
              "turn_on_tv",                      # 4
+             # Real Tasks
              "go_to_sleep",                     # 5
              "browse_internet",                 # 6
              "wash_teeth",                      # 7
              "brush_teeth",                     # 8
              "vacuum",                          # 9
-             "change_sheets_and_pillow_cases",  # 10*
+             "change_sheets_and_pillow_cases",  # 10
              "wash_dirty_dishes",               # 11
              "feed_me",                         # 12
-             "breakfast",                       # 13*
+             "breakfast",                       # 13
              "read"                             # 14
              ]
     final_state = [
@@ -154,7 +187,7 @@ if __name__ == '__main__':
         # 5
         "",
         # 6
-        "",
+        "[close([cpuscreen177]), holds([]), sat_on([chair109]), on_top_of([]), inside([]), on([computer176]), laid_on([]), used([]), eaten([])]",
         # 7
         "",
         # 8
@@ -205,16 +238,17 @@ if __name__ == '__main__':
         "[walk(bedroom74),walk(book192),grab(book192),walk(livingroom336),walk(sofa369),sit(sofa369),use(book192)]"
                   ]
     rooms = None
-    if task_selection in [6]:
-        rooms = [74] # bedroom
-    elif task_selection in [7,8]:
-        rooms = [11] # bathroom
-    elif task_selection in [10, 14]:
-        rooms = [74, 336] # bedroom, livingroom
-    elif task_selection in [11]:
-        rooms = [207, 74] # kitchen, bedroom
-    elif task_selection in [12, 13]:
-        rooms = [207] # kitchen
+    if few_rooms:
+        if task_selection in [5, 6, 9]:
+            rooms = [74] # bedroom
+        elif task_selection in [7,8]:
+            rooms = [11] # bathroom
+        elif task_selection in [10, 14]:
+            rooms = [74, 336] # bedroom, livingroom
+        elif task_selection in [11]:
+            rooms = [207, 74] # kitchen, bedroom
+        elif task_selection in [12, 13]:
+            rooms = [207] # kitchen
     start_time = time.time()
     logging.info("Start Time: %s", datetime.datetime.now())
     # Create simulator
@@ -226,6 +260,9 @@ if __name__ == '__main__':
     program = scaspharness.ScaspHarness(simulat, initial_rules="scasp_knowledge_base/knowledge_base_without_time.pl", optimize_rules=optimize_rules, rooms=rooms)
     logging.info("Program Initialized Time: %s seconds" % (time.time() - start_time))
     start_time = time.time()
+    if reduce_items:
+        relevant = get_relevant(tasks[task_selection])
+        program.relevant_items = relevant
     # Full loop
     if step_by_step:
         run_step_by_step(tasks[task_selection], final_state[task_selection])

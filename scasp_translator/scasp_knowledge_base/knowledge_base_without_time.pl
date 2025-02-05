@@ -34,7 +34,7 @@ dirty_in_sink(Sink, [Dish | T], PrevList, List) :- dish(Dish), dirty_in_sink(Sin
 dirty_in_sink(Sink, [_ | T], PrevList, List) :- dirty_in_sink(Sink, T, PrevList, List).
 
 % For the task "Feed Me"
-needs_cooking(X) :- food(X), -eatable(X), not dish(X).
+needs_cooking(X) :- food(X), not eatable(X), not dish(X).
 eatable(X) :- fruit(X).
 eatable(X) :- vegetable(X).
 fruit(X) :- type(X, bananas).
@@ -54,7 +54,6 @@ extra_ontopof([[vacuum, floor75], [sheets01, bed111], [pillowcase011, bed111], [
 
 % Constraints
 % Abducibles
--eatable(X) :- not eatable(X).
 movable(X) :- grabbable(X), not -movable(X).
 
 % Helper functions
@@ -149,6 +148,7 @@ suggest(grab(X), [close(Close), _, _, on_top_of(OtoI), _, _, _, _, _], [_, _, _,
 suggest(put(X,Y), [close(Close), holds(Held), _, on_top_of(OtoI), _, _, _, _, _], [_, _, _, on_top_of(OtoN), _, _, _, _, _]) :- member([X, Y], OtoN), not_member([X, Y], OtoI), member(Y, Close), member(X, Held).
 suggest(walk(X), [_, _, _, _, _, on(OnI), _, _, _], [_, _, _, _, _, on(OnF), _, _, _]) :- not_member(X,OnI), member(X, OnF).
 suggest(switchon(X), _, [_, _, _, _, _, on(On), _, _, _]) :- member(X, On).
+
 suggest(walk(Y), [_, holds(Held), _, _, _, _, _, _, _], [_, _, _, on_top_of(Oto), _, _, _, _, _]) :- member([X,Y], Oto), member(X, Held).
 suggest(put(X, Y), _, [_, _, _, on_top_of(Oto), _, _, _, _, _]) :- member([X,Y], Oto).
 suggest(put(X, Y), [close(CloseI), holds(Held), _, on_top_of(Oto), _, _, _, _, _], [close(CloseF), _, sat_on(Sat), _, _, _, _, _, _]) :-
@@ -162,6 +162,7 @@ suggest(walk(X), _, [close(Close), _, sat_on(Sat), _, _, _, _, _, _]) :- member(
 suggest(grab(X), [close(CloseI), _, _, _, _, _, _, _, _], [close(CloseF), _, sat_on(Sat), _, _, _, _, _, _]) :-
     not_member(Y, CloseI), member(Y, CloseF), member(X, Sat), -list_empty(CloseF).
 suggest(walk(X), [_, holds(Held), _, _, _, _, _, _, _], [close(Close), _, sat_on(Sat), _, _, _, _, _, _]) :- member(X, Close), sittable(Y), X\=Y, member(Y, Sat), member(Y, Held).
+
 suggest(sit(X), _, [_, _, sat_on(Sat), _, _, _, _, _, _]) :- member(X, Sat).
 suggest(walk(Room), State1, State2) :- item_of_interest(State1, State2, Item), state_inside(State1, Item, Room).
 suggest(walk(X), _, [close(Close), _, _, _, _, _, _, _, _]) :- member(X, Close).
@@ -330,10 +331,10 @@ complete_task(change_sheets_and_pillow_cases, P) :-
         [pillowcase021, pillow188], [pillowcase022, pillow189], [sheets02, bed111]]),
         inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 complete_task(wash_dirty_dishes, P) :-
-    type(Sink, sink), type(Kitchen, kitchen), inside(Inside), member([Sink, Kitchen], Inside),
+    type(Sink, sink), inside(Inside), member([Sink, Kitchen], Inside),
     dirty_in_sink(Sink, Dishes), type(Faucet, faucet), member([Faucet, Kitchen], Inside),
     transform([close([]), holds([]), sat_on([]), on_top_of(Dishes),
-        inside([]), on([Faucet]), laid_on([]), used([]), eaten([])], P).
+        inside([]), on([Faucet]), laid_on([]), used([Sink]), eaten([])], P).
 complete_task(feed_me, P) :-
     needs_cooking(Food), vegetable(Veggie), type(Pan, fryingpan), type(Stove, stove),
     transform([close([]), holds([]), sat_on([]), on_top_of([[Food, Pan], [Veggie, Pan], [Pan, Stove]]),
@@ -350,3 +351,38 @@ complete_task(read, P) :-
     readable(Reading), sittable(Comfy), type(Comfy, sofa), type(Light, lightswitch),
     transform([close([]), holds([Reading]), sat_on([Comfy]), on_top_of([]),
         inside([]), on([Light]), laid_on([]), used([Reading]), eaten([])], P).
+
+% Get Relevant
+get_relevant(grab_remote, [Remote]) :- type(Remote, remotecontrol).
+get_relevant(grab_remote_and_clothes, [Remote, Clothes]) :- type(Remote, remotecontrol), type(Clothes, clothesshirt).
+get_relevant(use_phone_on_couch, [Cell, Sofa]) :- type(Cell, cellphone), type(Sofa, sofa).
+get_relevant(set_remote_on_coffee_table, [Remote, Ct]) :- type(Remote, remotecontrol), type(Ct, coffeetable).
+get_relevant(turn_on_tv, [Tv]) :- type(Tv, tv).
+
+get_relevant(go_to_sleep, [Bed]) :- type(Bed, bed).
+get_relevant(browse_internet, [Computer, Chair, Cpuscreen, Floor]) :-
+    type(Computer, computer), type(Chair, chair), type(Cpuscreen, cpuscreen), inside_same_room(Computer, Chair),
+    ontopof(Oto), ontopof_inherited(Floor, Cpuscreen, Oto), type(Floor, floor).
+get_relevant(wash_teeth, [Toothbrush, Toothpaste, Faucet]) :-
+    type(Toothbrush, toothbrush), type(Toothpaste, toothpaste), type(Faucet, faucet).
+get_relevant(brush_teeth, [Toothbrush, Toothpaste, Faucet]) :-
+    type(Toothbrush, toothbrush), type(Toothpaste, toothpaste), type(Faucet, faucet).
+get_relevant(vacuum, [Vacuum]) :-
+    type(Vacuum, vacuum).
+get_relevant(change_sheets_and_pillow_cases, [Bed, Pillow1, Pillow2, Pilloecase1, Pillowcase2, Sheets,
+                                            ReplacementPillowcase1, ReplacementPillowcase2, ReplacementSheets, Clothespile]) :-
+    type(Bed, bed), type(Pillow1, pillow), type(Pillow2, pillow), Pillow1 \= Pillow2, inside_same_room(Pillow1, Bed),
+    inside_same_room(Pillow2, Bed), type(Pillowcase1, pillowcase), type(Pillowcase2, pillowcase), Pillowcase1 \= Pillowcase2,
+    inside_same_room(Pillowcase1, Pillow1), inside_same_room(Pillowcase2, Pillow2), type(Sheets, sheets), inside_same_room(Sheets, Bed),
+    type(ReplacementPillowcase1, pillowcase), type(ReplacementPillowcase2, pillowcase), type(ReplacementSheets, sheets),
+    ReplacementPillowcase1 \= Pillowcase1, ReplacementPillowcase1 \= Pillowcase2, ReplacementPillowcase2 \= Pillowcase1,
+    ReplacementPillowcase2 \= Pillowcase2, ReplacementSheets \= Sheets, type(Clothespile, clothespile).
+get_relevant(wash_dirty_dishes, List) :-
+    type(Sink, sink), type(Kitchen, kitchen), inside(Inside), member([Sink, Kitchen], Inside),
+    dirty_in_sink(Sink, Dishes), type(Faucet, faucet), member([Faucet, Kitchen], Inside), append([Sink, Faucet], Dishes, List).
+get_relevant(feed_me, [Food, Veggie, Pan, Stove]) :-
+    needs_cooking(Food), vegetable(Veggie), type(Pan, fryingpan), type(Stove, stove).
+get_relevant(breakfast, [Food, Heatsource]) :-
+    breakfast(Food), easy_cooking(Heatsource, Food).
+get_relevant(read, [Reading, Comfy, Light]) :-
+    readable(Reading), sittable(Comfy), type(Comfy, sofa), type(Light, lightswitch).

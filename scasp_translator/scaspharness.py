@@ -19,13 +19,14 @@ class ScaspHarness():
 		self.rules = {}
 		self.objects = {}
 		self.rooms = rooms
+		self.relevant_items = None
 
 	def get_scasp(self):
 		"""
 		This method gets the state from the simulator and appends it to the
 		initial rules
 		"""
-		self.rules = self.simulator.get_state(self.rooms)
+		self.rules = self.simulator.get_state(self.rooms, self.relevant_items)
 
 	def print_rules_to_file(self, rooms, file=None, past_file=None, query=None):
 		"""

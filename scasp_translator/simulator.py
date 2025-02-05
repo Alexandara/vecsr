@@ -33,7 +33,7 @@ class Simulator(ABC):
 	def take_action(self, action):
 		pass
 
-	def knowledge_graph_to_predicates(self, graph, rooms, time=False, character_perspective=True):
+	def knowledge_graph_to_predicates(self, graph, rooms, relevant_items=None, time=False, character_perspective=True):
 		includeType = True
 		includeState = True
 		includeProperties = True
@@ -44,6 +44,7 @@ class Simulator(ABC):
 		states = {}
 		facts = []
 		ids = {}
+		list_of_rooms = []
 		# Get all rooms
 		if not rooms:
 			room_nodes = self.check_for_node(graph, category="Rooms")
@@ -51,6 +52,9 @@ class Simulator(ABC):
 			room_nodes = []
 			for room in rooms:
 				room_nodes.append(self.check_for_node(graph, category="Rooms", identifier=room)[0])
+
+		for room in room_nodes:
+			list_of_rooms.append(room["class_name"] + str(room["id"]))
 		node_lookup = self.node_lookup_dict(graph)
 		for room in room_nodes:
 			for node in graph['nodes']:
@@ -58,6 +62,8 @@ class Simulator(ABC):
 						and not node == room:
 					continue
 				identifier = node['class_name'] + str(node['id'])
+				if relevant_items and not identifier in relevant_items:
+					continue
 				ids[node['id']] = identifier
 				if includeType:
 					facts.append([("type", identifier, node['class_name'])])
@@ -136,6 +142,8 @@ class Simulator(ABC):
 					facts.append([(rule.lower() + "_character", string_list, self.timestamp)])
 				else:
 					facts.append([(rule.lower() + "_character", string_list)])
+		for room in list_of_rooms:
+			facts.append([("rooms", room)])
 		return facts
 
 	@staticmethod
@@ -145,7 +153,7 @@ class Simulator(ABC):
 			return None
 		string_list = "["
 		for item in items:
-			string_list += item + ", "
+			string_list += str(item) + ", "
 		string_list = string_list[:-2] + "]"
 		return string_list
 
@@ -211,6 +219,7 @@ class Simulator(ABC):
 		for room in room_nodes:
 			rooms[room["id"]] = room["class_name"]
 		return rooms
+
 	@staticmethod
 	def node_lookup_dict(graph):
 		node_lookup = {}
@@ -257,14 +266,14 @@ class VirtualHomeSimulator(Simulator):
 		_, g = self.comm.environment_graph()
 		return g
 
-	def get_state(self, rooms=None):
+	def get_state(self, rooms=None, relevant=None):
 		"""
 		A method that returns the current state of the environment in the form
 		of Prolog facts of the form [(fact, parameter, ...)]
 		:return: a list of prolog facts [[(fact)], [(fact2)], ...]
 		"""
 		s, g = self.comm.environment_graph()
-		facts = self.knowledge_graph_to_predicates(g, rooms)
+		facts = self.knowledge_graph_to_predicates(g, rooms, relevant_items=relevant)
 		return facts
 
 	def get_actions(self):

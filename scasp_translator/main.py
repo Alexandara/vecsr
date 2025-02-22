@@ -21,6 +21,8 @@ def run(task, answer=None):
     else:
         logging.info("Answer received: %s", answer)
         actions = answer.strip('][ ').split(')')
+    logging.info("Plan:")
+    logging.info(actions)
     for action in actions:
         a = action.replace("(", " ").replace(",", " ").split()
         if a:
@@ -134,7 +136,7 @@ if __name__ == '__main__':
               False,    # Get plans step by step or not?
               False,    # Only use relevant rooms or not?
               ]
-    best = False
+    best = True
     best_norelitems = False
     best_noopt = False
     best_norelrooms = False
@@ -155,7 +157,7 @@ if __name__ == '__main__':
     use_answer_key = values[4]
     step_by_step = values[5]
     few_rooms = values[6]
-    task_selection = 14
+    task_selection = 15
     tasks = ["use_phone_on_couch",              # 0
              "grab_remote_and_clothes",         # 1
              "grab_remote",                     # 2
@@ -171,7 +173,8 @@ if __name__ == '__main__':
              "wash_dirty_dishes",               # 11
              "feed_me",                         # 12
              "breakfast",                       # 13
-             "read"                             # 14
+             "read",                            # 14
+             "generic"                          # 15
              ]
     final_state = [
         # 0
@@ -249,6 +252,8 @@ if __name__ == '__main__':
             rooms = [207, 74] # kitchen, bedroom
         elif task_selection in [12, 13]:
             rooms = [207] # kitchen
+        elif task_selection in [15]:
+            rooms = [74]
     start_time = time.time()
     logging.info("Start Time: %s", datetime.datetime.now())
     # Create simulator

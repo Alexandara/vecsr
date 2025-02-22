@@ -48,9 +48,15 @@ can_cook(X) :- type(X, toaster).
 breakfast(X) :- type(X, breadslice).
 easy_cooking(Toaster, Bread) :- type(Toaster, toaster), type(Bread, breadslice).
 
+% For the task
+
 % Inside and ontopof for added predicates
-extra_inside([[vacuum0, bedroom74], [sheets01, bedroom74], [pillowcase011, bedroom74], [pillowcase012, bedroom74], [sheets02, livingroom336], [pillowcase021, livingroom336], [pillowcase022, livingroom336]]).
-extra_ontopof([[vacuum, floor75], [sheets01, bed111], [pillowcase011, bed111], [pillowcase012, bed111], [sheets02, coffeetable372], [pillowcase021, coffeetable372], [pillowcase022, coffeetable372]]).
+extra_inside([[vacuum0, bedroom74],
+[sheets01, bedroom74], [pillowcase011, bedroom74], [pillowcase012, bedroom74], [sheets02, livingroom336], [pillowcase021, livingroom336], [pillowcase022, livingroom336]
+]).
+extra_ontopof([[vacuum, floor75],
+[sheets01, bed111], [pillowcase011, bed111], [pillowcase012, bed111], [sheets02, coffeetable372], [pillowcase021, coffeetable372], [pillowcase022, coffeetable372]
+]).
 
 % Constraints
 % Abducibles
@@ -386,3 +392,43 @@ get_relevant(breakfast, [Food, Heatsource]) :-
     breakfast(Food), easy_cooking(Heatsource, Food).
 get_relevant(read, [Reading, Comfy, Light]) :-
     readable(Reading), sittable(Comfy), type(Comfy, sofa), type(Light, lightswitch).
+
+% Unseen Data
+%% Watch TV
+%get_relevant(generic, [Tv, Comfy]) :-
+%    sittable(Comfy), type(Comfy, sofa), type(Tv, tv).
+%complete_task(generic, P) :-
+%    sittable(Comfy), type(Comfy, sofa), type(Tv, tv),
+%    transform([close([]), holds([]), sat_on([Comfy]), on_top_of([]),
+%        inside([]), on([Tv]), laid_on([]), used([]), eaten([])], P).
+%% Read Book
+%get_relevant(generic, [Book, Comfy, Light]) :-
+%    type(Book, book), readable(Book), sittable(Comfy), type(Comfy, sofa), type(Light, lightswitch).
+%complete_task(generic, P) :-
+%    type(Book, book), readable(Book), sittable(Comfy), type(Comfy, sofa), type(Light, lightswitch),
+%    transform([close([]), holds([Book]), sat_on([Comfy]), on_top_of([]),
+%        inside([]), on([Light]), laid_on([]), used([Book]), eaten([])], P).
+% Relax on Sofa
+get_relevant(generic, [Comfy]) :-
+    type(Comfy, sofa).
+complete_task(generic, P) :-
+    type(Comfy, sofa),
+    transform([close([]), holds([]), sat_on([Comfy]), on_top_of([]),
+        inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+% Listen to Music
+get_relevant(generic, [Radio]) :-
+    type(Radio, radio).
+complete_task(generic, P) :-
+    type(Radio, radio),
+    transform([close([]), holds([]), sat_on([]), on_top_of([]),
+        inside([]), on([Radio]), laid_on([]), used([]), eaten([])], P).
+% Tabletop Game
+get_relevant(generic, [Table, Game]) :-
+    type(Table, kitchentable), type(Game, tabletopgame).
+complete_task(generic, P) :-
+    type(Radio, radio),
+    transform([close([]), holds([]), sat_on([]), on_top_of([]),
+        inside([]), on([Radio]), laid_on([]), used([]), eaten([])], P).
+
+
+

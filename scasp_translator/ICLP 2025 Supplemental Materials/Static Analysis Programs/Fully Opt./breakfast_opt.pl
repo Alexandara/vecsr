@@ -1,17 +1,12 @@
 type(character1, character).
-type(fryingpan270, fryingpan).
-grabbable(fryingpan270).
-type(stove312, stove).
-has_switch(stove312).
-type(bellpepper321, bellpepper).
-grabbable(bellpepper321).
-food(bellpepper321).
-type(salmon328, salmon).
-grabbable(salmon328).
-food(salmon328).
-inside([[bellpepper321, kitchen207], [stove312, kitchen207], [character1, kitchen207], [salmon328, kitchen207], [oventray313, stove312], [fryingpan270, kitchen207]]).
-ontopof([[salmon328, microwave314], [bellpepper321, kitchencounter238], [fryingpan270, stove312], [bellpepper321, kitchencounterdrawer244]]).
-close_character([garbagecan105, kitchentable231, bench233, kitchencabinet235, kitchencabinet236, kitchencabinet237, kitchencounter238, kitchencounterdrawer239, kitchencounterdrawer240, kitchencounterdrawer244, kitchencounterdrawer245, kitchencounterdrawer246, sink247, faucet249, rug253, rug254, wallpictureframe255, wallpictureframe256, wallpictureframe257, lightswitch262, powersocket263, wallphone264, clock266, washingsponge267, dishwashingliquid268, book269, waterglass271, cutleryknife272, cutleryfork273, plate274, plate279, cutleryfork280, cutleryknife281, waterglass282, waterglass283, cutleryknife284, plate286, fridge306, toaster309, breadslice310, breadslice311, microwave314, plate315, pie320, bellpepper321, bellpepper322, bellpepper323, bellpepper324, bellpepper325, bellpepper326, dishbowl327, salmon328]).
+type(toaster309, toaster).
+has_switch(toaster309).
+type(breadslice310, breadslice).
+grabbable(breadslice310).
+eatable(breadslice310).
+inside([[breadslice310, kitchen207], [character1, kitchen207], [breadslice311, toaster309], [toaster309, kitchen207], [breadslice310, toaster309]]).
+ontopof([[toaster309, kitchencounter238], [toaster309, kitchencounterdrawer243]]).
+close_character([bench233, kitchencabinet234, kitchencabinet235, kitchencounter238, kitchencounterdrawer239, kitchencounterdrawer240, kitchencounterdrawer241, kitchencounterdrawer242, kitchencounterdrawer243, sink247, faucet249, wallshelf251, rug254, wallpictureframe258, wallpictureframe260, dishwashingliquid268, fryingpan270, plate279, cutleryfork280, cutleryknife281, waterglass282, waterglass283, cutleryknife284, cutleryfork285, plate286, stovefan305, coffeemaker307, coffeepot308, toaster309, breadslice310, breadslice311, stove312, oventray313, bellpepper322, bellpepper323, chips329, chips330, candybar331, chocolatesyrup332, wallpictureframe420]).
 rooms(kitchen207).
 type(vacuum0, vacuum).
 has_switch(vacuum0).
@@ -175,4 +170,4 @@ complete_task(feed_me, P) :- needs_cooking(Food), vegetable(Veggie), type(Pan, f
 complete_task(breakfast, P) :- transform([close([]), holds([]), sat_on([]), on_top_of([[breadslice310, toaster309]]), inside([]), on([toaster309]), laid_on([]), used([]), eaten([breadslice310])], P).
 complete_task(read, P) :- readable(Reading), sittable(Comfy), type(Comfy, sofa), type(Light, lightswitch), transform([close([]), holds([Reading]), sat_on([Comfy]), on_top_of([]), inside([]), on([Light]), laid_on([]), used([Reading]), eaten([])], P).
 
-?- complete_task(feed_me, P).
+?- complete_task(breakfast, P).

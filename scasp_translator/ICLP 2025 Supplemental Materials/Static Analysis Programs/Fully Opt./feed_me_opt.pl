@@ -9,9 +9,9 @@ food(bellpepper321).
 type(salmon328, salmon).
 grabbable(salmon328).
 food(salmon328).
-inside([[bellpepper321, kitchen207], [stove312, kitchen207], [character1, kitchen207], [salmon328, kitchen207], [oventray313, stove312], [fryingpan270, kitchen207]]).
-ontopof([[salmon328, microwave314], [bellpepper321, kitchencounter238], [fryingpan270, stove312], [bellpepper321, kitchencounterdrawer244]]).
-close_character([garbagecan105, kitchentable231, bench233, kitchencabinet235, kitchencabinet236, kitchencabinet237, kitchencounter238, kitchencounterdrawer239, kitchencounterdrawer240, kitchencounterdrawer244, kitchencounterdrawer245, kitchencounterdrawer246, sink247, faucet249, rug253, rug254, wallpictureframe255, wallpictureframe256, wallpictureframe257, lightswitch262, powersocket263, wallphone264, clock266, washingsponge267, dishwashingliquid268, book269, waterglass271, cutleryknife272, cutleryfork273, plate274, plate279, cutleryfork280, cutleryknife281, waterglass282, waterglass283, cutleryknife284, plate286, fridge306, toaster309, breadslice310, breadslice311, microwave314, plate315, pie320, bellpepper321, bellpepper322, bellpepper323, bellpepper324, bellpepper325, bellpepper326, dishbowl327, salmon328]).
+inside([[character1, kitchen207], [fryingpan270, kitchen207], [salmon328, kitchen207], [bellpepper321, kitchen207], [oventray313, stove312], [stove312, kitchen207]]).
+ontopof([[salmon328, microwave314], [bellpepper321, kitchencounterdrawer244], [fryingpan270, stove312], [bellpepper321, kitchencounter238]]).
+close_character([garbagecan105, wallpictureframe180, bench233, kitchencabinet235, kitchencabinet236, kitchencabinet237, kitchencounter238, kitchencounterdrawer239, kitchencounterdrawer240, kitchencounterdrawer241, kitchencounterdrawer242, kitchencounterdrawer243, kitchencounterdrawer244, kitchencounterdrawer245, kitchencounterdrawer246, sink247, faucet249, rug254, wallpictureframe255, wallpictureframe256, wallpictureframe257, lightswitch262, powersocket263, wallphone264, clock266, washingsponge267, dishwashingliquid268, plate279, cutleryfork280, cutleryknife281, waterglass282, cutleryknife284, fridge306, toaster309, breadslice310, breadslice311, microwave314, plate315, bellpepper321, bellpepper322, bellpepper323, bellpepper324, bellpepper325, bellpepper326, dishbowl327, salmon328]).
 rooms(kitchen207).
 type(vacuum0, vacuum).
 has_switch(vacuum0).

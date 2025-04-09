@@ -1,4 +1,49 @@
+% Current State
+current_time(1).
+type(plate195, plate).
+surfaces(plate195).
+grabbable(plate195).
+recipient(plate195).
+movable(plate195).
+props(plate195).
+type(wineglass199, wineglass).
+grabbable(wineglass199).
+recipient(wineglass199).
+pourable(wineglass199).
+movable(wineglass199).
+props(wineglass199).
+type(character1, character).
+characters(character1).
+type(sink247, sink).
+recipient(sink247).
+containers(sink247).
+furniture(sink247).
+type(faucet249, faucet).
+off(faucet249).
+has_switch(faucet249).
+furniture(faucet249).
+off_list([faucet249]).
+inside([[plate195, bedroom74], [faucet249, kitchen207], [character1, kitchen207], [wineglass199, bedroom74], [sink247, kitchen207]]).
+ontopof([[faucet249, kitchencounter238], [plate195, desk110], [wineglass199, coffeetable113]]).
+facing([[wineglass199, computer176], [character1, clock266], [character1, tv265]]).
+close([[character1, rug254], [lightswitch428, character1], [wallpictureframe259, character1], [plate274, character1], [cabinet416, character1], [folder454, character1], [waterglass283, character1], [character1, wallpictureframe421], [wallpictureframe419, character1], [cutleryfork277, character1], [cutleryfork273, character1], [wallshelf252, character1], [plate278, character1], [character1, wallpictureframe419], [character1, plate278], [character1, kitchentable231], [character1, wallpictureframe259], [character1, bench232], [character1, pie320], [character1, rug253], [character1, waterglass283], [crackers333, character1], [creamybuns334, character1], [character1, cabinet416], [waterglass271, character1], [cutleryknife276, character1], [rug254, character1], [wallpictureframe420, character1], [bench232, character1], [pie320, character1], [waterglass275, character1], [cereal335, character1], [character1, cereal335], [character1, lightswitch428], [character1, wallshelf252], [character1, cutleryknife276], [cutleryknife272, character1], [wallpictureframe421, character1], [character1, cutleryknife272], [character1, wallpictureframe420], [rug253, character1], [kitchentable231, character1], [character1, crackers333], [character1, cutleryfork273], [character1, creamybuns334], [character1, folder454], [character1, whippedcream319], [character1, waterglass271], [character1, plate274], [whippedcream319, character1], [character1, waterglass275], [character1, cutleryfork277]]).
+inside_character([kitchen207]).
+close_character([kitchentable231, bench232, wallshelf252, rug253, rug254, wallpictureframe259, waterglass271, cutleryknife272, cutleryfork273, plate274, waterglass275, cutleryknife276, cutleryfork277, plate278, waterglass283, whippedcream319, pie320, crackers333, creamybuns334, cereal335, wallpictureframe421, wallpictureframe419, lightswitch428, folder454, wallpictureframe420, cabinet416]).
+facing_character([tv265, clock266]).
+rooms(bathroom11).
+rooms(bedroom74).
+rooms(kitchen207).
+rooms(livingroom336).
+% Rules
 % Extra "facts" about objects that exist in the dataset but not the simulation
+% This is required because the VirtualHome simulation does not include everything
+% needed to complete every task in their database. As an example, although the
+% task "Vacuum" exists in the database, there is not object "vacuum" in the
+% simulation. Therefore we add state facts for those objects to
+% demonstrate the s(CASP) harness' ability on randomly selected tasks from the
+% database rather than on carefully selected tasks which are fully embodied in
+% the simulation
+
 % For the task: "Vacuum"
 type(vacuum0, vacuum).
 has_switch(vacuum0).
@@ -48,14 +93,131 @@ can_cook(X) :- type(X, toaster).
 breakfast(X) :- type(X, breadslice).
 easy_cooking(Toaster, Bread) :- type(Toaster, toaster), type(Bread, breadslice).
 
-% For the task
+%% Unseen Data
+%% For the task "Tabletop Game"
+%type(tabletopgame3200, tabletopgame).
+%grabbable(tabletopgame3200).
+%movable(tabletopgame3200).
+%
+%% For the task "Pick up spare change on dresser"
+%type(dresser3201, dresser).
+%surfaces(dresser3201).
+%movable(dresser3201).
+%type(change3202, change).
+%grabbable(change3202).
+%
+%% For the task "Put shoes and coats"
+%type(shoe3203, shoe).
+%clothes(shoe3203).
+%grabbable(shoe3203).
+%movable(shoe3203).
+%type(shoe3204, shoe).
+%clothes(shoe3204).
+%grabbable(shoe3204).
+%movable(shoe3204).
+%type(coat3205, coat).
+%clothes(coat3205).
+%grabbable(coat3205).
+%movable(coat3205).
+%
+%% For the task "Hair"
+%type(comb3206, comb).
+%grabbable(comb3206).
+%movable(comb3206).
+%
+%% For the task "Cutting"
+%type(cuttingboard3207, cuttingboard).
+%grabbable(cuttingboard3207).
+%movable(cuttingboard3207).
+%
+%% For the task "Put out flowers"
+%type(flowers3208, flowers).
+%grabbable(flowers3208).
+%movable(flowers3208).
+%type(vase3209, vase).
+%grabbable(vase3209).
+%movable(vase3209).
+%surface(vase3209).
+%
+%% For the task "Put down bags"
+%type(bag3210, bag).
+%grabbable(bag3210).
+%movable(bag3210).
+%type(bag3211, bag).
+%grabbable(bag3211).
+%movable(bag3211).
+%
+%% holds_character([bag3210, bag3211]).
+%
+%% For the task "Curled hair"
+%type(curlingiron3212, curlingiron).
+%grabbable(curlingiron3212).
+%movable(curlingiron3212).
+%has_switch(curlingiron3212).
+%
+%% For the task "Place centerpiece"
+%type(centerpiece3213, centerpiece).
+%grabbable(centerpiece3213).
+%movable(centerpiece3213).
+%
+%% For the task "Practice Violin"
+%type(violin3214, violin).
+%grabbable(violin3214).
+%movable(violin3214).
+%
+%% For the task "Wipe room down with lysol"
+%type(lysol3215, lysol).
+%grabbable(lysol3215).
+%movable(lysol3215).
+%
+%% For the task "Replace toothpaste"
+%type(toothpaste1163, toothpaste).
+%closed(toothpaste1163).
+%grabbable(toothpaste1163).
+%pourable(toothpaste1163).
+%can_open(toothpaste1163).
+%movable(toothpaste1163).
+%cream(toothpaste1163).
+%new(toothpaste1163).
+%
+%% For the task "Shampoo hair"
+%type(shampoo3216, shampoo).
+%grabbable(shampoo3216).
+%pourable(shampoo3216).
+%can_open(shampoo3216).
+%movable(shampoo3216).
 
 % Inside and ontopof for added predicates
 extra_inside([[vacuum0, bedroom74],
-[sheets01, bedroom74], [pillowcase011, bedroom74], [pillowcase012, bedroom74], [sheets02, livingroom336], [pillowcase021, livingroom336], [pillowcase022, livingroom336]
+[sheets01, bedroom74], [pillowcase011, bedroom74], [pillowcase012, bedroom74], [sheets02, livingroom336], [pillowcase021, livingroom336], [pillowcase022, livingroom336],
+%[tabletopgame3200, livingroom336],
+%[dresser3201, bedroom74], [change3202, bedroom74],
+%[shoe3203, bedroom74], [shoe3204, bedroom74], [coat3205, bedroom74],
+%[comb3206, bathroom11],
+%[cuttingboard3207, kitchen207],
+%[vase3209, kitchen207], [flowers3208, kitchen207],
+%[bag3210, kitchen207], [bag3211, kitchen207],
+%[curlingiron3212, bathroom11],
+%[centerpiece3213, kitchen207],
+%[violin3214, bedroom74],
+%[lysol3215, bathroom11],
+%[toothpaste1163, bedroom74],
+[shampoo3216, bathroom11]
 ]).
 extra_ontopof([[vacuum, floor75],
-[sheets01, bed111], [pillowcase011, bed111], [pillowcase012, bed111], [sheets02, coffeetable372], [pillowcase021, coffeetable372], [pillowcase022, coffeetable372]
+[sheets01, bed111], [pillowcase011, bed111], [pillowcase012, bed111], [sheets02, coffeetable372], [pillowcase021, coffeetable372], [pillowcase022, coffeetable372],
+%[tabletopgame3200, bookshelf371],
+%[change3202, dresser3201], [dresser3201, floor75],
+%[shoe3203, floor75], [shoe3204, floor75], [coat3205, closetdrawer122],
+%[comb3206, bathroomcounter50],
+%[cuttingboard3207, kitchencounter238],
+%[vase3209, kitchencounter238], [flowers3208, kitchencounter238],
+%[curlingiron3212, bathroomcounter50],
+%[centerpiece3213, kitchencounter238],
+%[violin3214, coffeetable113]
+%[lysol3215, bathroomcounter50],
+%[toothpaste1163, coffeetable113],
+[shampoo3216, bathroomcounter50]
 ]).
 
 % Constraints
@@ -408,27 +570,143 @@ get_relevant(read, [Reading, Comfy, Light]) :-
 %    type(Book, book), readable(Book), sittable(Comfy), type(Comfy, sofa), type(Light, lightswitch),
 %    transform([close([]), holds([Book]), sat_on([Comfy]), on_top_of([]),
 %        inside([]), on([Light]), laid_on([]), used([Book]), eaten([])], P).
-% Relax on Sofa
-get_relevant(generic, [Comfy]) :-
-    type(Comfy, sofa).
-complete_task(generic, P) :-
-    type(Comfy, sofa),
-    transform([close([]), holds([]), sat_on([Comfy]), on_top_of([]),
-        inside([]), on([]), laid_on([]), used([]), eaten([])], P).
-% Listen to Music
-get_relevant(generic, [Radio]) :-
-    type(Radio, radio).
-complete_task(generic, P) :-
-    type(Radio, radio),
-    transform([close([]), holds([]), sat_on([]), on_top_of([]),
-        inside([]), on([Radio]), laid_on([]), used([]), eaten([])], P).
-% Tabletop Game
-get_relevant(generic, [Table, Game]) :-
-    type(Table, kitchentable), type(Game, tabletopgame).
-complete_task(generic, P) :-
-    type(Radio, radio),
-    transform([close([]), holds([]), sat_on([]), on_top_of([]),
-        inside([]), on([Radio]), laid_on([]), used([]), eaten([])], P).
+%% Relax on Sofa
+%get_relevant(generic, [Comfy]) :-
+%    type(Comfy, sofa).
+%complete_task(generic, P) :-
+%    type(Comfy, sofa),
+%    transform([close([]), holds([]), sat_on([Comfy]), on_top_of([]),
+%        inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+%% Listen to Music
+%get_relevant(generic, [Radio]) :-
+%    type(Radio, radio).
+%complete_task(generic, P) :-
+%    type(Radio, radio),
+%    transform([close([]), holds([]), sat_on([]), on_top_of([]),
+%        inside([]), on([Radio]), laid_on([]), used([]), eaten([])], P).
+%% Tabletop Game
+%get_relevant(generic, [Table, Game]) :-
+%    type(Table, kitchentable), type(Game, tabletopgame).
+%complete_task(generic, P) :-
+%    type(Table, kitchentable), type(Game, tabletopgame),
+%    transform([close([]), holds([]), sat_on([]), on_top_of([[Game, Table]]),
+%        inside([]), on([]), laid_on([]), used([Game]), eaten([])], P).
+%% Pee
+%get_relevant(generic, [Toilet]) :-
+%    type(Toilet, toilet).
+%complete_task(generic, P) :-
+%    type(Toilet, toilet),
+%    transform([close([]), holds([]), sat_on([]), on_top_of([]),
+%        inside([]), on([]), laid_on([]), used([Toilet]), eaten([])], P).
+%% Have snack
+%get_relevant(generic, [Change, Dresser]) :-
+%    type(Change, change), type(Dresser, dresser).
+%complete_task(generic, P) :-
+%    type(Change, change), type(Dresser, dresser),
+%    transform([close([]), holds([Change]), sat_on([]), on_top_of([]),
+%        inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+%% Put shoes and coat FAILURE
+%get_relevant(generic, [Shoe1, Shoe2, Coat]) :-
+%    type(Shoe1, shoe), type(Shoe2, shoe), Shoe1 \= Shoe2, type(Coat, coat).
+%complete_task(generic, P) :-
+%    type(Shoe1, shoe), type(Shoe2, shoe), Shoe1 \= Shoe2, type(Coat, coat),
+%    transform([close([]), holds([]), sat_on([]), on_top_of([[Shoe1, character1], [Shoe2, character1], [Coat, character1]]),
+%        inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+%% Hair
+%get_relevant(generic, [HairProduct, Comb]) :-
+%    type(HairProduct, hairproduct), type(Comb, comb).
+%complete_task(generic, P) :-
+%    type(HairProduct, hairproduct), type(Comb, comb),
+%    transform([close([]), holds([Comb, HairProduct]), sat_on([]), on_top_of([]),
+%        inside([]), on([]), laid_on([]), used([Comb, HairProduct]), eaten([])], P).
+%% Put out flowers
+%get_relevant(generic, [Flowers, Vase, Table]) :-
+%    type(Flowers, flowers), type(Vase, vase), type(Table, kitchentable).
+%complete_task(generic, P) :-
+%    type(Flowers, flowers), type(Vase, vase), type(Table, kitchentable),
+%    transform([close([]), holds([]), sat_on([]), on_top_of([[Vase, Table], [Flowers, Vase]]),
+%        inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+%% Put down bags
+%get_relevant(generic, [Bag1, Bag2, Table]) :-
+%    type(Bag1, bag), type(Bag2, bag), Bag1 \= Bag2, type(Table, kitchentable).
+%complete_task(generic, P) :-
+%    type(Bag1, bag), type(Bag2, bag), Bag1 \= Bag2, type(Table, kitchentable),
+%    transform([close([]), holds([]), sat_on([]), on_top_of([[Bag1, Table], [Bag2, Table]]),
+%        inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+%% Try yourself off
+%get_relevant(generic, [Towel]) :-
+%    type(Towel, towel).
+%complete_task(generic, P) :-
+%    type(Towel, towel),
+%    transform([close([]), holds([Towel]), sat_on([]), on_top_of([]),
+%        inside([]), on([]), laid_on([]), used([Towel]), eaten([])], P).
+%% Curled hair
+%get_relevant(generic, [HairProduct, CurlingIron]) :-
+%    type(HairProduct, hairproduct), type(CurlingIron, curlingiron).
+%complete_task(generic, P) :-
+%    type(HairProduct, hairproduct), type(CurlingIron, curlingiron),
+%    transform([close([]), holds([CurlingIron, HairProduct]), sat_on([]), on_top_of([]),
+%        inside([]), on([CurlingIron]), laid_on([]), used([CurlingIron, HairProduct]), eaten([])], P).
+%% Place centerpiece
+%get_relevant(generic, [Centerpiece, Table]) :-
+%    type(Centerpiece, centerpiece), type(Table, kitchentable).
+%complete_task(generic, P) :-
+%    type(Centerpiece, centerpiece), type(Table, kitchentable),
+%    transform([close([]), holds([]), sat_on([]), on_top_of([[Centerpiece, Table]]),
+%        inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+%% Facial
+%get_relevant(generic, [Facecream]) :-
+%    type(Facecream, facecream).
+%complete_task(generic, P) :-
+%    type(Facecream, facecream),
+%    transform([close([]), holds([Facecream]), sat_on([]), on_top_of([]),
+%        inside([]), on([]), laid_on([]), used([Facecream]), eaten([])], P).
+%% Practice Violin
+%get_relevant(generic, [Violin]) :-
+%    type(Violin, violin).
+%complete_task(generic, P) :-
+%    type(Violin, violin),
+%    transform([close([]), holds([Violin]), sat_on([]), on_top_of([]),
+%        inside([]), on([]), laid_on([]), used([Violin]), eaten([])], P).
+%% Wipe room with lysol
+%get_relevant(generic, [Lysol, Towel, Counter]) :-
+%    type(Lysol, lysol), type(Towel, towel), type(Counter, bathroomcounter).
+%complete_task(generic, P) :-
+%    type(Lysol, lysol), type(Towel, towel), type(Counter, bathroomcounter),
+%    transform([close([Counter]), holds([Lysol, Towel]), sat_on([]), on_top_of([]),
+%        inside([]), on([]), laid_on([]), used([Lysol, Towel]), eaten([])], P).
+%% Replace toothpaste
+%get_relevant(generic, [Oldtoothpaste, Newtoothpaste, Trash, Counter]) :-
+%    type(Oldtoothpaste, toothpaste), type(Newtoothpaste, toothpaste), new(Newtoothpaste), Oldtoothpaste \= Newtoothpaste,
+%    type(Trash, garbagecan), type(Counter, bathroomcounter).
+%complete_task(generic, P) :-
+%    type(Oldtoothpaste, toothpaste), type(Newtoothpaste, toothpaste), new(Newtoothpaste), Oldtoothpaste \= Newtoothpaste,
+%    type(Trash, garbagecan), type(Counter, bathroomcounter),
+%    transform([close([]), holds([]), sat_on([]), on_top_of([[Oldtoothpaste, Trash], [Newtoothpaste, Counter]]),
+%        inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+%% Hang up jacket
+%get_relevant(generic, [Coat, Hanger]) :-
+%    type(Coat, coat), type(Hanger, hanger).
+%complete_task(generic, P) :-
+%    type(Coat, coat), type(Hanger, hanger),
+%    transform([close([]), holds([]), sat_on([]), on_top_of([[Coat, Hanger]]),
+%        inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+%% Shampoo hair
+%get_relevant(generic, [Shampoo, Tub]) :-
+%    type(Shampoo, shampoo), type(Tub, bathtub).
+%complete_task(generic, P) :-
+%    type(Shampoo, shampoo), type(Tub, bathtub),
+%    transform([close([]), holds([Shampoo]), sat_on([Tub]), on_top_of([]),
+%        inside([]), on([]), laid_on([]), used([Shampoo]), eaten([])], P).
+%% Read them bedtime story
+%get_relevant(generic, [Book, Bed]) :-
+%    readable(Book), type(Bed, bed).
+%complete_task(generic, P) :-
+%    readable(Book), type(Bed, bed),
+%    transform([close([]), holds([Book]), sat_on([Bed]), on_top_of([]),
+%        inside([]), on([]), laid_on([]), used([Book]), eaten([])], P).
 
 
 
+
+?- complete_task(wash_dirty_dishes, P).

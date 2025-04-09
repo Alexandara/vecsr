@@ -129,12 +129,12 @@ def get_relevant(task):
 if __name__ == '__main__':
     logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
     values = [True,     # Real simulator or not?
-              False,    # Optimize or not?
-              False,    # Remove unnecessary items or not?
+              True,    # Optimize or not?
+              True,    # Remove unnecessary items or not?
               False,    # Run dynamically or not?
               False,    # Use an answer key or not?
               False,    # Get plans step by step or not?
-              False,    # Only use relevant rooms or not?
+              True,    # Only use relevant rooms or not?
               ]
     best = True
     best_norelitems = False
@@ -143,6 +143,7 @@ if __name__ == '__main__':
     only_relitems = False
     only_opt = False
     only_relrooms = False
+    nothing = False
     if best: values = [True, True, True, False, False, False, True]
     if best_norelitems: values = [True, True, False, False, False, False, True]
     if best_noopt: values = [True, False, True, False, False, False, True]
@@ -150,6 +151,7 @@ if __name__ == '__main__':
     if only_relitems: values = [True, False, True, False, False, False, False]
     if only_opt: values = [True, True, False, False, False, False, False]
     if only_relrooms: values = [True, False, False, False, False, False, True]
+    if nothing: values = [True, False, False, False, False, False, False]
     real_simulator = values[0]
     optimize_rules = values[1]
     reduce_items = values[2] # Remove all facts about non-relevant objects
@@ -157,7 +159,7 @@ if __name__ == '__main__':
     use_answer_key = values[4]
     step_by_step = values[5]
     few_rooms = values[6]
-    task_selection = 15
+    task_selection = 12
     tasks = ["use_phone_on_couch",              # 0
              "grab_remote_and_clothes",         # 1
              "grab_remote",                     # 2
@@ -206,7 +208,9 @@ if __name__ == '__main__':
         # 13
         "[close([]), holds([]), sat_on([]), on_top_of([[breadslice310, toaster309]]), inside([]), on([toaster309]), laid_on([]), used([]), eaten([breadslice310])]",
         # 14
-        ""
+        "",
+        # 15
+        "[close([]), holds([]), sat_on([]), on_top_of([[vase3209, kitchentable231], [flowers3208, vase3209]]), inside([]), on([]), laid_on([]), used([]), eaten([])]"
         ]
     answer_key = [
         # 0
@@ -252,7 +256,7 @@ if __name__ == '__main__':
             rooms = [207, 74] # kitchen, bedroom
         elif task_selection in [12, 13]:
             rooms = [207] # kitchen
-        elif task_selection in [15]:
+        elif task_selection in [15]: # Generic for unseen data
             rooms = [74]
     start_time = time.time()
     logging.info("Start Time: %s", datetime.datetime.now())
@@ -262,7 +266,7 @@ if __name__ == '__main__':
     else:
         simulat = simulator.MockVirtualHomeSimulator() # Mock VirtualHome Simulator
     # Create Harness
-    program = scaspharness.ScaspHarness(simulat, initial_rules="scasp_knowledge_base/knowledge_base_without_time.pl", optimize_rules=optimize_rules, rooms=rooms)
+    program = scaspharness.ScaspHarness(simulat, initial_rules="scasp_knowledge_base/knowledge_base.pl", optimize_rules=optimize_rules, rooms=rooms)
     logging.info("Program Initialized Time: %s seconds" % (time.time() - start_time))
     start_time = time.time()
     if reduce_items:

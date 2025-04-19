@@ -217,7 +217,7 @@ inside_same_room(Item1, Item2) :- Item1 \= Item2, rooms(Room), inside(Inside1), 
 % Test queries
 % ontopof_inherited(X, computer176, [[computer176, desk110], [desk110, floor81]]).
 ontopof_inherited(ItemBelow, ItemOntop, OntopofList) :- member([ItemOntop, ItemBelow], OntopofList).
-ontopof_inherited(ItemBelow, ItemOntop, OntopofList) :- member([ItemOnTop, ItemInBetween], OntopofList),
+ontopof_inherited(ItemBelow, ItemOntop, OntopofList) :- member([ItemOntop, ItemInBetween], OntopofList),
     ontopof_inherited(ItemBelow, ItemInBetween, OntopofList).
 ontopof_inherited(ItemBelow, ItemOntop, OntopofList) :- member([ItemInBetween, ItemBelow], OntopofList),
     ontopof_inherited(ItemInBetween, ItemOntop, OntopofList).

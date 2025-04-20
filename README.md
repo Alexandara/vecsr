@@ -1,5 +1,5 @@
-# s(CASP) Harness
-The s(CASP) harness is a system which translates a VirtualHome simulation 
+# Virtually Embodied Common Sense Reasoning (VECSR)
+VECSR is a system which translates a VirtualHome simulation 
 environment into s(CASP) facts which can then be reasoned over to produce 
 actions. These actions are fulfilled in the simulation environment to complete
 high-level tasks. 
@@ -79,10 +79,10 @@ in a simulated environment.
 This file contains the code in Section 3.3 of the ICLP 2025 paper used to get 
 the first suggested action.
 
-# How to Cite s(CASP) Harness
+# How to Cite VECSR
 **In Publications:**
 
-If you use the s(CASP) translator for work/research presented in a publication 
+If you use VECSR for work/research presented in a publication 
 (whether directly, or as a dependency to another package), we ask that you please 
 use the following citation:
      
@@ -90,11 +90,11 @@ use the following citation:
      
 **In Projects:**
 
-If you are using the s(CASP) harness as part of a code project (e.g., affiliated packages), 
+If you are using VECSR as part of a code project (e.g., affiliated packages), 
 a useful way to acknowledge your use is in your README.
 
 # License 
-GNU @ Alexis Tudor
+GNU @ Alexis R. Tudor
 [![Open Source Love svg2](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 
 

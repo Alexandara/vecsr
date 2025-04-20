@@ -191,10 +191,10 @@ cython_debug/
 
 # VirtualHome Simulation
 /virtualhome/
-/scasp_translator/Output/
-/scasp_translator/macos_exec.2.2.4.app/
+/vecsr/Output/
+/vecsr/macos_exec.2.2.4.app/
 /Output/
 /macos_exec.2.2.4.app/
 /macos_exec*
 /macos_exec.*
-/scasp_translator/port_8082.txt
+/vecsr/port_8082.txt

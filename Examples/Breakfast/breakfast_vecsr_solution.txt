@@ -1,0 +1,6 @@
+[grab(breadslice310),put(breadslice310,toaster309),switchon(toaster309),eat(breadslice310)]
+
+Note: There is some non-determinism in where the agent will start in the VirtualHome apartment. In the optimized version,
+the agent is started next to the counter with the breadslice310 and toaster309. In the ICLP 2025 paper, we reference a
+run where the agent was spawned farther away from the counter and got this action plan:
+[walk(toaster309),switchon(toaster309),walk(breadslice310),grab(breadslice310),walk(toaster309),put(breadslice310,toaster309),eat(breadslice310)]

@@ -1,0 +1,17 @@
+Task: Wash teeth
+Step 1: Walk to bathroom
+Step 2: Walk to sink
+Step 3: Find faucet
+Step 4: Switch on faucet
+Step 5: Grab toothbrush
+Step 6: Find toothpaste
+Step 7: Open toothpaste cap
+Step 8: Squeeze toothpaste onto toothbrush
+Step 9: Close toothpaste cap
+Step 10: Put toothbrush into mouth
+Step 11: Brush teeth thoroughly (front, back, sides, and chewing surfaces)
+Step 12: Spit out toothpaste residue into sink
+Step 13: Rinse toothbrush under faucet
+Step 14: Switch off faucet
+Step 15: Rinse mouth with water and spit
+Step 16: Put toothbrush and toothpaste back in their place

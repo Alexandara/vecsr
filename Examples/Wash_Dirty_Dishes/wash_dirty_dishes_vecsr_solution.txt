@@ -1,0 +1,5 @@
+[walk(faucet249),switchon(faucet249),walk(bedroom74),walk(wineglass199),grab(wineglass199),walk(plate195),grab(plate195),walk(kitchen207),walk(sink247),put(wineglass199,sink247),put(plate195,sink247),walk(bedroom74),walk(kitchen207),walk(bedroom74),walk(sink247),use(sink247)]
+
+Note: There is some non-determinism in the dynamic running of the simulation. Provided is the solution referenced in the
+ICLP 2025 paper:
+[walk(faucet249),switchon(faucet249),walk(bedroom74),walk(wineglass199),grab(wineglass199),walk(plate195),grab(plate195),walk(kitchen207),walk(sink247),put(wineglass199,sink247),put(plate195,sink247),use(sink247)]

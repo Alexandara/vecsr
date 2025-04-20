@@ -1,0 +1,1 @@
+[walk(bathroom11),walk(faucet51),switchon(faucet51),walk(toothbrush66),grab(toothbrush66),walk(toothpaste63),grab(toothpaste63),walk(faucet51),use(toothpaste63),use(toothbrush66)]

@@ -1,0 +1,6 @@
+[walk(bedroom74),walk(book192),grab(book192),walk(livingroom336),walk(sofa369),sit(sofa369),use(book192)]
+
+Note: When run dynamically, there can be slight variations on the solution. The agent simply finds something that can
+be read and something comfortable to sit on, so there are different solutions that may be generated based on small
+differences in the simulated environment. The solution referenced in the ICLP 2025 paper is as follows:
+[walk(bedroom74),walk(book192),grab(book192),walk(chair109),sit(chair109),use(book192)]

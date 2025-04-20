@@ -1,0 +1,1 @@
+[grab(salmon328),grab(bellpepper321),walk(stove312),switchon(stove312),walk(fryingpan270),put(salmon328,fryingpan270),put(bellpepper321,fryingpan270),eat(salmon328)]

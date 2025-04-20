@@ -1,0 +1,16 @@
+Step 1: Walk to kitchen
+Step 2: Walk to plate
+Step 3: Find plate
+Step 4: Grab plate
+Step 5: Walk to fridge or pantry
+Step 6: Find breakfast food (e.g., cereal, eggs, bread, etc.)
+Step 7: Grab breakfast food
+Step 8: Prepare breakfast food (e.g., pour cereal, cook eggs, toast bread, etc.)
+Step 9: Put food on plate or bowl
+Step 10: Walk to table
+Step 11: Put plate or bowl on table
+Step 12: Find chair
+Step 13: Sit on chair
+Step 14: Find utensil (e.g., spoon, fork, knife, etc.)
+Step 15: Grab utensil
+Step 16: Eat from plate or bowl

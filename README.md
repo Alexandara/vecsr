@@ -26,11 +26,11 @@ to access network traffic. After turning it on, the main.py file can be run. The
 first thirty lines of the main method are various parameters concerning levels
 of static analysis, which task to perform, and some quality of life features.
 
-## ICLP 2025 Supplementary Materials
-There are two folders under "ICLP 2025 Supplementary Materials" with examples
-referenced in the ICLP 2025 conference paper (citation incoming).
+## Examples
+The examples referenced in the ICLP 2025 conference paper (citation incoming)
+are included under Examples.
 
-### Static Analysis Programs
+### Programs for Each Task
 In Table 2 the run times are compared between programs with different levels of 
 static analysis for different tasks. The programs executed for these times are 
 included in this folder. The levels are as follows and match the table in the 

@@ -1,0 +1,10 @@
+Step 1: Walk to dining room.
+Step 2: Walk to table where you are seated.
+Step 3: Find a chair for me to use (if needed).
+Step 4: Pull chair closer to table.
+Step 5: Sit on the chair (if I were human).
+Step 6: Locate plate for you.
+Step 7: Locate food for you.
+Step 8: Grab food for you.
+Step 9: Place food on your plate.
+Step 10: Hand you the food or assist you with eating.

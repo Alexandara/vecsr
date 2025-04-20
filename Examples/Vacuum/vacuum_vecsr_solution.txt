@@ -1,0 +1,1 @@
+[walk(bedroom74),walk(vacuum0),switchon(vacuum0),grab(vacuum0),use(vacuum0)]

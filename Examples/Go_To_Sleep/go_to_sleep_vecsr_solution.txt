@@ -1,0 +1,1 @@
+[walk(bedroom74),walk(bed111),lie(bed111)]

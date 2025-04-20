@@ -1,0 +1,1 @@
+[walk(bedroom74),walk(computer176),switchon(computer176),walk(chair109),grab(chair109),walk(cpuscreen177),put(chair109,floor81),sit(chair109)]

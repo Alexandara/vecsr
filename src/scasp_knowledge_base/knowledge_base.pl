@@ -56,7 +56,7 @@ can_cook(X) :- type(X, toaster).
 breakfast(X) :- type(X, breadslice).
 easy_cooking(Toaster, Bread) :- type(Toaster, toaster), type(Bread, breadslice).
 
-%% Unseen Data
+%% Unseen Data: Commented out so it doesn't clog up the knowledge base
 %% For the task "Tabletop Game"
 %type(tabletopgame3200, tabletopgame).
 %grabbable(tabletopgame3200).
@@ -180,6 +180,7 @@ extra_ontopof([[vacuum, floor75],
 %[violin3214, coffeetable113]
 %[lysol3215, bathroomcounter50],
 %[toothpaste1163, coffeetable113],
+[curtains187, window92],
 [shampoo3216, bathroomcounter50]
 ]).
 
@@ -208,6 +209,10 @@ remove(X, [Y | T], List, NewList) :- X \= Y, remove(X, T, [Y | List], NewList).
 append([ ], Y, Y).
 append([X|L1],L2,[X|L3]) :- append(L1,L2,L3).
 
+rev(L, R) :- trev(L, [], R). % O(n) time
+trev([], P, P).
+trev([H|T], P, R) :- trev(T, [H|P], R).
+
 inside_same_room(Item1, Item2) :- Item1 \= Item2, rooms(Room), inside(Inside), member([Item1, Room], Inside),
     member([Item2, Room], Inside).
 inside_same_room(Item1, Item2) :- Item1 \= Item2, rooms(Room), inside(Inside1), extra_inside(Inside2),
@@ -221,17 +226,6 @@ ontopof_inherited(ItemBelow, ItemOntop, OntopofList) :- member([ItemOntop, ItemI
     ontopof_inherited(ItemBelow, ItemInBetween, OntopofList).
 ontopof_inherited(ItemBelow, ItemOntop, OntopofList) :- member([ItemInBetween, ItemBelow], OntopofList),
     ontopof_inherited(ItemInBetween, ItemOntop, OntopofList).
-
-% testing examples:
-state_subset([close(CloseFinal), holds(HoldsFinal), sat_on(SatFinal), on_top_of(OtoFinal), inside(InsideFinal), on(OnFinal), laid_on(LaidFinal), used(UsedFinal), eaten(EatenFinal)],
-             [close(Close), holds(Holds), sat_on(Sat), on_top_of(Oto), inside(Inside), on(On), laid_on(Laid), used(Used), eaten(Eaten)]) :-
-                    subset(CloseFinal, Close), subset(HoldsFinal, Holds), subset(SatFinal, Sat),
-                    subset(OtoFinal, Oto), subset(InsideFinal, Inside), subset(OnFinal, On),
-                    subset(LaidFinal, Laid), subset(UsedFinal, Used), subset(EatenFinal, Eaten).
-
-rev(L, R) :- trev(L, [], R). % O(n) time
-trev([], P, P).
-trev([H|T], P, R) :- trev(T, [H|P], R).
 
 % Planning
 close_state(close(Close)) :- close_character(Close).
@@ -256,10 +250,16 @@ inside_state(inside([])).
 on_state(on(On)) :- on_list(On).
 on_state(on([])).
 
-% Get the initial state in regards to what items are close and held
-% Current state: [close(Close), holds(Held), sat_on(Sat)]
+% Get the initial state
 initial_state([Close, Held, Sat, OnTopOf, Inside, On, laid_on([]), used([]), eaten([])]) :-
     close_state(Close), held_state(Held), sitting_state(Sat), ontopof_state(OnTopOf), inside_state(Inside), on_state(On).
+
+% Check for final state accomplished
+state_subset([close(CloseFinal), holds(HoldsFinal), sat_on(SatFinal), on_top_of(OtoFinal), inside(InsideFinal), on(OnFinal), laid_on(LaidFinal), used(UsedFinal), eaten(EatenFinal)],
+             [close(Close), holds(Holds), sat_on(Sat), on_top_of(Oto), inside(Inside), on(On), laid_on(Laid), used(Used), eaten(Eaten)]) :-
+                    subset(CloseFinal, Close), subset(HoldsFinal, Holds), subset(SatFinal, Sat),
+                    subset(OtoFinal, Oto), subset(InsideFinal, Inside), subset(OnFinal, On),
+                    subset(LaidFinal, Laid), subset(UsedFinal, Used), subset(EatenFinal, Eaten).
 
 % We want to go from the current state to the final state
 transform(FinalState, Plan) :- initial_state(State1), transform(State1, FinalState, [State1], Plan).
@@ -274,12 +274,12 @@ transform(State1, State2, Visited, [Action|Actions]) :-
 % choose_action(action generated, current state, final state)
 choose_action(Action, State1, State2) :- suggest(Action, State1, State2), legal_action(Action, State1).
 choose_action(Action, State1, _) :- legal_action(Action, State1).
-% Example test queries:
+
+% Suggested actions in priority order
 suggest(grab(X), [close(Close), _, _, on_top_of(OtoI), _, _, _, _, _], [_, _, _, on_top_of(OtoN), _, _, _, _, _]) :- member([X, Y], OtoN), not_member([X, Y], OtoI), member(X, Close).
 suggest(put(X,Y), [close(Close), holds(Held), _, on_top_of(OtoI), _, _, _, _, _], [_, _, _, on_top_of(OtoN), _, _, _, _, _]) :- member([X, Y], OtoN), not_member([X, Y], OtoI), member(Y, Close), member(X, Held).
 suggest(walk(X), [_, _, _, _, _, on(OnI), _, _, _], [_, _, _, _, _, on(OnF), _, _, _]) :- not_member(X,OnI), member(X, OnF).
 suggest(switchon(X), _, [_, _, _, _, _, on(On), _, _, _]) :- member(X, On).
-
 suggest(walk(Y), [_, holds(Held), _, _, _, _, _, _, _], [_, _, _, on_top_of(Oto), _, _, _, _, _]) :- member([X,Y], Oto), member(X, Held).
 suggest(put(X, Y), _, [_, _, _, on_top_of(Oto), _, _, _, _, _]) :- member([X,Y], Oto).
 suggest(put(X, Y), [close(CloseI), holds(Held), _, on_top_of(Oto), _, _, _, _, _], [close(CloseF), _, sat_on(Sat), _, _, _, _, _, _]) :-
@@ -337,7 +337,6 @@ item_of_interest([close(CloseI), _, _, _, _, _, _, _, _],
                 Item) :- member(Item, CloseF), not_member(Item, CloseI).
 
 % Check if an action is legal given the state
-% Example test query:
 legal_action(walk(X), [_, _, sat_on([]), _, inside(Inside), _, _, _, _]) :- rooms(X), not_member([character1, X], Inside).
 legal_action(walk(X), [close(Close), _, sat_on([]), _, inside(Inside), _, _, _, _]) :- type(X, Y), -rooms(X), Y \= character,
     member([X, Room], Inside), member([character1, Room], Inside), not_member(X, Close).
@@ -441,26 +440,25 @@ complete_task(wash_teeth, P) :-
 complete_task(brush_teeth, P) :-
     type(Toothbrush, toothbrush), type(Toothpaste, toothpaste), type(Faucet, faucet),
     transform([close([Faucet]), holds([Toothbrush, Toothpaste]), sat_on([]), on_top_of([]), inside([]), on([Faucet]), laid_on([]), used([Toothpaste, Toothbrush]), eaten([])], P).
-% Note: good candidate for event calculus, because then we can vacuum multiple spots and remember where we've been
 complete_task(vacuum, P) :-
     type(Vacuum, vacuum),
     transform([close([]), holds([Vacuum]), sat_on([]), on_top_of([]), inside([]), on([Vacuum]), laid_on([]), used([Vacuum]), eaten([])], P).
-% Note: Non-terminating due to the size of the program, however it gets the right results piecemeal
+
 complete_task(change_sheets_and_pillow_cases, P) :-
-%    type(Bed, bed), type(Pillow1, pillow), type(Pillow2, pillow), Pillow1 \= Pillow2, inside_same_room(Pillow1, Bed),
-%    inside_same_room(Pillow2, Bed), type(Pillowcase1, pillowcase), type(Pillowcase2, pillowcase), Pillowcase1 \= Pillowcase2,
-%    inside_same_room(Pillowcase1, Pillow1), inside_same_room(Pillowcase2, Pillow2), type(Sheets, sheets), inside_same_room(Sheets, Bed),
-%    type(ReplacementPillowcase1, pillowcase), type(ReplacementPillowcase2, pillowcase), type(ReplacementSheets, sheets),
-%    ReplacementPillowcase1 \= Pillowcase1, ReplacementPillowcase1 \= Pillowcase2, ReplacementPillowcase2 \= Pillowcase1,
-%    ReplacementPillowcase2 \= Pillowcase2, ReplacementSheets \= Sheets, type(Clothespile, clothespile),
-%    transform([close([]), holds([]), sat_on([]),
-%        on_top_of([[Pillowcase1, Clothespile], [Pillowcase2, Clothespile], [Sheets, Clothespile],
-%        [ReplacementPillowcase1, Pillow1], [ReplacementPillowcase2, Pillow2], [ReplacementSheets, Bed]]),
-%        inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+    type(Bed, bed), type(Pillow1, pillow), type(Pillow2, pillow), Pillow1 \= Pillow2, inside_same_room(Pillow1, Bed),
+    inside_same_room(Pillow2, Bed), type(Pillowcase1, pillowcase), type(Pillowcase2, pillowcase), Pillowcase1 \= Pillowcase2,
+    inside_same_room(Pillowcase1, Pillow1), inside_same_room(Pillowcase2, Pillow2), type(Sheets, sheets), inside_same_room(Sheets, Bed),
+    type(ReplacementPillowcase1, pillowcase), type(ReplacementPillowcase2, pillowcase), type(ReplacementSheets, sheets),
+    ReplacementPillowcase1 \= Pillowcase1, ReplacementPillowcase1 \= Pillowcase2, ReplacementPillowcase2 \= Pillowcase1,
+    ReplacementPillowcase2 \= Pillowcase2, ReplacementSheets \= Sheets, type(Clothespile, clothespile),
     transform([close([]), holds([]), sat_on([]),
-        on_top_of([[pillowcase011, clothespile150], [pillowcase012, clothespile150], [sheets01, clothespile150],
-        [pillowcase021, pillow188], [pillowcase022, pillow189], [sheets02, bed111]]),
+        on_top_of([[Pillowcase1, Clothespile], [Pillowcase2, Clothespile], [Sheets, Clothespile],
+        [ReplacementPillowcase1, Pillow1], [ReplacementPillowcase2, Pillow2], [ReplacementSheets, Bed]]),
         inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+%    transform([close([]), holds([]), sat_on([]),
+%        on_top_of([[pillowcase011, clothespile150], [pillowcase012, clothespile150], [sheets01, clothespile150],
+%        [pillowcase021, pillow188], [pillowcase022, pillow189], [sheets02, bed111]]),
+%        inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 complete_task(wash_dirty_dishes, P) :-
     type(Sink, sink), inside(Inside), member([Sink, Kitchen], Inside),
     dirty_in_sink(Sink, Dishes), type(Faucet, faucet), member([Faucet, Kitchen], Inside),
@@ -473,11 +471,11 @@ complete_task(feed_me, P) :-
 %    transform([close([]), holds([]), sat_on([]), on_top_of([[salmon328, fryingpan270], [bellpepper321, fryingpan270],
 %    [fryingpan270, stove312]]), inside([]), on([stove312]), laid_on([]), used([]), eaten([salmon328])], P).
 complete_task(breakfast, P) :-
-%    breakfast(Food), easy_cooking(Heatsource, Food),
-%    transform([close([]), holds([]), sat_on([]), on_top_of([[Food, Heatsource]]),
-%        inside([]), on([Heatsource]), laid_on([]), used([]), eaten([Food])], P).
-    transform([close([]), holds([]), sat_on([]), on_top_of([[breadslice310, toaster309]]),
-        inside([]), on([toaster309]), laid_on([]), used([]), eaten([breadslice310])], P).
+    breakfast(Food), easy_cooking(Heatsource, Food),
+    transform([close([]), holds([]), sat_on([]), on_top_of([[Food, Heatsource]]),
+        inside([]), on([Heatsource]), laid_on([]), used([]), eaten([Food])], P).
+%    transform([close([]), holds([]), sat_on([]), on_top_of([[breadslice310, toaster309]]),
+%        inside([]), on([toaster309]), laid_on([]), used([]), eaten([breadslice310])], P).
 complete_task(read, P) :-
     readable(Reading), sittable(Comfy), type(Comfy, sofa), type(Light, lightswitch),
     transform([close([]), holds([Reading]), sat_on([Comfy]), on_top_of([]),
@@ -500,7 +498,7 @@ get_relevant(brush_teeth, [Toothbrush, Toothpaste, Faucet]) :-
     type(Toothbrush, toothbrush), type(Toothpaste, toothpaste), type(Faucet, faucet).
 get_relevant(vacuum, [Vacuum]) :-
     type(Vacuum, vacuum).
-get_relevant(change_sheets_and_pillow_cases, [Bed, Pillow1, Pillow2, Pilloecase1, Pillowcase2, Sheets,
+get_relevant(change_sheets_and_pillow_cases, [Bed, Pillow1, Pillow2, Pillowcase1, Pillowcase2, Sheets,
                                             ReplacementPillowcase1, ReplacementPillowcase2, ReplacementSheets, Clothespile]) :-
     type(Bed, bed), type(Pillow1, pillow), type(Pillow2, pillow), Pillow1 \= Pillow2, inside_same_room(Pillow1, Bed),
     inside_same_room(Pillow2, Bed), type(Pillowcase1, pillowcase), type(Pillowcase2, pillowcase), Pillowcase1 \= Pillowcase2,
@@ -561,6 +559,13 @@ get_relevant(read, [Reading, Comfy, Light]) :-
 %    type(Toilet, toilet),
 %    transform([close([]), holds([]), sat_on([]), on_top_of([]),
 %        inside([]), on([]), laid_on([]), used([Toilet]), eaten([])], P).
+%% Go To Bathroom
+%get_relevant(generic, [Toilet]) :-
+%    type(Toilet, toilet).
+%complete_task(generic, P) :-
+%    type(Toilet, toilet),
+%    transform([close([]), holds([]), sat_on([Toilet]), on_top_of([]),
+%        inside([]), on([]), laid_on([]), used([Toilet]), eaten([])], P).
 %% Have snack
 %get_relevant(generic, [Change, Dresser]) :-
 %    type(Change, change), type(Dresser, dresser).
@@ -596,7 +601,7 @@ get_relevant(read, [Reading, Comfy, Light]) :-
 %    type(Bag1, bag), type(Bag2, bag), Bag1 \= Bag2, type(Table, kitchentable),
 %    transform([close([]), holds([]), sat_on([]), on_top_of([[Bag1, Table], [Bag2, Table]]),
 %        inside([]), on([]), laid_on([]), used([]), eaten([])], P).
-%% Try yourself off
+%% Dry yourself off
 %get_relevant(generic, [Towel]) :-
 %    type(Towel, towel).
 %complete_task(generic, P) :-
@@ -668,5 +673,133 @@ get_relevant(read, [Reading, Comfy, Light]) :-
 %    readable(Book), type(Bed, bed),
 %    transform([close([]), holds([Book]), sat_on([Bed]), on_top_of([]),
 %        inside([]), on([]), laid_on([]), used([Book]), eaten([])], P).
-
-
+%% Sit Quietly
+%get_relevant(generic, [Comfy]) :-
+%    type(Comfy, sofa).
+%complete_task(generic, P) :-
+%    type(Comfy, sofa),
+%    transform([close([]), holds([]), sat_on([Comfy]), on_top_of([]),
+%        inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+%% Work
+%get_relevant(generic, [Computer, Chair, Cpuscreen, Floor]) :-
+%    type(Computer, computer), type(Chair, chair), type(Cpuscreen, cpuscreen), inside_same_room(Computer, Chair),
+%    ontopof(Oto), ontopof_inherited(Floor, Cpuscreen, Oto), type(Floor, floor).
+%complete_task(generic, P) :-
+%    type(Computer, computer), type(Chair, chair), type(Cpuscreen, cpuscreen), inside_same_room(Computer, Chair),
+%    transform([close([Cpuscreen]), holds([]), sat_on([Chair]), on_top_of([]), inside([]), on([Computer]), laid_on([]), used([]), eaten([])], P).
+%% Use laptop
+%get_relevant(generic, [Computer, Chair, Cpuscreen, Floor]) :-
+%    type(Computer, computer), type(Chair, chair), type(Cpuscreen, cpuscreen), inside_same_room(Computer, Chair),
+%    ontopof(Oto), ontopof_inherited(Floor, Cpuscreen, Oto), type(Floor, floor).
+%complete_task(generic, P) :-
+%    type(Computer, computer), type(Chair, chair), type(Cpuscreen, cpuscreen), inside_same_room(Computer, Chair),
+%    transform([close([Cpuscreen]), holds([]), sat_on([Chair]), on_top_of([]), inside([]), on([Computer]), laid_on([]), used([]), eaten([])], P).
+%% Check email
+%get_relevant(generic, [Computer, Chair, Cpuscreen, Floor]) :-
+%    type(Computer, computer), type(Chair, chair), type(Cpuscreen, cpuscreen), inside_same_room(Computer, Chair),
+%    ontopof(Oto), ontopof_inherited(Floor, Cpuscreen, Oto), type(Floor, floor).
+%complete_task(generic, P) :-
+%    type(Computer, computer), type(Chair, chair), type(Cpuscreen, cpuscreen), inside_same_room(Computer, Chair),
+%    transform([close([Cpuscreen]), holds([]), sat_on([Chair]), on_top_of([]), inside([]), on([Computer]), laid_on([]), used([]), eaten([])], P).
+%% Print Out Document
+%get_relevant(generic, [Computer, Chair, Cpuscreen, Floor]) :-
+%    type(Computer, computer), type(Chair, chair), type(Cpuscreen, cpuscreen), inside_same_room(Computer, Chair),
+%    ontopof(Oto), ontopof_inherited(Floor, Cpuscreen, Oto), type(Floor, floor).
+%complete_task(generic, P) :-
+%    type(Computer, computer), type(Chair, chair), type(Cpuscreen, cpuscreen), inside_same_room(Computer, Chair),
+%    transform([close([Cpuscreen]), holds([]), sat_on([Chair]), on_top_of([]), inside([]), on([Computer]), laid_on([]), used([]), eaten([])], P).
+%% Type Up Document
+%get_relevant(generic, [Computer, Chair, Cpuscreen, Floor]) :-
+%    type(Computer, computer), type(Chair, chair), type(Cpuscreen, cpuscreen), inside_same_room(Computer, Chair),
+%    ontopof(Oto), ontopof_inherited(Floor, Cpuscreen, Oto), type(Floor, floor).
+%complete_task(generic, P) :-
+%    type(Computer, computer), type(Chair, chair), type(Cpuscreen, cpuscreen), inside_same_room(Computer, Chair),
+%    transform([close([Cpuscreen]), holds([]), sat_on([Chair]), on_top_of([]), inside([]), on([Computer]), laid_on([]), used([]), eaten([])], P).
+%% Watch youtube
+%get_relevant(generic, [Computer, Chair, Cpuscreen, Floor]) :-
+%    type(Computer, computer), type(Chair, chair), type(Cpuscreen, cpuscreen), inside_same_room(Computer, Chair),
+%    ontopof(Oto), ontopof_inherited(Floor, Cpuscreen, Oto), type(Floor, floor).
+%complete_task(generic, P) :-
+%    type(Computer, computer), type(Chair, chair), type(Cpuscreen, cpuscreen), inside_same_room(Computer, Chair),
+%    transform([close([Cpuscreen]), holds([]), sat_on([Chair]), on_top_of([]), inside([]), on([Computer]), laid_on([]), used([]), eaten([])], P).
+%% Do Homework
+%get_relevant(generic, [Computer, Chair, Cpuscreen, Floor]) :-
+%    type(Computer, computer), type(Chair, chair), type(Cpuscreen, cpuscreen), inside_same_room(Computer, Chair),
+%    ontopof(Oto), ontopof_inherited(Floor, Cpuscreen, Oto), type(Floor, floor).
+%complete_task(generic, P) :-
+%    type(Computer, computer), type(Chair, chair), type(Cpuscreen, cpuscreen), inside_same_room(Computer, Chair),
+%    transform([close([Cpuscreen]), holds([]), sat_on([Chair]), on_top_of([]), inside([]), on([Computer]), laid_on([]), used([]), eaten([])], P).
+%% Shop
+%get_relevant(generic, [Computer, Chair, Cpuscreen, Floor]) :-
+%    type(Computer, computer), type(Chair, chair), type(Cpuscreen, cpuscreen), inside_same_room(Computer, Chair),
+%    ontopof(Oto), ontopof_inherited(Floor, Cpuscreen, Oto), type(Floor, floor).
+%complete_task(generic, P) :-
+%    type(Computer, computer), type(Chair, chair), type(Cpuscreen, cpuscreen), inside_same_room(Computer, Chair),
+%    transform([close([Cpuscreen]), holds([]), sat_on([Chair]), on_top_of([]), inside([]), on([Computer]), laid_on([]), used([]), eaten([])], P).
+%% Change Curtains
+%get_relevant(generic, [OldCurtains, Window, NewCurtains, Closet]) :-
+%    type(OldCurtains, curtains), type(Window, window), extra_ontopof(Ontopof), member([OldCurtains, Window], Ontopof),
+%    type(NewCurtains, curtains), OldCurtains \= NewCurtains, type(Closet, closet).
+%complete_task(generic, P) :-
+%    type(OldCurtains, curtains), type(Window, window), extra_ontopof(Ontopof), member([OldCurtains, Window], Ontopof),
+%    type(NewCurtains, curtains), OldCurtains \= NewCurtains, type(Closet, closet),
+%    transform([close([]), holds([]), sat_on([]),
+%        on_top_of([[OldCurtains, Closet], [NewCurtains, Window]]),
+%        inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+%% Eat Family Meals
+%get_relevant(generic, [Food, Veggie, Pan, Stove]) :-
+%    needs_cooking(Food), vegetable(Veggie), type(Pan, fryingpan), type(Stove, stove).
+%complete_task(generic, P) :-
+%    needs_cooking(Food), vegetable(Veggie), type(Pan, fryingpan), type(Stove, stove),
+%    transform([close([]), holds([]), sat_on([]), on_top_of([[Food, Pan], [Veggie, Pan], [Pan, Stove]]),
+%        inside([]), on([Stove]), laid_on([]), used([]), eaten([Food])], P).
+%% Use Bathroom
+%get_relevant(generic, [Toilet]) :-
+%    type(Toilet, toilet).
+%complete_task(generic, P) :-
+%    type(Toilet, toilet),
+%    transform([close([]), holds([]), sat_on([Toilet]), on_top_of([]),
+%        inside([]), on([]), laid_on([]), used([Toilet]), eaten([])], P).
+%% Do Dishes
+%get_relevant(generic, List) :-
+%    type(Sink, sink), type(Kitchen, kitchen), inside(Inside), member([Sink, Kitchen], Inside),
+%    dirty_in_sink(Sink, Dishes), type(Faucet, faucet), member([Faucet, Kitchen], Inside), append([Sink, Faucet], Dishes, List).
+%complete_task(generic, P) :-
+%    type(Sink, sink), inside(Inside), member([Sink, Kitchen], Inside),
+%    dirty_in_sink(Sink, Dishes), type(Faucet, faucet), member([Faucet, Kitchen], Inside),
+%    transform([close([]), holds([]), sat_on([]), on_top_of(Dishes),
+%        inside([]), on([Faucet]), laid_on([]), used([Sink]), eaten([])], P).
+%% Eat Family Meals
+%get_relevant(generic, [Food, Veggie, Pan, Stove]) :-
+%    needs_cooking(Food), vegetable(Veggie), type(Pan, fryingpan), type(Stove, stove).
+%complete_task(generic, P) :-
+%    needs_cooking(Food), vegetable(Veggie), type(Pan, fryingpan), type(Stove, stove),
+%    transform([close([]), holds([]), sat_on([]), on_top_of([[Food, Pan], [Veggie, Pan], [Pan, Stove]]),
+%        inside([]), on([Stove]), laid_on([]), used([]), eaten([Food])], P).
+%% Change Bedding
+%get_relevant(generic, [Bed, Pillow1, Pillow2, Pillowcase1, Pillowcase2, Sheets,
+%                                            ReplacementPillowcase1, ReplacementPillowcase2, ReplacementSheets, Clothespile]) :-
+%    type(Bed, bed), type(Pillow1, pillow), type(Pillow2, pillow), Pillow1 \= Pillow2, inside_same_room(Pillow1, Bed),
+%    inside_same_room(Pillow2, Bed), type(Pillowcase1, pillowcase), type(Pillowcase2, pillowcase), Pillowcase1 \= Pillowcase2,
+%    inside_same_room(Pillowcase1, Pillow1), inside_same_room(Pillowcase2, Pillow2), type(Sheets, sheets), inside_same_room(Sheets, Bed),
+%    type(ReplacementPillowcase1, pillowcase), type(ReplacementPillowcase2, pillowcase), type(ReplacementSheets, sheets),
+%    ReplacementPillowcase1 \= Pillowcase1, ReplacementPillowcase1 \= Pillowcase2, ReplacementPillowcase2 \= Pillowcase1,
+%    ReplacementPillowcase2 \= Pillowcase2, ReplacementSheets \= Sheets, type(Clothespile, clothespile).
+%complete_task(generic, P) :-
+%    type(Bed, bed), type(Pillow1, pillow), type(Pillow2, pillow), Pillow1 \= Pillow2, inside_same_room(Pillow1, Bed),
+%    inside_same_room(Pillow2, Bed), type(Pillowcase1, pillowcase), type(Pillowcase2, pillowcase), Pillowcase1 \= Pillowcase2,
+%    inside_same_room(Pillowcase1, Pillow1), inside_same_room(Pillowcase2, Pillow2), type(Sheets, sheets), inside_same_room(Sheets, Bed),
+%    type(ReplacementPillowcase1, pillowcase), type(ReplacementPillowcase2, pillowcase), type(ReplacementSheets, sheets),
+%    ReplacementPillowcase1 \= Pillowcase1, ReplacementPillowcase1 \= Pillowcase2, ReplacementPillowcase2 \= Pillowcase1,
+%    ReplacementPillowcase2 \= Pillowcase2, ReplacementSheets \= Sheets, type(Clothespile, clothespile),
+%    transform([close([]), holds([]), sat_on([]),
+%        on_top_of([[Pillowcase1, Clothespile], [Pillowcase2, Clothespile], [Sheets, Clothespile],
+%        [ReplacementPillowcase1, Pillow1], [ReplacementPillowcase2, Pillow2], [ReplacementSheets, Bed]]),
+%        inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+%% Toast Bread
+%get_relevant(generic, [Food, Heatsource]) :-
+%    breakfast(Food), easy_cooking(Heatsource, Food).
+%complete_task(generic, P) :-
+%    breakfast(Food), easy_cooking(Heatsource, Food),
+%    transform([close([]), holds([]), sat_on([]), on_top_of([[Food, Heatsource]]),
+%        inside([]), on([Heatsource]), laid_on([]), used([]), eaten([])], P).

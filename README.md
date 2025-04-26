@@ -86,7 +86,7 @@ If you use VECSR for work/research presented in a publication
 (whether directly, or as a dependency to another package), we ask that you please 
 use the following citation:
      
-     [Citation Coming Soon!]
+     Alexis R. Tudor, (2025). VECSR: Virtually Embodied Common Sense Reasoning. https://github.com/Alexandara/vecsr/
      
 **In Projects:**
 

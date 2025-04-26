@@ -1,17 +1,12 @@
 type(character1, character).
-type(fryingpan270, fryingpan).
-grabbable(fryingpan270).
-type(stove312, stove).
-has_switch(stove312).
-type(bellpepper321, bellpepper).
-grabbable(bellpepper321).
-food(bellpepper321).
-type(salmon328, salmon).
-grabbable(salmon328).
-food(salmon328).
-inside([[bellpepper321, kitchen207], [stove312, kitchen207], [character1, kitchen207], [salmon328, kitchen207], [oventray313, stove312], [fryingpan270, kitchen207]]).
-ontopof([[salmon328, microwave314], [bellpepper321, kitchencounter238], [fryingpan270, stove312], [bellpepper321, kitchencounterdrawer244]]).
-close_character([garbagecan105, kitchentable231, bench233, kitchencabinet235, kitchencabinet236, kitchencabinet237, kitchencounter238, kitchencounterdrawer239, kitchencounterdrawer240, kitchencounterdrawer244, kitchencounterdrawer245, kitchencounterdrawer246, sink247, faucet249, rug253, rug254, wallpictureframe255, wallpictureframe256, wallpictureframe257, lightswitch262, powersocket263, wallphone264, clock266, washingsponge267, dishwashingliquid268, book269, waterglass271, cutleryknife272, cutleryfork273, plate274, plate279, cutleryfork280, cutleryknife281, waterglass282, waterglass283, cutleryknife284, plate286, fridge306, toaster309, breadslice310, breadslice311, microwave314, plate315, pie320, bellpepper321, bellpepper322, bellpepper323, bellpepper324, bellpepper325, bellpepper326, dishbowl327, salmon328]).
+type(toaster309, toaster).
+has_switch(toaster309).
+type(breadslice310, breadslice).
+grabbable(breadslice310).
+eatable(breadslice310).
+inside([[breadslice310, toaster309], [toaster309, kitchen207], [breadslice310, kitchen207], [breadslice311, toaster309], [character1, kitchen207]]).
+ontopof([[toaster309, kitchencounter238], [toaster309, kitchencounterdrawer243]]).
+close_character([garbagecan105, lightswitch175, wallpictureframe180, kitchentable231, bench233, rug253, wallpictureframe255, wallpictureframe256, wallpictureframe257, lightswitch262, powersocket263, wallphone264, clock266, book269, waterglass271, cutleryfork273, plate274, plate279, cutleryfork280, cutleryknife281, waterglass282]).
 rooms(kitchen207).
 type(vacuum0, vacuum).
 has_switch(vacuum0).
@@ -46,8 +41,10 @@ eatable(X) :- type(X, chips).
 eatable(X) :- type(X, crackers).
 can_cook(X) :- type(X, stove).
 can_cook(X) :- type(X, toaster).
+breakfast(X) :- type(X, breadslice).
+easy_cooking(Toaster, Bread) :- type(Toaster, toaster), type(Bread, breadslice).
 extra_inside([[vacuum0, bedroom74], [sheets01, bedroom74], [pillowcase011, bedroom74], [pillowcase012, bedroom74], [sheets02, livingroom336], [pillowcase021, livingroom336], [pillowcase022, livingroom336], [shampoo3216, bathroom11]]).
-extra_ontopof([[vacuum, floor75], [sheets01, bed111], [pillowcase011, bed111], [pillowcase012, bed111], [sheets02, coffeetable372], [pillowcase021, coffeetable372], [pillowcase022, coffeetable372], [shampoo3216, bathroomcounter50]]).
+extra_ontopof([[vacuum, floor75], [sheets01, bed111], [pillowcase011, bed111], [pillowcase012, bed111], [sheets02, coffeetable372], [pillowcase021, coffeetable372], [pillowcase022, coffeetable372], [curtains187, window92], [shampoo3216, bathroomcounter50]]).
 member(X, [X|_]).
 member(X, [Y|T]) :- member(X, T).
 not_member(_, []).
@@ -65,7 +62,7 @@ inside_same_room(Item1, Item2) :- Item1\=Item2, rooms(Room), inside(Inside), mem
 inside_same_room(Item1, Item2) :- Item1\=Item2, rooms(Room), inside(Inside1), extra_inside(Inside2), append(Inside1, Inside2, Inside), member([Item1, Room], Inside), member([Item2, Room], Inside).
 -rooms(X) :- not rooms(X).
 ontopof_inherited(ItemBelow, ItemOntop, OntopofList) :- member([ItemOntop, ItemBelow], OntopofList).
-ontopof_inherited(ItemBelow, ItemOntop, OntopofList) :- member([ItemOnTop, ItemInBetween], OntopofList), ontopof_inherited(ItemBelow, ItemInBetween, OntopofList).
+ontopof_inherited(ItemBelow, ItemOntop, OntopofList) :- member([ItemOntop, ItemInBetween], OntopofList), ontopof_inherited(ItemBelow, ItemInBetween, OntopofList).
 ontopof_inherited(ItemBelow, ItemOntop, OntopofList) :- member([ItemInBetween, ItemBelow], OntopofList), ontopof_inherited(ItemInBetween, ItemOntop, OntopofList).
 state_subset([close(CloseFinal), holds(HoldsFinal), sat_on(SatFinal), on_top_of(OtoFinal), inside(InsideFinal), on(OnFinal), laid_on(LaidFinal), used(UsedFinal), eaten(EatenFinal)], [close(Close), holds(Holds), sat_on(Sat), on_top_of(Oto), inside(Inside), on(On), laid_on(Laid), used(Used), eaten(Eaten)]) :- subset(CloseFinal, Close), subset(HoldsFinal, Holds), subset(SatFinal, Sat), subset(OtoFinal, Oto), subset(InsideFinal, Inside), subset(OnFinal, On), subset(LaidFinal, Laid), subset(UsedFinal, Used), subset(EatenFinal, Eaten).
 close_state(close(Close)) :- close_character(Close).
@@ -169,10 +166,11 @@ complete_task(browse_internet, P) :- type(Computer, computer), type(Chair, chair
 complete_task(wash_teeth, P) :- type(Toothbrush, toothbrush), type(Toothpaste, toothpaste), type(Faucet, faucet), transform([close([Faucet]), holds([Toothbrush, Toothpaste]), sat_on([]), on_top_of([]), inside([]), on([Faucet]), laid_on([]), used([Toothpaste, Toothbrush]), eaten([])], P).
 complete_task(brush_teeth, P) :- type(Toothbrush, toothbrush), type(Toothpaste, toothpaste), type(Faucet, faucet), transform([close([Faucet]), holds([Toothbrush, Toothpaste]), sat_on([]), on_top_of([]), inside([]), on([Faucet]), laid_on([]), used([Toothpaste, Toothbrush]), eaten([])], P).
 complete_task(vacuum, P) :- type(Vacuum, vacuum), transform([close([]), holds([Vacuum]), sat_on([]), on_top_of([]), inside([]), on([Vacuum]), laid_on([]), used([Vacuum]), eaten([])], P).
-complete_task(change_sheets_and_pillow_cases, P) :- transform([close([]), holds([]), sat_on([]), on_top_of([[pillowcase011, clothespile150], [pillowcase012, clothespile150], [sheets01, clothespile150], [pillowcase021, pillow188], [pillowcase022, pillow189], [sheets02, bed111]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+complete_task(change_sheets_and_pillow_cases, P) :- type(Bed, bed), type(Pillow1, pillow), type(Pillow2, pillow), Pillow1\=Pillow2, inside_same_room(Pillow1, Bed), inside_same_room(Pillow2, Bed), type(Pillowcase1, pillowcase), type(Pillowcase2, pillowcase), Pillowcase1\=Pillowcase2, inside_same_room(Pillowcase1, Pillow1), inside_same_room(Pillowcase2, Pillow2), type(Sheets, sheets), inside_same_room(Sheets, Bed), type(ReplacementPillowcase1, pillowcase), type(ReplacementPillowcase2, pillowcase), type(ReplacementSheets, sheets), ReplacementPillowcase1\=Pillowcase1, ReplacementPillowcase1\=Pillowcase2, ReplacementPillowcase2\=Pillowcase1, ReplacementPillowcase2\=Pillowcase2, ReplacementSheets\=Sheets, type(Clothespile, clothespile), transform([close([]), holds([]), sat_on([]), on_top_of([[Pillowcase1, Clothespile], [Pillowcase2, Clothespile], [Sheets, Clothespile], [ReplacementPillowcase1, Pillow1], [ReplacementPillowcase2, Pillow2], [ReplacementSheets, Bed]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 complete_task(wash_dirty_dishes, P) :- type(Sink, sink), inside(Inside), member([Sink, Kitchen], Inside), dirty_in_sink(Sink, Dishes), type(Faucet, faucet), member([Faucet, Kitchen], Inside), transform([close([]), holds([]), sat_on([]), on_top_of(Dishes), inside([]), on([Faucet]), laid_on([]), used([Sink]), eaten([])], P).
 complete_task(feed_me, P) :- needs_cooking(Food), vegetable(Veggie), type(Pan, fryingpan), type(Stove, stove), transform([close([]), holds([]), sat_on([]), on_top_of([[Food, Pan], [Veggie, Pan], [Pan, Stove]]), inside([]), on([Stove]), laid_on([]), used([]), eaten([Food])], P).
-complete_task(breakfast, P) :- transform([close([]), holds([]), sat_on([]), on_top_of([[breadslice310, toaster309]]), inside([]), on([toaster309]), laid_on([]), used([]), eaten([breadslice310])], P).
+complete_task(breakfast, P) :- breakfast(Food), easy_cooking(Heatsource, Food), transform([close([]), holds([]), sat_on([]), on_top_of([[Food, Heatsource]]), inside([]), on([Heatsource]), laid_on([]), used([]), eaten([Food])], P).
 complete_task(read, P) :- readable(Reading), sittable(Comfy), type(Comfy, sofa), type(Light, lightswitch), transform([close([]), holds([Reading]), sat_on([Comfy]), on_top_of([]), inside([]), on([Light]), laid_on([]), used([Reading]), eaten([])], P).
+complete_task(generic, P) :- breakfast(Food), easy_cooking(Heatsource, Food), transform([close([]), holds([]), sat_on([]), on_top_of([[Food, Heatsource]]), inside([]), on([Heatsource]), laid_on([]), used([]), eaten([])], P).
 
-?- complete_task(feed_me, P).
+?- complete_task(generic, P).

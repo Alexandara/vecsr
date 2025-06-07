@@ -198,3 +198,6 @@ cython_debug/
 /macos_exec*
 /macos_exec.*
 /src/port_8082.txt
+
+# AirSim images
+/src/airsim_images

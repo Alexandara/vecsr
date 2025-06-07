@@ -20,18 +20,29 @@ class VirtualHomeObject:
 		return self.name + str(self.identifier)
 
 class VirtualHomeSimulatorBase(Simulator):
+	def __init__(self):
+		super().__init__()
+		self.rooms = []
+
 	def get_graph(self):
 		pass
 
 	@abstractmethod
-	def get_state(self, rooms=None):
+	def get_state(self):
 		pass
+
+	@staticmethod
+	def which_simulator():
+		return "VirtualHome"
 
 	@abstractmethod
 	def take_action(self, action):
 		pass
 
-	def knowledge_graph_to_predicates(self, graph, rooms, relevant_items=None, time=False, character_perspective=True):
+	def set_rooms(self, rooms):
+		self.rooms = rooms
+
+	def knowledge_graph_to_predicates(self, graph, relevant_items=None, time=False, character_perspective=True):
 		includeType = True
 		includeState = True
 		includeProperties = True
@@ -44,11 +55,11 @@ class VirtualHomeSimulatorBase(Simulator):
 		ids = {}
 		list_of_rooms = []
 		# Get all rooms
-		if not rooms:
+		if not self.rooms:
 			room_nodes = self.check_for_node(graph, category="Rooms")
 		else:
 			room_nodes = []
-			for room in rooms:
+			for room in self.rooms:
 				room_nodes.append(self.check_for_node(graph, category="Rooms", identifier=room)[0])
 
 		for room in room_nodes:
@@ -200,23 +211,18 @@ class VirtualHomeSimulatorBase(Simulator):
 	def character_room(self):
 		graph = self.get_graph()
 		nodes = self.check_for_node(graph, class_name="character")
-		rooms = set()
+		rooms_set = set()
 		for node in nodes:
 			edges = self.check_for_edge(graph, from_id=node["id"], relation_type="INSIDE")
 			if edges:
 				for edge in edges:
-					rooms.add(edge["to_id"])
-		if len(rooms) == 0:
+					rooms_set.add(edge["to_id"])
+		if len(rooms_set) == 0:
 			logging.warning("No characters in simulation.")
-		return rooms
+		return rooms_set
 
 	def get_rooms(self):
-		graph = self.get_graph()
-		room_nodes = self.check_for_node(graph, category="Rooms")
-		rooms = {}
-		for room in room_nodes:
-			rooms[room["id"]] = room["class_name"]
-		return rooms
+		return self.rooms
 
 	@staticmethod
 	def node_lookup_dict(graph):
@@ -265,14 +271,14 @@ class VirtualHomeSimulator(VirtualHomeSimulatorBase):
 		_, g = self.comm.environment_graph()
 		return g
 
-	def get_state(self, rooms=None, relevant=None):
+	def get_state(self, relevant=None):
 		"""
 		A method that returns the current state of the environment in the form
 		of Prolog facts of the form [(fact, parameter, ...)]
 		:return: a list of prolog facts [[(fact)], [(fact2)], ...]
 		"""
 		s, g = self.comm.environment_graph()
-		facts = self.knowledge_graph_to_predicates(g, rooms, relevant_items=relevant)
+		facts = self.knowledge_graph_to_predicates(g, self.rooms, relevant_items=relevant)
 		return facts
 
 	def get_actions(self):
@@ -399,8 +405,8 @@ class MockVirtualHomeSimulator(VirtualHomeSimulatorBase):
 	def get_graph(self):
 		return self.state_graph
 
-	def get_state(self, rooms=None):
-		return self.knowledge_graph_to_predicates(self.state_graph, rooms)
+	def get_state(self):
+		return self.knowledge_graph_to_predicates(self.state_graph, self.rooms)
 
 	def take_action(self, action):
 		# Possible actions: walk, grab, put

@@ -1,0 +1,1 @@
+initial_state(loc(X, Y, Z)) :- curr_x(X), curr_y(Y), curr_z(Z).

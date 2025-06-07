@@ -2,9 +2,11 @@ import logging
 import subprocess
 
 class ScaspHarness():
-	def __init__(self, simulator, initial_rules=None, optimize_rules=True, rooms=None):
+	def __init__(self, simulator, initial_rules=None, optimize_rules=False, rooms=None):
 		if simulator:
 			self.simulator = simulator
+			if simulator.which_simulator() == "VirtualHome":
+				self.simulator.set_rooms(rooms)
 		self.optimize_rules = optimize_rules
 		# A prolog rule is represented here as a list of the form:
 		# [("name_of_predicate", "parameter1", ..., "parameterN"), (...)...]
@@ -18,7 +20,6 @@ class ScaspHarness():
 		self.generate_dependency_graph()
 		self.rules = {}
 		self.objects = {}
-		self.rooms = rooms
 		self.relevant_items = None
 
 	def get_scasp(self):
@@ -26,12 +27,14 @@ class ScaspHarness():
 		This method gets the state from the simulator and appends it to the
 		initial rules
 		"""
-		self.rules = self.simulator.get_state(self.rooms, self.relevant_items)
+		if self.simulator.which_simulator() == "VirtualHome":
+			self.rules = self.simulator.get_state(self.relevant_items)
+		elif self.simulator.which_simulator() == "AirSim":
+			self.rules = self.simulator.get_state()
 
-	def print_rules_to_file(self, rooms, file=None, past_file=None, query=None):
+	def print_rules_to_file(self, file=None, past_file=None, query=None):
 		"""
 		This method prints the self.rules to a file.
-		:param rooms: list of rooms we're interested in
 		:param file: File to print to, default is generated_scasp.pl
 		:param past_file: file of previous rules
 		:param query: query to optimize for
@@ -100,9 +103,8 @@ class ScaspHarness():
 		:param query: query to run, in the format of a list of tuples
 		:return: results of query
 		"""
-		rooms = self.simulator.get_rooms()
 		self.get_scasp()
-		self.print_rules_to_file(rooms, query=query)
+		self.print_rules_to_file(query=query)
 		str_query = self.build_rule(query[0], low=False) + "."
 		logging.info("Running query: " + query[0][0])
 		logging.debug("Full query: " + str_query)
@@ -256,7 +258,8 @@ class ScaspHarness():
 		new_rules = rules.split("\n")
 		new_rules = [r for r in new_rules if len(r) > 0 and not "%" == r[0]]
 		new_rules = "".join(new_rules)
-		new_rules = new_rules.replace("\n", "").replace(" ", "").split(".")
+		new_rules = new_rules.replace("\n", "").replace(" ", "").split(").")
+		new_rules = [rule + ")" for rule in new_rules if rule]
 		return new_rules
 
 	def get_relevant_rules(self, facts_and_rules, query):

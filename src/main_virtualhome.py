@@ -209,7 +209,7 @@ if __name__ == '__main__':
     else:
         simulat = simulator_virtualhome.MockVirtualHomeSimulator() # Mock VirtualHome Simulator
     # Create Harness
-    program = scaspharness.ScaspHarness(simulat, initial_rules="scasp_knowledge_base/knowledge_base.pl", optimize_rules=optimize_rules, rooms=rooms)
+    program = scaspharness.ScaspHarness(simulat, initial_rules="scasp_knowledge_base/knowledge_base_virtualhome.pl", optimize_rules=optimize_rules, rooms=rooms)
     logging.info("Program Initialized Time: %s seconds" % (time.time() - start_time))
     start_time = time.time()
     if reduce_items:

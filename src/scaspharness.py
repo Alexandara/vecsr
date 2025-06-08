@@ -1,8 +1,11 @@
 import logging
+import socket
 import subprocess
+from time import sleep
+
 
 class ScaspHarness():
-	def __init__(self, simulator, initial_rules=None, optimize_rules=False, rooms=None):
+	def __init__(self, simulator, initial_rules=None, optimize_rules=False, rooms=None, scasp_client=None):
 		if simulator:
 			self.simulator = simulator
 			if simulator.which_simulator() == "VirtualHome":
@@ -21,6 +24,7 @@ class ScaspHarness():
 		self.rules = {}
 		self.objects = {}
 		self.relevant_items = None
+		self.scasp_client = scasp_client
 
 	def get_scasp(self):
 		"""
@@ -112,7 +116,7 @@ class ScaspHarness():
 		f.write("\n\n?- ")
 		f.write(str_query)
 		f.close()
-		result = self.run_generated_scasp()
+		result = self.run_generated_scasp(self.scasp_client)
 		if result:
 			logging.info("Success!")
 			logging.debug(result)
@@ -146,29 +150,42 @@ class ScaspHarness():
 		return string_rule
 
 	@staticmethod
-	def run_generated_scasp():
+	def run_generated_scasp(scasp_client=None):
 		"""
 		Runs the generated_scasp.pl file
 		:return: results of running the file
 		"""
-		output = subprocess.run(["./scasp_knowledge_base/test.sh"], shell=True, capture_output=True, text=True)
-		output = output.stdout
-		if 'BINDINGS' in output and "BINDINGS: ?" not in output:
-			options = []
-			output = output.split('ANSWER:')[1:]
-			for option in output:
-				option = option.replace(" ?", "")
-				opt = option[option.find('BINDINGS') + 10:-2].strip()
-				opt = opt.split('\n')
-				opt = [item.split(' = ') for item in opt]
-				opt = {name: value.strip() for [name, value] in opt}
-				options.append(opt)
-			output = options
-		# If no model found, return an empty dictionary.
-		elif 'no models' in output:
-			output = False
+		output = [{}]
+		if scasp_client:
+			with open('scasp_knowledge_base/generated_scasp.pl', 'r') as content_file:
+				message = content_file.read()
+			data = scasp_client.send_text(message)
+			if data[0] == "f":
+				return False
+			data = data.split(".")
+			data.pop(0)
+			for i, item in enumerate(data):
+				if i % 2 == 0:
+					output[0][item] = data[i + 1]
 		else:
-			output = None
+			output = subprocess.run(["./scasp_knowledge_base/test.sh"], shell=True, capture_output=True, text=True)
+			output = output.stdout
+			if 'BINDINGS' in output and "BINDINGS: ?" not in output:
+				options = []
+				output = output.split('ANSWER:')[1:]
+				for option in output:
+					option = option.replace(" ?", "")
+					opt = option[option.find('BINDINGS') + 10:-2].strip()
+					opt = opt.split('\n')
+					opt = [item.split(' = ') for item in opt]
+					opt = {name: value.strip() for [name, value] in opt}
+					options.append(opt)
+				output = options
+			# If no model found, return an empty dictionary.
+			elif 'no models' in output:
+				output = False
+			else:
+				output = None
 
 		return output
 

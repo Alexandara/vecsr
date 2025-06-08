@@ -2,13 +2,16 @@ import airsim
 import numpy as np
 import cv2
 import os
-import pprint
+import logging
 
 from simulator import Simulator
+from mock_image_processor import detected_front_collision
 
 class AirSimSimulator(Simulator):
     def __init__(self):
         super().__init__()
+        self.direction = "posx" # can be facing positive x, negative x, positive y, or negative y
+        self.collision_detected = False
         # connect to the AirSim simulator
         self.client = airsim.MultirotorClient()
         self.client.confirmConnection()
@@ -65,15 +68,64 @@ class AirSimSimulator(Simulator):
 
         # Landed
         if state.landed_state:
-            scasp_facts.append([("is_landed", "true")])
-        else:
             scasp_facts.append([("is_landed", "false")])
+        else:
+            scasp_facts.append([("is_landed", "true")])
+
+        if self.collision_detected:
+            scasp_facts.append([("collision_detected", "true")])
+        else:
+            scasp_facts.append([("collision_detected", "false")])
 
         return scasp_facts
 
-
     def take_action(self, action):
-        pass
+        velocity = 5
+        self.client.confirmConnection()
+        self.client.enableApiControl(True)
+        if action[0] == "takeoff":
+            self.client.takeoffAsync().join()
+            position = self.client.getMultirotorState().kinematics_estimated.position
+            self.client.moveToPositionAsync(position.x_val, position.y_val, -10, velocity).join()
+        elif action[0] == "move" and "forward" in action[1]:
+            position = self.client.getMultirotorState().kinematics_estimated.position
+            if self.direction == "posx":
+                self.client.moveToPositionAsync(position.x_val + 5, position.y_val, position.z_val, velocity).join()
+            elif self.direction == "negx":
+                self.client.moveToPositionAsync(position.x_val - 5, position.y_val, position.z_val, velocity).join()
+            elif self.direction == "posy":
+                self.client.moveToPositionAsync(position.x_val, position.y_val + 5, position.z_val, velocity).join()
+            elif self.direction == "negy":
+                self.client.moveToPositionAsync(position.x_val, position.y_val - 5, position.z_val, velocity).join()
+        elif action[0] == "rotate" and "right" in action[1]:
+            if self.direction == "posx":
+                self.client.rotateToYawAsync(90).join()
+                self.direction = "posy"
+            elif self.direction == "negx":
+                self.client.rotateToYawAsync(270).join()
+                self.direction = "negy"
+            elif self.direction == "posy":
+                self.client.rotateToYawAsync(180).join()
+                self.direction = "negx"
+            elif self.direction == "negy":
+                self.client.rotateToYawAsync(0).join()
+                self.direction = "posx"
+        elif action[0] == "rotate" and "left" in action[1]:
+            if self.direction == "posx":
+                self.client.rotateToYawAsync(270).join()
+                self.direction = "negy"
+            elif self.direction == "negx":
+                self.client.rotateToYawAsync(90).join()
+                self.direction = "posy"
+            elif self.direction == "posy":
+                self.client.rotateToYawAsync(0).join()
+                self.direction = "posx"
+            elif self.direction == "negy":
+                self.client.rotateToYawAsync(180).join()
+                self.direction = "negx"
+        else:
+            logging.warn("Invalid action taken.")
+        self.collision_detected = detected_front_collision()
 
     @staticmethod
     def which_simulator():
@@ -87,3 +139,9 @@ class AirSimSimulator(Simulator):
         img1d = np.fromstring(responses[1].image_data_uint8, dtype=np.uint8)  # get numpy array
         np_image = img1d.reshape(responses[1].height, responses[1].width, 3)
         return png_image, np_image
+
+    @staticmethod
+    def save_images(png_image, np_image=None):
+        airsim.write_file(os.path.normpath('image.png'), png_image)
+        if np_image is not None:
+            cv2.imwrite(os.path.normpath('np_image.png'), np_image)

@@ -4,7 +4,7 @@ import datetime
 
 import scaspharness
 import simulator_virtualhome
-from main_helpers import run, check_results, run_step_by_step
+from main_helpers import run, check_results
 
 def state_subset(final_state, curr_state):
     """
@@ -68,6 +68,31 @@ def get_relevant(task):
     listified_items.append("character1")
     logging.info(listified_items)
     return listified_items
+
+def run_step_by_step(task, final_state, program, state_subset):
+    start_time = time.time()
+    logging.info("Step-By-Step Task: " + task)
+    logging.info("Task received: %s seconds" % start_time)
+    curr_state = check_results(program.run_query([("initial_state", "P")]))['P']
+    plan = []
+    success_check = state_subset(final_state, curr_state)
+    # Get plans
+    while not success_check:
+        next_action = check_results(program.run_query([("choose_action", "X", curr_state, final_state)]))['X']
+        logging.info("Choose action: %s seconds" % (time.time() - start_time))
+        logging.info("Action chosen: " + next_action)
+        curr_state = check_results(program.run_query([("update", next_action, curr_state, "S")]))['S']
+        logging.info("Update: %s seconds" % (time.time() - start_time))
+        plan.append(next_action)
+        success_check = state_subset(final_state, curr_state)
+    logging.info("Plan found!")
+    logging.info(plan)
+    for action in plan:
+        a = action.replace("(", " ").replace(",", " ").split()
+        if a:
+            program.take_action(tuple(a))
+    logging.info("Actions taken in simulation: %s seconds" % (time.time() - start_time))
+    logging.info("Task End Time: %s", datetime.datetime.now())
 
 if __name__ == '__main__':
     logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)

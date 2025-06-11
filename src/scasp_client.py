@@ -12,6 +12,6 @@ class ScaspClient():
 
     def send_text(self, message):
         self.client_socket.send(message.encode())  # send message
-        data = self.client_socket.recv(2048).decode()  # receive response
+        data = self.client_socket.recv(16384).decode()  # receive response
         logging.info("s(CASP) Server Data: " + data)
         return data

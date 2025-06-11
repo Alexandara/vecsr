@@ -27,7 +27,7 @@ if __name__ == '__main__':
             sleep(5)
     while True:
         # receive data stream. it won't accept data packet greater than 1024 bytes
-        data = conn.recv(2048).decode()
+        data = conn.recv(16384).decode()
         print("Received " + str(data))
         if not data:
             continue

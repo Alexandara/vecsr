@@ -41,7 +41,7 @@ if __name__ == '__main__':
     logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
     task_selection = 0
     tasks = ["navigate"]
-    final_state = ["loc(40,0,-10)"]
+    final_state = ["loc(70,0,-10)"]
 
     start_time = time.time()
     logging.info("Start Time: %s", datetime.datetime.now())

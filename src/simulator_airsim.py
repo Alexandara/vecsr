@@ -17,6 +17,8 @@ class AirSimSimulator(Simulator):
         self.client.confirmConnection()
         self.client.enableApiControl(True)
         self.client.armDisarm(True)
+        self.imagenum = 0
+        self.last_move = []
 
     def get_state(self, rooms=None):
         scasp_facts = []
@@ -72,22 +74,33 @@ class AirSimSimulator(Simulator):
         else:
             scasp_facts.append([("is_landed", "true")])
 
+        # Collision detection
         if self.collision_detected:
             scasp_facts.append([("collision_detected", "true")])
         else:
             scasp_facts.append([("collision_detected", "false")])
 
+        # Direction
+        scasp_facts.append([("facing_direction", self.direction)])
+
+        # Last Move
+        scasp_facts.append(self.last_move)
+
         return scasp_facts
 
     def take_action(self, action):
+        p, n = self.get_images()
+        self.save_images(p, n)
         velocity = 5
         self.client.confirmConnection()
         self.client.enableApiControl(True)
         if action[0] == "takeoff":
+            self.last_move = [("last_move", "takeoff")]
             self.client.takeoffAsync().join()
             position = self.client.getMultirotorState().kinematics_estimated.position
             self.client.moveToPositionAsync(position.x_val, position.y_val, -10, velocity).join()
         elif action[0] == "move" and "forward" in action[1]:
+            self.last_move = [("last_move", "move", "forward")]
             position = self.client.getMultirotorState().kinematics_estimated.position
             if self.direction == "posx":
                 self.client.moveToPositionAsync(position.x_val + 5, position.y_val, position.z_val, velocity).join()
@@ -98,6 +111,7 @@ class AirSimSimulator(Simulator):
             elif self.direction == "negy":
                 self.client.moveToPositionAsync(position.x_val, position.y_val - 5, position.z_val, velocity).join()
         elif action[0] == "rotate" and "right" in action[1]:
+            self.last_move = [("last_move", "rotate", "right")]
             if self.direction == "posx":
                 self.client.rotateToYawAsync(90).join()
                 self.direction = "posy"
@@ -111,6 +125,7 @@ class AirSimSimulator(Simulator):
                 self.client.rotateToYawAsync(0).join()
                 self.direction = "posx"
         elif action[0] == "rotate" and "left" in action[1]:
+            self.last_move = [("last_move", "rotate", "left")]
             if self.direction == "posx":
                 self.client.rotateToYawAsync(270).join()
                 self.direction = "negy"
@@ -140,8 +155,8 @@ class AirSimSimulator(Simulator):
         np_image = img1d.reshape(responses[1].height, responses[1].width, 3)
         return png_image, np_image
 
-    @staticmethod
-    def save_images(png_image, np_image=None):
-        airsim.write_file(os.path.normpath('image.png'), png_image)
+    def save_images(self, png_image, np_image=None):
+        airsim.write_file(os.path.normpath('airsim_images\\image' + str(self.imagenum) + '.png'), png_image)
         if np_image is not None:
-            cv2.imwrite(os.path.normpath('np_image.png'), np_image)
+            cv2.imwrite(os.path.normpath('airsim_images\\np_image' + str(self.imagenum) + '.png'), np_image)
+        self.imagenum = self.imagenum + 1

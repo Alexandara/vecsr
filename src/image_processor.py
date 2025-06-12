@@ -38,10 +38,14 @@ def detected_front_collision(image):
     tensor_depth = (cmap(depth)[:, :, :3] * 255)[:, :, ::-1].astype(np.uint8)
 
     collision = False
-    for row in depth:
+    total = 0
+    index = 0
+    for row in depth[int(depth.shape[0]/3):int(2*depth.shape[0]/3),int(depth.shape[1]/3):int(2*depth.shape[1]/3)]:
         for column in row:
-            if (column > 200):
-                collision = True
-    return collision
+            total = total + column
+            index = index + 1
+    average = total/index
+    return (average > 220)
+
 
 

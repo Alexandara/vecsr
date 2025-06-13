@@ -40,20 +40,10 @@ def detected_front_collision(image):
     collision = False
     total = 0
     index = 0
-    for row in depth[int(depth.shape[0]/3):int(2*depth.shape[0]/3),int(depth.shape[1]/3):int(1.5*depth.shape[1]/3)]:
+    for row in depth[int(1.2*depth.shape[0]/3):int(1.5*depth.shape[0]/3),int(depth.shape[1]/3):int(2*depth.shape[1]/3)]:
         for column in row:
             total = total + column
             index = index + 1
     average = total/index
-    print(average)
-    return (average > 220)
+    return (average > 200)
 
-
-
-
-if __name__ == '__main__':
-    print(detected_front_collision(cv2.imread('C:/Users/keega/Downloads/Drone Commonsense/Depth-Anything-V2/airsim_images/image0.png')))
-    print(detected_front_collision(cv2.imread('C:/Users/keega/Downloads/Drone Commonsense/Depth-Anything-V2/airsim_images/image3.png')))
-    print(detected_front_collision(cv2.imread('C:/Users/keega/Downloads/Drone Commonsense/Depth-Anything-V2/airsim_images/image9.png')))
-    print(detected_front_collision(cv2.imread('C:/Users/keega/Downloads/Drone Commonsense/Depth-Anything-V2/airsim_images/image10.png')))
-    print(detected_front_collision(cv2.imread('C:/Users/keega/Downloads/Drone Commonsense/Depth-Anything-V2/airsim_images/image12.png')))

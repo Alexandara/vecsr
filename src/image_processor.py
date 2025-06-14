@@ -45,5 +45,5 @@ def detected_front_collision(image, num=0):
     with open('airsim_images\\results' + str(num) + '.json', 'w') as f:
         json.dump(json.dumps(depth.tolist()), f)
     logging.info("Average for image " + str(num) + ": " + str(average))
-    return (average > 200 or average == 0)
+    return (average > 200)
 

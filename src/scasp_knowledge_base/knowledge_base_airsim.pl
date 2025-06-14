@@ -27,6 +27,7 @@ choose_action(Action, State1, _) :- legal_action(Action, State1).
 
 suggest(takeoff, _, _) :- is_landed(true).
 suggest(move(forward), S1, S2) :- collision_detected(false), facing_direction(Dir), x_direction_needed(S1, S2, Dir).
+suggest(rotate(right), S1, S2) :- collision_detected(true), facing_direction(Dir), x_direction_needed(S1, S2, Dir), last_move(takeoff).
 suggest(rotate(right), S1, S2) :- collision_detected(true), facing_direction(Dir), x_direction_needed(S1, S2, Dir), last_move(move, _).
 suggest(rotate(right), S1, S2) :- collision_detected(true), facing_direction(Dir), x_direction_needed(S1, S2, Dir), last_move(rotate, left).
 suggest(move(forward), _, _) :- collision_detected(false), last_move(rotate, _).

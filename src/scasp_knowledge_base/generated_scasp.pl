@@ -1,30 +1,30 @@
 % Current State
 current_time(1).
 has_collided(False).
-curr_gps_altitude(135).
-curr_longitude(-122.13983).
+curr_gps_altitude(140).
+curr_longitude(-122.1399).
 curr_latitude(-122.14).
 curr_angular_acceleration_x(-0.0).
 curr_angular_acceleration_y(-0.0).
-curr_angular_acceleration_z(0.0).
-curr_angular_velocity_x(0.0).
-curr_angular_velocity_y(0.0).
-curr_angular_velocity_z(-0.0).
-curr_linear_acceleration_x(-0.0).
+curr_angular_acceleration_z(-0.0).
+curr_angular_velocity_x(-0.0).
+curr_angular_velocity_y(-0.0).
+curr_angular_velocity_z(0.0).
+curr_linear_acceleration_x(0.0).
 curr_linear_acceleration_y(0.0).
-curr_linear_acceleration_z(-0.0).
-curr_linear_velocity_x(0.0).
+curr_linear_acceleration_z(0.0).
+curr_linear_velocity_x(-0.0).
 curr_linear_velocity_y(-0.0).
 curr_linear_velocity_z(0.0).
 curr_orientation_x(0).
 curr_orientation_y(0).
-curr_orientation_z(0).
-curr_x(18).
-curr_y(26).
-curr_z(-13).
+curr_orientation_z(-1).
+curr_x(73).
+curr_y(20).
+curr_z(-18).
 is_landed(false).
 collision_detected(false).
-facing_direction(posx).
+facing_direction(negy).
 last_move(rotate, left).
 % Rules
 % Helper functions
@@ -56,6 +56,7 @@ choose_action(Action, State1, _) :- legal_action(Action, State1).
 
 suggest(takeoff, _, _) :- is_landed(true).
 suggest(move(forward), S1, S2) :- collision_detected(false), facing_direction(Dir), x_direction_needed(S1, S2, Dir).
+suggest(rotate(right), S1, S2) :- collision_detected(true), facing_direction(Dir), x_direction_needed(S1, S2, Dir), last_move(takeoff).
 suggest(rotate(right), S1, S2) :- collision_detected(true), facing_direction(Dir), x_direction_needed(S1, S2, Dir), last_move(move, _).
 suggest(rotate(right), S1, S2) :- collision_detected(true), facing_direction(Dir), x_direction_needed(S1, S2, Dir), last_move(rotate, left).
 suggest(move(forward), _, _) :- collision_detected(false), last_move(rotate, _).
@@ -66,4 +67,4 @@ legal_action(move(forward), _) :- is_landed(false), collision_detected(false).
 legal_action(rotate(_), _) :- is_landed(false).
 
 
-?- choose_action(X, loc(18,26,-13), loc(70,0,-10)).
+?- choose_action(X, loc(73,20,-18), loc(70,0,-10)).

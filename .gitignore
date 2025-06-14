@@ -201,3 +201,6 @@ cython_debug/
 
 # AirSim images
 /src/airsim_images
+
+# CV Model
+/src/Depth-Anything-V2/checkpoints/depth_anything_v2_vitl.pth

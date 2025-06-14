@@ -5,7 +5,7 @@ import os
 import logging
 
 from simulator import Simulator
-from mock_image_processor import detected_front_collision
+from image_processor import detected_front_collision
 
 class AirSimSimulator(Simulator):
     def __init__(self):
@@ -89,8 +89,6 @@ class AirSimSimulator(Simulator):
         return scasp_facts
 
     def take_action(self, action):
-        p, n = self.get_images()
-        self.save_images(p, n)
         velocity = 5
         self.client.confirmConnection()
         self.client.enableApiControl(True)
@@ -140,7 +138,14 @@ class AirSimSimulator(Simulator):
                 self.direction = "negx"
         else:
             logging.warn("Invalid action taken.")
-        self.collision_detected = detected_front_collision()
+        png, npng = self.get_images()
+        logging.info("Checking for collisions")
+        self.collision_detected = detected_front_collision(npng, num=self.imagenum)
+        if self.collision_detected:
+            logging.info("Collision detected")
+        else:
+            logging.info("Collision not detected")
+        self.save_images(png, npng)
 
     @staticmethod
     def which_simulator():

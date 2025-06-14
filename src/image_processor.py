@@ -1,18 +1,15 @@
-import argparse
-import cv2
-import glob
 import matplotlib
 import numpy as np
-import os
 import torch
 import json
 import sys
+import logging
 
 sys.path.insert(0, './Depth-Anything-V2')
 from depth_anything_v2.dpt import DepthAnythingV2
 
 
-def detected_front_collision(image):   
+def detected_front_collision(image, num=0):
     DEVICE = 'cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu'
     
     model_configs = {
@@ -38,12 +35,15 @@ def detected_front_collision(image):
     tensor_depth = (cmap(depth)[:, :, :3] * 255)[:, :, ::-1].astype(np.uint8)
 
     collision = False
-    total = 0
+    total = int(0)
     index = 0
     for row in depth[int(1.2*depth.shape[0]/3):int(1.5*depth.shape[0]/3),int(depth.shape[1]/3):int(2*depth.shape[1]/3)]:
         for column in row:
-            total = total + column
+            total += int(column)
             index = index + 1
     average = total/index
-    return (average > 200)
+    with open('airsim_images\\results' + str(num) + '.json', 'w') as f:
+        json.dump(json.dumps(depth.tolist()), f)
+    logging.info("Average for image " + str(num) + ": " + str(average))
+    return (average > 200 or average == 0)
 

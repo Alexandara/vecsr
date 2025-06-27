@@ -278,7 +278,7 @@ class VirtualHomeSimulator(VirtualHomeSimulatorBase):
 		:return: a list of prolog facts [[(fact)], [(fact2)], ...]
 		"""
 		s, g = self.comm.environment_graph()
-		facts = self.knowledge_graph_to_predicates(g, self.rooms, relevant_items=relevant)
+		facts = self.knowledge_graph_to_predicates(g, relevant_items=relevant)
 		return facts
 
 	def get_actions(self):

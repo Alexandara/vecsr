@@ -180,6 +180,7 @@ def pickle_virtualhome_data():
 	preconditions_folder = "src/programs_processed_precond_nograb_morepreconds/initstate"
 	# preconditions_folder = "src/programs_processed_precond_nograb_morepreconds/test_cond"
 	tasks = {}
+	key_add = 0
 	for path in Path(tasks_folder).rglob("*"):
 		if path.is_file():
 			with open(path, "r", encoding="utf-8") as file:
@@ -204,11 +205,12 @@ def pickle_virtualhome_data():
 						cleaned_actions = [s.replace("_", "") for s in action]
 						actions.append(Action(time, a, objects=cleaned_actions))
 					time = time + 1
-				tasks[Path(path).stem] = VH_Task(task, desc, actions)
-	for path in Path(preconditions_folder).rglob("*"):
-		if path.is_file():
-			with open(path, "r", encoding="utf-8") as file:
-				lines = file.read()
+				tasks[Path(path).stem + str(key_add)] = VH_Task(task, desc, actions)
+				key_add += 1
+	# for path in Path(preconditions_folder).rglob("*"):
+	# 	if path.is_file():
+	# 		with open(path, "r", encoding="utf-8") as file:
+	# 			lines = file.read()
 				# TODO: read preconditions
 	pickle.dump(tasks, open("src/analogy_learning/vh_tasks_db.pkl", 'wb'))
 
@@ -327,6 +329,8 @@ def fix_unsafe_literals(name):
 		to_return = "tabl"
 	elif name == "hide":
 		to_return = "hides"
+	elif name == "compute":
+		to_return = "comput"
 	return to_return
 
 def generate_task_postconditions():

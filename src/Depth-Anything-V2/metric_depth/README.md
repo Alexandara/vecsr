@@ -24,7 +24,7 @@ We provide **six metric depth models** of three scales for indoor and outdoor sc
 ```bash
 git clone https://github.com/DepthAnything/Depth-Anything-V2
 cd Depth-Anything-V2/metric_depth
-pip install -r requirements.txt
+pip install -r requirements-wrong.txt
 ```
 
 Download the checkpoints listed [here](#pre-trained-models) and put them under the `checkpoints` directory.

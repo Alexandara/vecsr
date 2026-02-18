@@ -1,3 +1,5 @@
+from abc import abstractmethod
+
 import airsim
 import numpy as np
 import cv2
@@ -5,9 +7,39 @@ import os
 import logging
 
 from src.simulators.simulator import Simulator
-from image_processor import detected_front_collision
+from src.vecsra_modules.image_processor import detected_front_collision
 
 class AirSimSimulator(Simulator):
+    def __init__(self):
+        super().__init__()
+
+    @abstractmethod
+    def get_state(self):
+        pass
+
+    @abstractmethod
+    def take_action(self, action):
+        pass
+
+    @staticmethod
+    def which_simulator():
+        return "AirSim"
+
+class ProjectAirSimSimulator(AirSimSimulator):
+    def __init__(self):
+        super().__init__()
+
+    def get_state(self):
+        # Get s(CASP) facts from environment and return them
+        logging.warning("Stub method")
+        scasp_facts = [[("fact", "literal")]]
+        return scasp_facts
+
+    def take_action(self, action):
+        # Takes in an action in the form of a list (e.g. ["move", "forward"] etc.)
+        logging.warning("Stub method")
+
+class MicrosoftAirSimSimulator(AirSimSimulator):
     def __init__(self):
         super().__init__()
         self.direction = "posx" # can be facing positive x, negative x, positive y, or negative y
@@ -146,10 +178,6 @@ class AirSimSimulator(Simulator):
         else:
             logging.info("Collision not detected")
         self.save_images(png, npng)
-
-    @staticmethod
-    def which_simulator():
-        return "AirSim"
 
     def get_images(self):
         responses = self.client.simGetImages([

@@ -69,7 +69,11 @@ def state_subset(final_state, curr_state):
     return True
 
 def get_relevant(task):
-    relevant_items = check_results(program.run_query([("get_relevant", task, "P")]))['P']
+    relevant_items = check_results(program.run_query([("get_relevant", task, "P")]))
+    if relevant_items:
+        relevant_items = relevant_items['P']
+    else:
+        return False
     listified_items = relevant_items.replace("[","").replace("]","").split(",")
     listified_items.append("character1")
     logging.info(listified_items)
@@ -77,7 +81,6 @@ def get_relevant(task):
 
 def run_step_by_step(task, final_state, program, state_subset):
     start_time = time.time()
-    logging.info("Step-By-Step Task: " + task)
     logging.info("Task received: %s seconds" % start_time)
     curr_state = check_results(program.run_query([("initial_state", "P")]))['P']
     plan = []
@@ -146,6 +149,7 @@ if __name__ == '__main__':
     logging.info("Start Time: %s", datetime.datetime.now())
 
     for task in config["vecsr_settings"]["tasks"]:
+        logging.info("Task: " + task)
         if sys.platform == "darwin":
             start_vh()
         [final_state, answer_key, rooms] = task_helper(task)
@@ -165,8 +169,10 @@ if __name__ == '__main__':
         start_time = time.time()
         if config["vecsr_settings"]["optimizations"]["partial_ground"] or config["vecsr_settings"]["counterfactual_analysis"]:
             relevant = get_relevant(task)
-            if config["vecsr_settings"]["optimizations"]["partial_ground"]:
+            if config["vecsr_settings"]["optimizations"]["partial_ground"] and relevant:
                 program.relevant_items = relevant
+            elif not relevant:
+                continue
         # Full loop
         if config["vecsr_settings"]["step_by_step"]:
             run_step_by_step(task, final_state, program, state_subset)

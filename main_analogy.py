@@ -3,7 +3,6 @@ import random
 import re
 import itertools
 
-from varname import nameof
 from src.simulators import simulator
 from src.scasp_functions import scaspharness
 
@@ -248,4 +247,5 @@ def full_analogy():
 if __name__ == '__main__':
     logging.getLogger("httpcore").setLevel(logging.WARNING)
     logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
+    virtualhome_data_ingest.pickle_virtualhome_data()
     virtualhome_data_ingest.generate_task_postconditions()

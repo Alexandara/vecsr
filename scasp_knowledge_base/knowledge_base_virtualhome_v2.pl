@@ -50,25 +50,27 @@ vegetable(X) :- type(X, bellpepper).
 eatable(X) :- type(X, chips).
 eatable(X) :- type(X, crackers).
 can_cook(X) :- type(X, stove).
+eatable(bananas316).
+eatable(plate62).
 
 % For the task "Breakfast"
 can_cook(X) :- type(X, toaster).
 breakfast(X) :- type(X, breadslice).
 easy_cooking(Toaster, Bread) :- type(Toaster, toaster), type(Bread, breadslice).
 
-%% Unseen Data: Commented out so it doesn't clog up the knowledge base
-%% For the task "Tabletop Game"
-%type(tabletopgame3200, tabletopgame).
-%grabbable(tabletopgame3200).
-%movable(tabletopgame3200).
-%
-%% For the task "Pick up spare change on dresser"
-%type(dresser3201, dresser).
-%surfaces(dresser3201).
-%movable(dresser3201).
-%type(change3202, change).
-%grabbable(change3202).
-%
+% Unseen Data: Commented out so it doesn't clog up the knowledge base
+% For the task "Tabletop Game"
+type(tabletopgame3200, tabletopgame).
+grabbable(tabletopgame3200).
+movable(tabletopgame3200).
+
+% For the task "Pick up spare change on dresser"
+type(dresser3201, dresser).
+surfaces(dresser3201).
+movable(dresser3201).
+type(change3202, change).
+grabbable(change3202).
+
 % For the task "Put shoes and coats"
 type(shoe3203, shoe).
 clothes(shoe3203).
@@ -82,73 +84,73 @@ type(coat3205, coat).
 clothes(coat3205).
 grabbable(coat3205).
 movable(coat3205).
-%
-%% For the task "Hair"
-%type(comb3206, comb).
-%grabbable(comb3206).
-%movable(comb3206).
-%
-%% For the task "Cutting"
-%type(cuttingboard3207, cuttingboard).
-%grabbable(cuttingboard3207).
-%movable(cuttingboard3207).
-%
-%% For the task "Put out flowers"
-%type(flowers3208, flowers).
-%grabbable(flowers3208).
-%movable(flowers3208).
-%type(vase3209, vase).
-%grabbable(vase3209).
-%movable(vase3209).
-%surface(vase3209).
-%
-%% For the task "Put down bags"
-%type(bag3210, bag).
-%grabbable(bag3210).
-%movable(bag3210).
-%type(bag3211, bag).
-%grabbable(bag3211).
-%movable(bag3211).
-%
-%% holds_character([bag3210, bag3211]).
-%
-%% For the task "Curled hair"
-%type(curlingiron3212, curlingiron).
-%grabbable(curlingiron3212).
-%movable(curlingiron3212).
-%has_switch(curlingiron3212).
-%
-%% For the task "Place centerpiece"
-%type(centerpiece3213, centerpiece).
-%grabbable(centerpiece3213).
-%movable(centerpiece3213).
-%
-%% For the task "Practice Violin"
-%type(violin3214, violin).
-%grabbable(violin3214).
-%movable(violin3214).
-%
-%% For the task "Wipe room down with lysol"
-%type(lysol3215, lysol).
-%grabbable(lysol3215).
-%movable(lysol3215).
-%
-%% For the task "Replace toothpaste"
-%type(toothpaste1163, toothpaste).
-%closed(toothpaste1163).
-%grabbable(toothpaste1163).
-%pourable(toothpaste1163).
-%can_open(toothpaste1163).
-%movable(toothpaste1163).
-%cream(toothpaste1163).
-%new(toothpaste1163).
-%
-%% For the task "Shampoo hair"
-%type(shampoo3216, shampoo).
-%grabbable(shampoo3216).
-%pourable(shampoo3216).
-%can_open(shampoo3216).
-%movable(shampoo3216).
+
+% For the task "Hair"
+type(comb3206, comb).
+grabbable(comb3206).
+movable(comb3206).
+
+% For the task "Cutting"
+type(cuttingboard3207, cuttingboard).
+grabbable(cuttingboard3207).
+movable(cuttingboard3207).
+
+% For the task "Put out flowers"
+type(flowers3208, flowers).
+grabbable(flowers3208).
+movable(flowers3208).
+type(vase3209, vase).
+grabbable(vase3209).
+movable(vase3209).
+surface(vase3209).
+
+% For the task "Put down bags"
+type(bag3210, bag).
+grabbable(bag3210).
+movable(bag3210).
+type(bag3211, bag).
+grabbable(bag3211).
+movable(bag3211).
+
+% holds_character([bag3210, bag3211]).
+
+% For the task "Curled hair"
+type(curlingiron3212, curlingiron).
+grabbable(curlingiron3212).
+movable(curlingiron3212).
+has_switch(curlingiron3212).
+
+% For the task "Place centerpiece"
+type(centerpiece3213, centerpiece).
+grabbable(centerpiece3213).
+movable(centerpiece3213).
+
+% For the task "Practice Violin"
+type(violin3214, violin).
+grabbable(violin3214).
+movable(violin3214).
+
+% For the task "Wipe room down with lysol"
+type(lysol3215, lysol).
+grabbable(lysol3215).
+movable(lysol3215).
+
+% For the task "Replace toothpaste"
+type(toothpaste1163, toothpaste).
+closed(toothpaste1163).
+grabbable(toothpaste1163).
+pourable(toothpaste1163).
+can_open(toothpaste1163).
+movable(toothpaste1163).
+cream(toothpaste1163).
+new(toothpaste1163).
+
+% For the task "Shampoo hair"
+type(shampoo3216, shampoo).
+grabbable(shampoo3216).
+pourable(shampoo3216).
+can_open(shampoo3216).
+movable(shampoo3216).
 
 % For the task "Drink Iced Coffee"
 type(icedcoffee3217, icedcoffee).
@@ -163,42 +165,357 @@ movable(envelope3218).
 type(mailbox3219, mailbox).
 recipient(mailbox3219).
 
+% Analogy objects
+% writingutensil
+type(writingutensil3220, writingutensil).
+grabbable(writingutensil3220).
+movable(writingutensil3220).
+% disk
+type(disk3223, disk).
+grabbable(disk3223).
+movable(disk3223).
+% iron
+type(iron3226, iron).
+grabbable(iron3226).
+movable(iron3226).
+has_switch(iron3226).
+electronics(iron3226).
+has_plug(iron3226).
+% keys
+type(keys3230, keys).
+grabbable(keys3230).
+movable(keys3230).
+% officemachine
+type(officemachine3231, officemachine).
+grabbable(officemachine3231).
+movable(officemachine3231).
+has_switch(officemachine3231).
+electronics(officemachine3231).
+has_plug(officemachine3231).
+% wallet
+type(wallet3232, wallet).
+grabbable(wallet3232).
+movable(wallet3232).
+% sewingtools
+type(sewingtools3235, sewingtools).
+grabbable(sewingtools3235).
+movable(sewingtools3235).
+% toy
+type(toy3245, toy).
+grabbable(toy3245).
+movable(toy3245).
+% toy
+type(toy3246, toy).
+grabbable(toy3246).
+movable(toy3246).
+% toy
+type(toy3247, toy).
+grabbable(toy3247).
+movable(toy3247).
+% glasses
+type(glasses3248, glasses).
+grabbable(glasses3248).
+movable(glasses3248).
+% button
+type(button3253, button).
+grabbable(button3253).
+movable(button3253).
+% glue
+type(glue3255, glue).
+grabbable(glue3255).
+movable(glue3255).
+% stamp
+type(stamp3256, stamp).
+grabbable(stamp3256).
+movable(stamp3256).
+% cards
+type(cards3219, cards).
+grabbable(cards3219).
+movable(cards3219).
+% diskplayer
+type(diskplayer3225, diskplayer).
+grabbable(diskplayer3225).
+movable(diskplayer3225).
+has_switch(diskplayer3225).
+electronics(diskplayer3225).
+has_plug(diskplayer3225).
+% lightbulb
+type(lightbulb3243, lightbulb).
+grabbable(lightbulb3243).
+movable(lightbulb3243).
+% lightbulb
+type(lightbulb3244, lightbulb).
+grabbable(lightbulb3244).
+movable(lightbulb3244).
+% hat
+type(hat3252, hat).
+grabbable(hat3252).
+movable(hat3252).
+hangable(hat3252).
+clothes(hat3252).
+% ovenmitts
+type(ovenmitts3224, ovenmitts).
+grabbable(ovenmitts3224).
+movable(ovenmitts3224).
+hangable(ovenmitts3224).
+clothes(ovenmitts3224).
+% animal
+type(animal3226, animal).
+grabbable(animal3226).
+movable(animal3226).
+characters(animal3226).
+% dough
+type(dough3227, dough).
+grabbable(dough3227).
+movable(dough3227).
+food(dough3227).
+eatable(dough3227).
+% filter
+type(filter3228, filter).
+grabbable(filter3228).
+movable(filter3228).
+% coffee
+type(coffee3229, coffee).
+grabbable(coffee3229).
+movable(coffee3229).
+food(coffee3229).
+drinkable(coffee3229).
+pourable(coffee3229).
+% teabag
+type(teabag3233, teabag).
+grabbable(teabag3233).
+movable(teabag3233).
+food(teabag3233).
+drinkable(teabag3233).
+pourable(teabag3233).
+% egg
+type(egg3234, egg).
+grabbable(egg3234).
+movable(egg3234).
+food(egg3234).
+eatable(egg3234).
+% tablecloth
+type(tablecloth3236, tablecloth).
+grabbable(tablecloth3236).
+movable(tablecloth3236).
+% carrot
+type(carrot3237, carrot).
+grabbable(carrot3237).
+movable(carrot3237).
+food(carrot3237).
+eatable(carrot3237).
+% milk
+type(milk3238, milk).
+grabbable(milk3238).
+movable(milk3238).
+food(milk3238).
+drinkable(milk3238).
+pourable(milk3238).
+% juice
+type(juice3239, juice).
+grabbable(juice3239).
+movable(juice3239).
+food(juice3239).
+drinkable(juice3239).
+pourable(juice3239).
+% ice
+type(ice3241, ice).
+grabbable(ice3241).
+movable(ice3241).
+% peanutbutter
+type(peanutbutter3249, peanutbutter).
+grabbable(peanutbutter3249).
+movable(peanutbutter3249).
+food(peanutbutter3249).
+eatable(peanutbutter3249).
+% cheese
+type(cheese3250, cheese).
+grabbable(cheese3250).
+movable(cheese3250).
+food(cheese3250).
+eatable(cheese3250).
+% salt
+type(salt3251, salt).
+grabbable(salt3251).
+movable(salt3251).
+food(salt3251).
+eatable(salt3251).
+% dirt
+type(dirt3258, dirt).
+grabbable(dirt3258).
+movable(dirt3258).
+% othercharacter
+type(othercharacter3259, othercharacter).
+grabbable(othercharacter3259).
+movable(othercharacter3259).
+characters(othercharacter3259).
+% othercharacter
+type(othercharacter3260, othercharacter).
+grabbable(othercharacter3260).
+movable(othercharacter3260).
+characters(othercharacter3260).
+% othercharacter
+type(othercharacter3261, othercharacter).
+grabbable(othercharacter3261).
+movable(othercharacter3261).
+characters(othercharacter3261).
+% cleaningliquid
+type(cleaningliquid3221, cleaningliquid).
+grabbable(cleaningliquid3221).
+movable(cleaningliquid3221).
+pourable(cleaningliquid3221).
+% makeup
+type(makeup3222, makeup).
+grabbable(makeup3222).
+movable(makeup3222).
+% shower
+type(shower3240, shower).
+grabbable(shower3240).
+movable(shower3240).
+has_switch(shower3240).
+% mirror
+type(mirror3242, mirror).
+grabbable(mirror3242).
+movable(mirror3242).
+% dryer
+type(dryer3254, dryer).
+grabbable(dryer3254).
+movable(dryer3254).
+has_switch(dryer3254).
+electronics(dryer3254).
+has_plug(dryer3254).
+% razor
+type(razor3257, razor).
+grabbable(razor3257).
+movable(razor3257).
+% Off lightswitch
+type(lightswitch3258, lightswitch).
+has_switch(lightswitch3258).
+has_plug(lightswitch3258).
+electronics(lightswitch3258).
+
 % Inside and ontopof for added predicates
 extra_inside([[vacuum0, bedroom74],
 [sheets01, bedroom74], [pillowcase011, bedroom74], [pillowcase012, bedroom74], [sheets02, livingroom336], [pillowcase021, livingroom336], [pillowcase022, livingroom336],
-%[tabletopgame3200, livingroom336],
-%[dresser3201, bedroom74], [change3202, bedroom74],
+[tabletopgame3200, livingroom336],
+[dresser3201, bedroom74], [change3202, bedroom74],
 [shoe3203, bedroom74], [shoe3204, bedroom74], [coat3205, bedroom74],
-%[comb3206, bathroom11],
-%[cuttingboard3207, kitchen207],
-%[vase3209, kitchen207], [flowers3208, kitchen207],
-%[bag3210, kitchen207], [bag3211, kitchen207],
-%[curlingiron3212, bathroom11],
-%[centerpiece3213, kitchen207],
-%[violin3214, bedroom74],
-%[lysol3215, bathroom11],
-%[toothpaste1163, bedroom74],
-%[shampoo3216, bathroom11],
-%[icedcoffee3217, mug196],
-[envelope3218, bedroom74]
+[comb3206, bathroom11],
+[cuttingboard3207, kitchen207],
+[vase3209, kitchen207], [flowers3208, kitchen207],
+[bag3210, kitchen207], [bag3211, kitchen207],
+[curlingiron3212, bathroom11],
+[centerpiece3213, kitchen207],
+[violin3214, bedroom74],
+[lysol3215, bathroom11],
+[toothpaste1163, bedroom74],
+[shampoo3216, bathroom11],
+[icedcoffee3217, mug196],
+[envelope3218, bedroom74],
+% Analogy
+[writingutensil3220,bedroom74],
+[disk3223,bedroom74],
+[iron3226,bedroom74],
+[keys3230,bedroom74],
+[officemachine3231,bedroom74],
+[wallet3232,bedroom74],
+[sewingtools3235,bedroom74],
+[toy3245,bedroom74],
+[toy3246,bedroom74],
+[toy3247,bedroom74],
+[glasses3248,bedroom74],
+[button3253,bedroom74],
+[glue3255,bedroom74],
+[stamp3256,bedroom74],
+[cards3219,livingroom336],
+[diskplayer3225,livingroom336],
+[lightbulb3243,livingroom336],
+[lightbulb3244,livingroom336],
+[hat3252,livingroom336],
+[ovenmitts3224,kitchen207],
+[animal3226,kitchen207],
+[dough3227,kitchen207],
+[filter3228,kitchen207],
+[coffee3229,kitchen207],
+[teabag3233,kitchen207],
+[egg3234,kitchen207],
+[tablecloth3236,kitchen207],
+[carrot3237,kitchen207],
+[milk3238,kitchen207],
+[juice3239,kitchen207],
+[ice3241,kitchen207],
+[peanutbutter3249,kitchen207],
+[cheese3250,kitchen207],
+[salt3251,kitchen207],
+[dirt3258,kitchen207],
+[othercharacter3259,kitchen207],
+[cleaningliquid3221,bathroom11],
+[makeup3222,bathroom11],
+[shower3240,bathroom11],
+[mirror3242,bathroom11],
+[dryer3254,bathroom11],
+[razor3257,bathroom11]
 ]).
 
 extra_ontopof([[vacuum, floor75],
 [sheets01, bed111], [pillowcase011, bed111], [pillowcase012, bed111], [sheets02, coffeetable372], [pillowcase021, coffeetable372], [pillowcase022, coffeetable372],
-%[tabletopgame3200, bookshelf371],
-%[change3202, dresser3201], [dresser3201, floor75],
+[tabletopgame3200, bookshelf371],
+[change3202, dresser3201], [dresser3201, floor75],
 [shoe3203, floor75], [shoe3204, floor75], [coat3205, closetdrawer122],
-%[comb3206, bathroomcounter50],
-%[cuttingboard3207, kitchencounter238],
-%[vase3209, kitchencounter238], [flowers3208, kitchencounter238],
-%[curlingiron3212, bathroomcounter50],
-%[centerpiece3213, kitchencounter238],
-%[violin3214, coffeetable113]
-%[lysol3215, bathroomcounter50],
-%[toothpaste1163, coffeetable113],
-%[curtains187, window92],
-%[shampoo3216, bathroomcounter50],
-[envelope3218, desk110]
+[comb3206, bathroomcounter50],
+[cuttingboard3207, kitchencounter238],
+[vase3209, kitchencounter238], [flowers3208, kitchencounter238],
+[curlingiron3212, bathroomcounter50],
+[centerpiece3213, kitchencounter238],
+[violin3214, coffeetable113],
+[lysol3215, bathroomcounter50],
+[toothpaste1163, coffeetable113],
+[curtains187, window92],
+[shampoo3216, bathroomcounter50],
+[envelope3218, desk110],
+% Analogy
+[writingutensil3220,desk110],
+[disk3223,desk110],
+[iron3226,desk110],
+[keys3230,desk110],
+[officemachine3231,desk110],
+[wallet3232,desk110],
+[sewingtools3235,desk110],
+[toy3245,desk110],
+[toy3246,desk110],
+[toy3247,desk110],
+[glasses3248,desk110],
+[button3253,desk110],
+[glue3255,desk110],
+[stamp3256,desk110],
+[cards3219,coffeetable372],
+[diskplayer3225,coffeetable372],
+[lightbulb3243,coffeetable372],
+[lightbulb3244,coffeetable372],
+[hat3252,coffeetable372],
+[ovenmitts3224,kitchencounter238],
+[animal3226,kitchencounter238],
+[dough3227,kitchencounter238],
+[filter3228,kitchencounter238],
+[coffee3229,kitchencounter238],
+[teabag3233,kitchencounter238],
+[egg3234,kitchencounter238],
+[tablecloth3236,kitchencounter238],
+[carrot3237,kitchencounter238],
+[milk3238,kitchencounter238],
+[juice3239,kitchencounter238],
+[ice3241,kitchencounter238],
+[peanutbutter3249,kitchencounter238],
+[cheese3250,kitchencounter238],
+[salt3251,kitchencounter238],
+[dirt3258,kitchencounter238],
+[othercharacter3259,kitchencounter238],
+[cleaningliquid3221,bathroomcounter50],
+[makeup3222,bathroomcounter50],
+[shower3240,bathroomcounter50],
+[mirror3242,bathroomcounter50],
+[dryer3254,bathroomcounter50],
+[razor3257,bathroomcounter50]
 ]).
 
 % Constraints
@@ -278,6 +595,7 @@ initial_state([Close, Held, Sat, OnTopOf, Inside, On, laid_on([]), used([]), eat
 
 % Check for final state accomplished
 % STATEX
+% state_subset([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([plate62])], [close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([plate62])]).
 state_subset([close(CloseFinal), holds(HoldsFinal), sat_on(SatFinal), on_top_of(OtoFinal), inside(InsideFinal), on(OnFinal), laid_on(LaidFinal), used(UsedFinal), eaten(EatenFinal) | _],
              [close(Close), holds(Holds), sat_on(Sat), on_top_of(Oto), inside(Inside), on(On), laid_on(Laid), used(Used), eaten(Eaten) | _]) :-
                     subset(CloseFinal, Close), subset(HoldsFinal, Holds), subset(SatFinal, Sat),
@@ -287,7 +605,7 @@ state_subset([close(CloseFinal), holds(HoldsFinal), sat_on(SatFinal), on_top_of(
 % We want to go from the current state to the final state
 transform(FinalState, Plan) :- initial_state(State1), perturb(FinalState, PerturbedFinalState),
                                transform(State1, PerturbedFinalState, [State1], PerturbedPlan, 0),
-                               %-list_empty(PerturbedPlan),
+%                               -list_empty(PerturbedPlan),
                                unperturb_actions(FinalState, PerturbedPlan, Plan).
 transform(State1, PerturbedFinalState,_,[], _) :- state_subset(PerturbedFinalState, State1).
 transform(_, _, _, _, 30).
@@ -322,9 +640,9 @@ suggest(put(X,Y), [close(Close), holds(Held), _, on_top_of(OtoI), _, _, _, _, _ 
 suggest(walk(X), [_, _, _, _, _, on(OnI), _, _, _ | _],
                  [_, _, _, _, _, on(OnF), _, _, _ | _])
                         :- not_member(X,OnI), member(X, OnF).
-suggest(switchon(X), _,
-                    [_, _, _, _, _, on(On), _, _, _ | _])
-                        :- member(X, On).
+suggest(switchon(X), [_, _, _, _, _, on(OnI), _, _, _ | _],
+                    [_, _, _, _, _, on(OnF), _, _, _ | _])
+                        :- member(X, OnF), not_member(X, OnI).
 suggest(walk(Y), [_, holds(Held), _, _, _, _, _, _, _ | _],
                  [_, _, _, on_top_of(Oto), _, _, _, _, _ | _])
                         :- member([X,Y], Oto), member(X, Held).
@@ -445,12 +763,16 @@ legal_action(switchon(X), [close(Close), _, _, _, inside(Inside), on(On), _, _, 
 % We assume that something can only be used once for simplicity
 legal_action(use(X), [close(Close), _, _, _, _, _, _, used(Used), _ | _])
                 :- member(X, Close), not_member(X, Used).
+% Strict definition of eat
 legal_action(eat(X), [close(Close), _, _, _, _, _, _, _, eaten(Eaten) | _])
                 :- member(X, Close), not_member(X, Eaten), not grabbable(X), eatable(X).
 legal_action(eat(X), [_, holds(Held), _, _, _, _, _, _, eaten(Eaten) | _])
                 :- member(X, Held), not_member(X, Eaten), eatable(X).
 legal_action(eat(X), [close(Close), _, _, on_top_of(Oto), _, on(On), _, _, eaten(Eaten) | _])
                 :- member(X, Close), not_member(X, Eaten), can_cook(Heat), ontopof_inherited(Heat, X, Oto), member(Heat, On).
+% Loose definition of eat
+legal_action(eat(X), [close(Close), _, _, _, _, _, _, _, eaten(Eaten) | _])
+                :- member(X, Close), not_member(X, Eaten), eatable(X).
 legal_action(X, State) :- similar_action(X, Y), legal_action(Y, State).
 legal_action(X, State) :- similar_action(Y, X), legal_action(Y, State).
 
@@ -460,9 +782,14 @@ legal_action(X, State) :- similar_action(Y, X), legal_action(Y, State).
 % Update state
 % If we walk to something, anything we are not holding is no longer close
 % STATEX
+% Strict walk: Any items that aren't held are no longer close
+%update(walk(X), [close(Close), holds(Held), sat_on(Sat), on_top_of(Oto), inside(In), on(On), laid_on(Laid), used(Used), eaten(Eaten) | _],
+%                [close(Closen), holds(Held), sat_on(Sat), on_top_of(Oto), inside(Inf), on(On), laid_on(Laid), used(Used), eaten(Eaten) | _]) :-
+%    update_walking(X, [Close, Held, Oto], [], Closen),
+%    update_room(X, In, [], Inf).
+% Loose walk: once an item is close, it remains close
 update(walk(X), [close(Close), holds(Held), sat_on(Sat), on_top_of(Oto), inside(In), on(On), laid_on(Laid), used(Used), eaten(Eaten) | _],
-                [close(Closen), holds(Held), sat_on(Sat), on_top_of(Oto), inside(Inf), on(On), laid_on(Laid), used(Used), eaten(Eaten) | _]) :-
-    update_walking(X, [Close, Held, Oto], [], Closen),
+                [close([X | Close]), holds(Held), sat_on(Sat), on_top_of(Oto), inside(Inf), on(On), laid_on(Laid), used(Used), eaten(Eaten) | _]) :-
     update_room(X, In, [], Inf).
 update(grab(X), [close(Close), holds(Held), sat_on(Sat), on_top_of(Oto), inside(In), on(On), laid_on(Laid), used(Used), eaten(Eaten) | _],
                 [close(Close), holds([X | Held]), sat_on(Sat), on_top_of(OtoN), inside(In), on(On), laid_on(Laid), used(Used), eaten(Eaten) | _])

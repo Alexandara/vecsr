@@ -7,7 +7,6 @@ from pathlib import Path
 
 def run(task, program, answer=None, take_actions=True):
     start_time = time.time()
-    logging.info("Task: " + task)
     logging.info("Task received: %s seconds" % start_time)
     if not answer:
         results = program.run_query([("complete_task", task, "P")])
@@ -86,7 +85,7 @@ def task_helper(task):
                         "put(salmon328,fryingpan270),put(bellpepper321,fryingpan270),eat(salmon328)]",
                         [207]]  # 12
     tasks["breakfast"] = ["[close([]), holds([]), sat_on([]), on_top_of([[breadslice310, toaster309]]), inside([]), "
-                          "on([toaster309]), laid_on([]), used([]), eaten([breadslice310])]", "", [207]]  # 13
+                          "on([toaster309]), laid_on([]), used([]), eaten([breadslice310])]", "", None]#[207]]  # 13
     tasks["read"] = ["",
                      "[walk(bedroom74),walk(book192),grab(book192),walk(livingroom336),walk(sofa369),sit(sofa369),use(book192)]",
                      [74, 336]]  # 14

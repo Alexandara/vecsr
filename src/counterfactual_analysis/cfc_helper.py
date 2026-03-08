@@ -276,7 +276,7 @@ class VHObject:
 					elif action.action.lower() in ["open"]:
 						open = True
 						closed = False
-					elif action.action.lower() in ["close"]:
+					elif action.action.lower() in ["closed"]:
 						open = False
 						closed = True
 					elif action.action.lower() in ["putobjback", "putoff"]:

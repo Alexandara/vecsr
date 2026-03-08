@@ -64,7 +64,7 @@ if __name__ == '__main__':
     start_time = time.time()
     logging.info("Start Time: %s", datetime.datetime.now())
     # Create simulator
-    simulat = simulator_airsim.AirSimSimulator()
+    simulat = simulator_airsim.MicrosoftAirSimSimulator()
     # Create Harness
     program = scaspharness.ScaspHarness(simulat, initial_rules="scasp_knowledge_base/knowledge_base_airsim.pl", scasp_client=scasp_client)
     logging.info("Program Initialized Time: %s seconds" % (time.time() - start_time))

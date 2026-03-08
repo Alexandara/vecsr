@@ -4,7 +4,7 @@ import os
 import logging
 import math
 from projectairsim import ProjectAirSimClient, Drone, World
-from src.simulators.simulator import Simulator
+from src.simulators.simulator import Simulato
 
 '''
 INFO:The following topics can be subscribed to for robot 'Drone1':
@@ -22,7 +22,6 @@ INFO:    robot_info["actual_pose"]
 INFO:    robot_info["collision_info"]
 INFO:    robot_info["rotor_info"]
 '''
-
 
 class AirSimSimulator(Simulator):
     def __init__(self):
@@ -161,6 +160,7 @@ class AirSimSimulator(Simulator):
             logging.info("Collision detected")
         else:
             logging.info("Collision not detected")
+
 
     @staticmethod
     def which_simulator():

@@ -22,9 +22,9 @@ how to do so can be found in the
 [s(CASP) README](https://gitlab.software.imdea.org/ciao-lang/sCASP). 
 
 To run the program, the VirtualHome executable will have to be on and allowed
-to access network traffic. After turning it on, the main_virtualhome.py file can be run. The 
-first thirty lines of the main method are various parameters concerning levels
-of static analysis, which task to perform, and some quality of life features.
+to access network traffic. Alternatively, if using Mac the executable will be started
+and stopped automatically.
+For all other OSes, after turning it on, the main_virtualhome.py file can be run.
 
 ### Installation for Windows (WSL)
 VECSR in VirtualHome was originally designed for MacOS, so you need to go through some extra setup on WSL to get it working.

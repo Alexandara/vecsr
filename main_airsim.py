@@ -1,7 +1,12 @@
+# main_airsim.py
+
 import logging
 import time
 import datetime
 import yaml
+import re
+
+import asyncio
 
 from src.scasp_functions import scaspharness
 from src.simulators import simulator_airsim
@@ -30,9 +35,10 @@ def run_airsim(final_state, program):
         next_action = check_results(program.run_query([("choose_action", "X", curr_state, final_state)]))['X']
         logging.info("Choose action: %s seconds" % (time.time() - start_time))
         logging.info("Action chosen: " + next_action)
-        a = next_action.replace("(", " ").replace(",", " ").split()
+        # a = next_action.replace("(", " ").replace(",", " ").split()
+        a = re.findall(r'\w+', next_action)
         if a:
-            program.take_action(tuple(a))
+            asyncio.run(program.take_action(tuple(a))) # program.take_action(tuple(a))
         curr_state = check_results(program.run_query([("curr_state", "P")]))['P']
         success_check = state_subset(final_state, curr_state)
 

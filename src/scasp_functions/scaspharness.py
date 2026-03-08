@@ -1,6 +1,9 @@
 import logging
 import socket
 import subprocess
+
+import asyncio
+
 from copy import deepcopy
 from time import sleep
 
@@ -42,7 +45,13 @@ class ScaspHarness():
 		if self.simulator.which_simulator() == "VirtualHome":
 			self.rules = self.simulator.get_state(self.relevant_items, by_item=self.by_item)
 		elif self.simulator.which_simulator() == "AirSim":
-			self.rules = self.simulator.get_state()
+			# self.rules = self.simulator.get_state() cus project airsim
+			try:
+				loop = asyncio.get_event_loop()
+			except RuntimeError:
+				loop = asyncio.new_event_loop()
+				asyncio.set_event_loop(loop)
+			self.rules = loop.run_until_complete(self.simulator.get_state())
 
 	def print_rules_to_file(self, file=None, past_file=None, query=None):
 		"""

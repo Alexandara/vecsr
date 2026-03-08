@@ -4,7 +4,6 @@ import os
 import logging
 import math
 from projectairsim import ProjectAirSimClient, Drone, World
-from src.simulators.simulator import Simulato
 
 '''
 INFO:The following topics can be subscribed to for robot 'Drone1':
@@ -23,7 +22,7 @@ INFO:    robot_info["collision_info"]
 INFO:    robot_info["rotor_info"]
 '''
 
-class AirSimSimulator(Simulator):
+class AirSimSimulator():
     def __init__(self):
         super().__init__()
         self.direction = "posx" # assumes bot spawns facing "rpy-deg": "0 0 0"

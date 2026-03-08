@@ -162,7 +162,7 @@
 #   - "put_away_jackets"
 #   - "put_away_keys"
 #   - "put_down_bags"
-   - "put_in_chair"
+    - "put_in_chair"
 #   - "put_mail_away"
 #   - "put_on_coat_and_shoes"
 #   - "put_out_flowers"

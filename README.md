@@ -51,6 +51,8 @@ The original repositories are depricated and require different Python versions (
     - Do similarly with Airsim, if the sCASP server keeps failing to reconnect try to restart WSL `wsl --shutdown`
 10. After staring the simulator on the windows side, run `main_virtualhome.py` or `main_airsim.py` in WSL.
 
+![ProjectAirSim VECSR-A running in WSL](Examples/project_airsim_example.jpg)
+
 ## Examples
 The examples referenced in ICLP 2025 are included under Examples.
 

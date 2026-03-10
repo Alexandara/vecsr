@@ -56,7 +56,6 @@ class AirSimSimulator():
             self.collision_detected = True
 
     async def get_state(self, rooms=None):
-        self.timestamp += 1 
         scasp_facts = []
         scasp_facts.append([("current_time", str(self.timestamp))])
         
@@ -77,7 +76,7 @@ class AirSimSimulator():
         lin_acc = accels.get('linear', {'x': 0, 'y': 0, 'z': 0})
         ang_acc = accels.get('angular', {'x': 0, 'y': 0, 'z': 0})
         
-        # mapping to prolog scasp
+        # mapping to scasp
         scasp_facts.append([("curr_x", str(round(pos['x'])))])
         scasp_facts.append([("curr_y", str(round(pos['y'])))])
         scasp_facts.append([("curr_z", str(round(pos['z'])))])
@@ -103,9 +102,8 @@ class AirSimSimulator():
         return scasp_facts
 
     async def take_action(self, action):
+        self.timestamp += 1 
         velocity = 5.0
-        
-        print(action)
         
         kinematics = self.drone.get_ground_truth_kinematics()
         pose = kinematics.get('pose', {})

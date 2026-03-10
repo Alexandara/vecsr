@@ -45,7 +45,6 @@ class ScaspHarness():
 		if self.simulator.which_simulator() == "VirtualHome":
 			self.rules = self.simulator.get_state(self.relevant_items, by_item=self.by_item)
 		elif self.simulator.which_simulator() == "AirSim":
-			# self.rules = self.simulator.get_state() cus project airsim
 			try:
 				loop = asyncio.get_event_loop()
 			except RuntimeError:

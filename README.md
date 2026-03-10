@@ -28,7 +28,8 @@ For all other OSes, after turning it on, the main_virtualhome.py file can be run
 
 ### Installation for Windows (WSL)
 VECSR in VirtualHome was originally designed for MacOS, so you need to go through some extra setup on WSL to get it working.
-The original repositories are depricated and require different Python versions (Airsim 3.9, VirtualHome >=3.10).
+Though VirtualHome can run Python 3.10+, We recommend using Python 3.9 for compatibility with both Airsim and VirtualHome.
+
 1. Install WSL
     - `wsl --install` `wsl --update`
     - `sudo apt update` `sudo apt install build-essential`
@@ -45,13 +46,11 @@ The original repositories are depricated and require different Python versions (
 8. Make a Python VENV and install all pip / libs
     - Airsim `uv venv --seed --python 3.9 -c` -> `uv pip install -r requirements.txt` -> cd ProjectAirSim -> `python -m pip install -e client/python/projectairsim`
 	- With ProjectAirSim you may need to `pip uninstall virtualhome` and `pip install "setuptools<70.0.0"`
-    - VirtualHome, `uv venv --seed --python 3.12 -c` -> cd vecsr\virtualhome\ -> `pip install -e .` -> install rest manually.
+    - VirtualHome, `uv venv --seed --python 3.9 -c` -> cd vecsr\virtualhome\ -> `pip install -e .` -> install rest manually.
 9. On the Windows side, download VirtualHome's Windows Exe to somewhere like Program Files, and run it.
     - You can verify if it's open on localhost in WSL w/ `ip route | grep default` for `8080`
     - Do similarly with Airsim, if the sCASP server keeps failing to reconnect try to restart WSL `wsl --shutdown`
 10. After staring the simulator on the windows side, run `main_virtualhome.py` or `main_airsim.py` in WSL.
-
-![ProjectAirSim VECSR-A running in WSL](Examples/project_airsim_example.jpg)
 
 ## Examples
 The examples referenced in ICLP 2025 are included under Examples.
@@ -118,7 +117,7 @@ To run VECSR as a s(CASP) server, use `scasp_server.py` on the Unix side, then w
     - Setup config.yml `ip_address` to `127.0.0.1` or run w/ `0.0.0.0`.
     - The ProjectAirSim drone spawn config is in the `sim_config` folder.
 
-If you try building AirSim yourself, ensure your Visual Studio 2022 has .net, Windows build tools, C++ frameworks, Game Development bundles, and try adding these lines to `C:\Program Files\Epic Games\UE_4.27\Engine\Config\BaseEngine.ini`, else we recommend using the prebuilt binaries given by Microsoft recommend
+If you try building AirSim yourself, ensure your Visual Studio 2022 has .net, Windows build tools, C++ frameworks, Game Development bundles, and try adding these lines to `C:\Program Files\Epic Games\UE_4.27\Engine\Config\BaseEngine.ini` (or 5.2 / 5.7 for Project Airsim), else we recommend using the prebuilt binaries given by either Microsoft Airsim or IAMAI Project AirSim.
 ```
 [PlatformPaths]
 UnrealBuildTool=Engine/Binaries/DotNET/UnrealBuildTool.exe

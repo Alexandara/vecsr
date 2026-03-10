@@ -1,20 +1,20 @@
 % Current State
-current_time(29).
-current_time(29).
-curr_x(32).
+current_time(10).
+current_time(10).
+curr_x(48).
 curr_y(5).
-curr_z(-7).
+curr_z(-8).
 curr_linear_velocity_x(-0.3).
-curr_linear_acceleration_x(-1.4).
+curr_linear_acceleration_x(-1.6).
 curr_angular_velocity_x(-0.0).
-curr_angular_acceleration_x(-0.0).
+curr_angular_acceleration_x(0.0).
 curr_linear_velocity_y(0.0).
 curr_linear_acceleration_y(-0.0).
 curr_angular_velocity_y(-0.2).
 curr_angular_acceleration_y(-0.1).
-curr_linear_velocity_z(0.1).
+curr_linear_velocity_z(0.2).
 curr_linear_acceleration_z(-0.0).
-curr_angular_velocity_z(-0.0).
+curr_angular_velocity_z(0.0).
 curr_angular_acceleration_z(-0.0).
 curr_orientation_x(0).
 curr_orientation_y(0).
@@ -64,4 +64,4 @@ legal_action(move(forward), _) :- is_landed(false), collision_detected(false).
 legal_action(rotate(_), _) :- is_landed(false).
 
 
-?- choose_action(X, loc(31,5,-7), loc(70,0,-10)).
+?- choose_action(X, loc(47,5,-8), loc(70,0,-10)).

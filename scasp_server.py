@@ -14,8 +14,7 @@ if __name__ == '__main__':
     while True:
         try:
             server_socket = socket.socket()  # get instance
-            server_socket.bind((host, port))  # bind host address and port together
-            print(f"{host} | {port}") # debug
+            server_socket.bind((host, port))  # bind host address and port 
             server_socket.listen(1) # max of 1
             conn, address = server_socket.accept()  # accept new connection
             print("Connection from: " + str(address))

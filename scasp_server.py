@@ -7,16 +7,16 @@ if __name__ == '__main__':
     scasprunner = scaspharness.ScaspHarness(None)
     filename = "scasp_knowledge_base/generated_scasp.pl"
 
-    # get the hostname host = socket.gethostname()
+    # WSL doesn't work with `host = socket.gethostname()`, probably because virtual machine & mirrored networking or smth
     host = '0.0.0.0'
     port = 5602  # initiate port no above 1024
     print("Waiting for connection...")
     while True:
         try:
-            server_socket = socket.socket()  # get instance
-            server_socket.bind((host, port))  # bind host address and port 
-            server_socket.listen(1) # max of 1
-            conn, address = server_socket.accept()  # accept new connection
+            server_socket = socket.socket()
+            server_socket.bind((host, port))
+            server_socket.listen(1)
+            conn, address = server_socket.accept()
             print("Connection from: " + str(address))
             break
         except OSError:

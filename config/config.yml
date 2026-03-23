@@ -578,4 +578,6 @@
    scasp_client: # If using as s(CASP) client machine, set to true and include the IP Address for the s(CASP) server
      enabled: True
      ip_address: "127.0.0.1" # 192.168.1.135
+   scasp_server:
+     wsl: True # If using two WSL terminals for hosting both client and server
    task: "loc(70,0,-10)" # Task for drone, currently only able to be set to a location to navigate to

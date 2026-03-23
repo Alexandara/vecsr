@@ -3,9 +3,15 @@ import numpy as np
 import os
 import logging
 import math
+import cv2
 from projectairsim import ProjectAirSimClient, Drone, World
+from projectairsim.types import ImageType
+from projectairsim.utils import unpack_image
 
 '''
+This is just a list of events the default drone can currently sub to.
+Copy pasted here from the terminal so it's easier to see.
+
 INFO:The following topics can be subscribed to for robot 'Drone1':
 INFO:    sensors["Chase"]["scene_camera"]
 INFO:    sensors["Chase"]["scene_camera_info"]
@@ -27,8 +33,10 @@ class AirSimSimulator():
         super().__init__()
         self.direction = "posx" # assumes bot spawns facing "rpy-deg": "0 0 0"
         self.collision_detected = False
+        self.forward_collision_detected = False
         
         self.timestamp = 1
+        self.last_image = 0
         
         self.client = ProjectAirSimClient()
         self.client.connect()
@@ -36,6 +44,18 @@ class AirSimSimulator():
         # ensure whatever setup is in `./sim_config/` folder
         self.world = World(self.client, "scene_basic_drone.jsonc")
         self.drone = Drone(self.client, self.world, "Drone1")
+        
+        # chase as "front camera", can be replaced by whatever the drone's front camera is
+        # but this one just has "chase" and "down" for now
+        self.front_camera_name = "Chase"
+        
+        # use images dir (based on the gitignore)
+        self.images_dir = os.path.join(os.getcwd(), "src/airsim_images")
+        try:
+            os.makedirs(self.images_dir)
+        except OSError:
+            if not os.path.isdir(self.images_dir):
+                raise
         
         # subscribe to collision sensor
         try:
@@ -48,7 +68,6 @@ class AirSimSimulator():
 
         self.drone.enable_api_control()
         self.drone.arm()
-        self.imagenum = 0
         self.last_move = [("last_move", "none")] # self.last_move = []
         
     def on_collision(self, topic, data):
@@ -96,6 +115,10 @@ class AirSimSimulator():
         scasp_facts.append([("is_landed", is_landed)])
         
         scasp_facts.append([("collision_detected", "true" if self.collision_detected else "false")])
+        
+        self.forward_collision_detected = await self.detect_forward_collision()
+        scasp_facts.append([("forward_collision_detected", "true" if self.forward_collision_detected else "false")])
+        
         scasp_facts.append([("facing_direction", self.direction)])
         scasp_facts.append(self.last_move)
 
@@ -157,8 +180,32 @@ class AirSimSimulator():
             logging.info("Collision detected")
         else:
             logging.info("Collision not detected")
-
-
+            
+    async def detect_forward_collision(self):
+        # dummy test refering to what the old CV collision did
+        # can prob make this return the img too or use what it saved in the img folder
+        # TODO actual CV
+        await self.get_images() 
+        return False
+        
+    async def get_images(self):
+        """Capture image from Chase camera and save to images folder"""
+        try:
+            # get_state() is currently called more often / faster than take_action() so ignore if already captured
+            if self.last_image >= self.timestamp:
+                return
+            
+            # it returns extra data like file format w/h etc but we just need the img
+            response = list(self.drone.get_images(self.front_camera_name, [ImageType.SCENE]).values())[0]
+            filename = os.path.join(self.images_dir, f"image_{self.timestamp}.png")
+            img = unpack_image(response)
+            cv2.imwrite(filename, img)
+            logging.info(f"Saved image to {filename}")
+            self.last_image = self.timestamp
+            
+        except Exception as e:
+            logging.error(f"Failed to get image: {e}")
+    
     @staticmethod
     def which_simulator():
         return "AirSim"

@@ -1,16 +1,23 @@
 import socket
+import yaml
 from time import sleep
 
 from src.scasp_functions import scaspharness
 
 if __name__ == '__main__':
+    with open("config/config.yml", "r") as f:
+        config = yaml.safe_load(f)
+    
     scasprunner = scaspharness.ScaspHarness(None)
     filename = "scasp_knowledge_base/generated_scasp.pl"
 
     # WSL doesn't work with `host = socket.gethostname()`, probably because virtual machine & mirrored networking or smth
-    host = '0.0.0.0'
+    host = socket.gethostname()
+    if config["vecsra_settings"]["scasp_server"]["wsl"]:
+        host = '0.0.0.0'
+        
     port = 5602  # initiate port no above 1024
-    print("Waiting for connection...")
+    print(f"Hosting server at {host} on {port} - Waiting for connection...")
     while True:
         try:
             server_socket = socket.socket()

@@ -61,18 +61,29 @@ class AirSimSimulator():
         try:
             self.client.subscribe(
                 self.drone.robot_info["collision_info"],
-                self.on_collision
+                lambda _, data: self.collision_callback(data)
             )
-        except (KeyError, Exception) as e:
-            logging.warning(f"Collision sensor subscription failed: {e}")
+            logging.info(f"Subscribed to collision sensor.")
+        except Exception as e:
+            logging.warning(f"Collision Subscription failed: {e}")
 
         self.drone.enable_api_control()
         self.drone.arm()
         self.last_move = [("last_move", "none")] # self.last_move = []
         
-    def on_collision(self, topic, data):
-        if getattr(data, 'has_collided', False) or data.get('has_collided', False):
-            self.collision_detected = True
+    def collision_callback(self, collision_info):
+        # collision_info is a dict that gets passed whenever the drone touches anything
+        # can be called multiple times per timestamp depending on UE game ticks
+        # collision_info.keys() = ['time_stamp', 'object_name', 'segmentation_id', 'position', 'impact_point', 'normal', 'penetration_depth']
+        
+        self.collision_detected = True
+        col_pos = collision_info.get('position', 'unknown')
+        logging.debug(f"Collision detected at: {col_pos}")
+    
+    # called by anything that "solves" a collision
+    def reset_collision(self):
+        self.collision_detected = False
+        logging.info(f"Collision resolved.")
 
     async def get_state(self, rooms=None):
         scasp_facts = []
@@ -136,6 +147,9 @@ class AirSimSimulator():
             self.last_move = [("last_move", action[0])]
             task = await self.drone.takeoff_async()
             await task
+            
+            if self.collision_detected:
+                self.reset_collision() # mark collision as solved
 
         elif action[0] == "move" and "forward" in action[1]:
             self.last_move = [("last_move", action[0], action[1])]
@@ -144,11 +158,33 @@ class AirSimSimulator():
             elif self.direction == "negx": dx = -5
             elif self.direction == "posy": dy = 5
             elif self.direction == "negy": dy = -5
-
-            move_task = await self.drone.move_to_position_async(
+            
+            # start the movement task
+            task = await self.drone.move_to_position_async(
                 pos['x'] + dx, pos['y'] + dy, pos['z'], velocity
             )
-            await move_task
+            
+            # polling loop
+            while not task.done():
+                if self.collision_detected:
+                    logging.info("Collision! Cancelling movement and backing up.")
+                    
+                    # stop current velocity and move back a bit
+                    await self.drone.move_by_velocity_async(0, 0, 0, 0.1)
+                    back_x = pos['x'] - (dx * 0.1)
+                    back_y = pos['y'] - (dy * 0.1)
+                    back_vel = velocity * 0.5
+                    
+                    task = await self.drone.move_to_position_async(
+                        back_x, back_y, pos['z'], back_vel
+                    )
+                    await task
+                    
+                    break
+                await asyncio.sleep(0.1)
+                
+            if not task.done():
+                task.cancel() # Clean up the task if we broke early
 
         elif action[0] == "rotate":
             side = action[1] # "right" or "left"
@@ -167,12 +203,14 @@ class AirSimSimulator():
             self.direction = dirs[new_idx]
             # yaw_control_mode: 0 = Angle, 1 = Rate
             # yaw_is_rate: False
-            rotate_task = await self.drone.rotate_to_yaw_async(
+            task = await self.drone.rotate_to_yaw_async(
                 yaw=yaw_map[self.direction],
-                timeout_sec=20,
+                timeout_sec=10,
                 margin=0.1
             )
-            await rotate_task
+            await task
+            if self.collision_detected:
+                self.reset_collision() # mark collision as solved
         else:
             logging.warn("Invalid action taken.")
         

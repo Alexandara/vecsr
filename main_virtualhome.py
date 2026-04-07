@@ -41,7 +41,7 @@ def state_subset(final_state, curr_state):
         used_state = make_list_regular(string_state.split("used")[1].split("eaten")[0])
         eaten_state = make_list_regular(string_state.split("eaten")[1])
         return [close_state, holds_state, sat_on_state, on_top_of_state, inside_state, on_state, laid_on_state, used_state, eaten_state]
-
+        
     final = machine_state("".join(final_state.split()))
     curr = machine_state("".join(curr_state.split()))
 

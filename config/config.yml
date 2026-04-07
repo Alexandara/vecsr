@@ -162,7 +162,7 @@
 #   - "put_away_jackets"
 #   - "put_away_keys"
 #   - "put_down_bags"
-   - "put_in_chair"
+    - "put_in_chair"
 #   - "put_mail_away"
 #   - "put_on_coat_and_shoes"
 #   - "put_out_flowers"
@@ -577,5 +577,7 @@
  vecsra_settings:
    scasp_client: # If using as s(CASP) client machine, set to true and include the IP Address for the s(CASP) server
      enabled: True
-     ip_address: "192.168.1.135"
-   task: "loc(70,0,-10)" # Task for drone, currently only able to be set to a location to navigate to
+     ip_address: "127.0.0.1" # 192.168.1.135
+   scasp_server:
+     wsl: True # If using two WSL terminals for hosting both client and server
+   task: "loc(200,0,-10)" # Task for drone, currently only able to be set to a location to navigate to

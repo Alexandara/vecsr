@@ -1,195 +1,253 @@
-from abc import abstractmethod
-
-import airsim
+import asyncio
 import numpy as np
-import cv2
 import os
 import logging
+import math
+import cv2
+from projectairsim import ProjectAirSimClient, Drone, World
+from projectairsim.types import ImageType
+from projectairsim.utils import unpack_image
 
-from src.simulators.simulator import Simulator
-from src.vecsra_modules.image_processor import detected_front_collision
+'''
+This is just a list of events the default drone can currently sub to.
+Copy pasted here from the terminal so it's easier to see.
 
-class AirSimSimulator(Simulator):
+INFO:The following topics can be subscribed to for robot 'Drone1':
+INFO:    sensors["Chase"]["scene_camera"]
+INFO:    sensors["Chase"]["scene_camera_info"]
+INFO:    sensors["DownCamera"]["scene_camera"]
+INFO:    sensors["DownCamera"]["scene_camera_info"]
+INFO:    sensors["DownCamera"]["depth_camera"]
+INFO:    sensors["DownCamera"]["depth_camera_info"]
+INFO:    sensors["IMU1"]["imu_kinematics"]
+INFO:    sensors["GPS"]["gps"]
+INFO:    sensors["Barometer"]["barometer"]
+INFO:    sensors["Magnetometer"]["magnetometer"]
+INFO:    robot_info["actual_pose"]
+INFO:    robot_info["collision_info"]
+INFO:    robot_info["rotor_info"]
+'''
+
+class AirSimSimulator():
     def __init__(self):
         super().__init__()
-
-    @abstractmethod
-    def get_state(self):
-        pass
-
-    @abstractmethod
-    def take_action(self, action):
-        pass
-
-    @staticmethod
-    def which_simulator():
-        return "AirSim"
-
-class ProjectAirSimSimulator(AirSimSimulator):
-    def __init__(self):
-        super().__init__()
-
-    def get_state(self):
-        # Get s(CASP) facts from environment and return them
-        logging.warning("Stub method")
-        scasp_facts = [[("fact", "literal")]]
-        return scasp_facts
-
-    def take_action(self, action):
-        # Takes in an action in the form of a list (e.g. ["move", "forward"] etc.)
-        logging.warning("Stub method")
-
-class MicrosoftAirSimSimulator(AirSimSimulator):
-    def __init__(self):
-        super().__init__()
-        self.direction = "posx" # can be facing positive x, negative x, positive y, or negative y
+        self.direction = "posx" # assumes bot spawns facing "rpy-deg": "0 0 0"
         self.collision_detected = False
-        # connect to the AirSim simulator
-        self.client = airsim.MultirotorClient()
-        self.client.confirmConnection()
-        self.client.enableApiControl(True)
-        self.client.armDisarm(True)
-        self.imagenum = 0
-        self.last_move = []
+        self.forward_collision_detected = False
+        
+        self.timestamp = 1
+        self.last_image = 0
+        
+        self.client = ProjectAirSimClient()
+        self.client.connect()
+        
+        # ensure whatever setup is in `./sim_config/` folder
+        self.world = World(self.client, "scene_basic_drone.jsonc")
+        self.drone = Drone(self.client, self.world, "Drone1")
+        
+        # chase as "front camera", can be replaced by whatever the drone's front camera is
+        # but this one just has "chase" and "down" for now
+        self.front_camera_name = "Chase"
+        
+        # use images dir (based on the gitignore)
+        self.images_dir = os.path.join(os.getcwd(), "src/airsim_images")
+        try:
+            os.makedirs(self.images_dir)
+        except OSError:
+            if not os.path.isdir(self.images_dir):
+                raise
+        
+        # subscribe to collision sensor
+        try:
+            self.client.subscribe(
+                self.drone.robot_info["collision_info"],
+                lambda _, data: self.collision_callback(data)
+            )
+            logging.info(f"Subscribed to collision sensor.")
+        except Exception as e:
+            logging.warning(f"Collision Subscription failed: {e}")
 
-    def get_state(self, rooms=None):
+        self.drone.enable_api_control()
+        self.drone.arm()
+        self.last_move = [("last_move", "none")] # self.last_move = []
+        
+    def collision_callback(self, collision_info):
+        # collision_info is a dict that gets passed whenever the drone touches anything
+        # can be called multiple times per timestamp depending on UE game ticks
+        # collision_info.keys() = ['time_stamp', 'object_name', 'segmentation_id', 'position', 'impact_point', 'normal', 'penetration_depth']
+        
+        self.collision_detected = True
+        col_pos = collision_info.get('position', 'unknown')
+        logging.debug(f"Collision detected at: {col_pos}")
+    
+    # called by anything that "solves" a collision
+    def reset_collision(self):
+        self.collision_detected = False
+        logging.info(f"Collision resolved.")
+
+    async def get_state(self, rooms=None):
         scasp_facts = []
-        state = self.client.getMultirotorState()
+        scasp_facts.append([("current_time", str(self.timestamp))])
+        
+        # get state dictionary from Project AirSim
+        # https://github.com/iamaisim/ProjectAirSim/blob/main/docs/api.md
+        # temporary until we do sensors / more logic stuff
+        kinematics = self.drone.get_ground_truth_kinematics()
+        
+        pose = kinematics.get('pose', {})
+        pos = pose.get('position', {'x': 0, 'y': 0, 'z': 0})
+        ori = pose.get('orientation', {'w': 1, 'x': 0, 'y': 0, 'z': 0})
+        
+        twist = kinematics.get('twist', {})
+        lin_vel = twist.get('linear', {'x': 0, 'y': 0, 'z': 0})
+        ang_vel = twist.get('angular', {'x': 0, 'y': 0, 'z': 0})
+        
+        accels = kinematics.get('accels', {})
+        lin_acc = accels.get('linear', {'x': 0, 'y': 0, 'z': 0})
+        ang_acc = accels.get('angular', {'x': 0, 'y': 0, 'z': 0})
+        
+        # mapping to scasp
+        scasp_facts.append([("curr_x", str(round(pos['x'])))])
+        scasp_facts.append([("curr_y", str(round(pos['y'])))])
+        scasp_facts.append([("curr_z", str(round(pos['z'])))])
 
-        # Collision data
-        # Note: although there is more data, right now we are considering any collisions a failure state
-        scasp_facts.append([("has_collided", state.collision.has_collided)])
-
-        # GPS Location
-        scasp_facts.append([("curr_gps_altitude", str(round(state.gps_location.altitude)))])
-        scasp_facts.append([("curr_longitude", str(round(state.gps_location.longitude,5)))])
-        scasp_facts.append([("curr_latitude", str(round(state.gps_location.longitude, 3)))])
-
-        # Kinematics
-        scasp_facts.append([("curr_angular_acceleration_x",
-                             str(round(state.kinematics_estimated.angular_acceleration.x_val, 1)))])
-        scasp_facts.append([("curr_angular_acceleration_y",
-                             str(round(state.kinematics_estimated.angular_acceleration.y_val, 1)))])
-        scasp_facts.append([("curr_angular_acceleration_z",
-                             str(round(state.kinematics_estimated.angular_acceleration.z_val, 1)))])
-        scasp_facts.append([("curr_angular_velocity_x",
-                             str(round(state.kinematics_estimated.angular_velocity.x_val, 1)))])
-        scasp_facts.append([("curr_angular_velocity_y",
-                             str(round(state.kinematics_estimated.angular_velocity.y_val, 1)))])
-        scasp_facts.append([("curr_angular_velocity_z",
-                             str(round(state.kinematics_estimated.angular_velocity.z_val, 1)))])
-
-        scasp_facts.append([("curr_linear_acceleration_x",
-                             str(round(state.kinematics_estimated.linear_acceleration.x_val, 1)))])
-        scasp_facts.append([("curr_linear_acceleration_y",
-                             str(round(state.kinematics_estimated.linear_acceleration.y_val, 1)))])
-        scasp_facts.append([("curr_linear_acceleration_z",
-                             str(round(state.kinematics_estimated.linear_acceleration.z_val, 1)))])
-        scasp_facts.append([("curr_linear_velocity_x",
-                             str(round(state.kinematics_estimated.linear_velocity.x_val, 1)))])
-        scasp_facts.append([("curr_linear_velocity_y",
-                             str(round(state.kinematics_estimated.linear_velocity.y_val, 1)))])
-        scasp_facts.append([("curr_linear_velocity_z",
-                             str(round(state.kinematics_estimated.linear_velocity.z_val, 1)))])
-
-        scasp_facts.append([("curr_orientation_x", str(round(state.kinematics_estimated.orientation.x_val)))])
-        scasp_facts.append([("curr_orientation_y", str(round(state.kinematics_estimated.orientation.y_val)))])
-        scasp_facts.append([("curr_orientation_z", str(round(state.kinematics_estimated.orientation.z_val)))])
-
-        scasp_facts.append([("curr_x", str(round(state.kinematics_estimated.position.x_val)))])
-        scasp_facts.append([("curr_y", str(round(state.kinematics_estimated.position.y_val)))])
-        scasp_facts.append([("curr_z", str(round(state.kinematics_estimated.position.z_val)))])
-
-        # Landed
-        if state.landed_state:
-            scasp_facts.append([("is_landed", "false")])
-        else:
-            scasp_facts.append([("is_landed", "true")])
-
-        # Collision detection
-        if self.collision_detected:
-            scasp_facts.append([("collision_detected", "true")])
-        else:
-            scasp_facts.append([("collision_detected", "false")])
-
-        # Direction
+        for axis in ['x', 'y', 'z']:
+            scasp_facts.append([(f"curr_linear_velocity_{axis}", str(round(lin_vel[axis], 1)))])
+            scasp_facts.append([(f"curr_linear_acceleration_{axis}", str(round(lin_acc[axis], 1)))])
+            scasp_facts.append([(f"curr_angular_velocity_{axis}", str(round(ang_vel[axis], 1)))])
+            scasp_facts.append([(f"curr_angular_acceleration_{axis}", str(round(ang_acc[axis], 1)))])
+            
+        scasp_facts.append([("curr_orientation_x", str(round(ori['x'])))])
+        scasp_facts.append([("curr_orientation_y", str(round(ori['y'])))])
+        scasp_facts.append([("curr_orientation_z", str(round(ori['z'])))])
+        
+        landed_state = self.drone.get_landed_state()
+        is_landed = "true" if landed_state == 0 else "false" # 0 is landed
+        scasp_facts.append([("is_landed", is_landed)])
+        
+        scasp_facts.append([("collision_detected", "true" if self.collision_detected else "false")])
+        
+        self.forward_collision_detected = await self.detect_forward_collision()
+        scasp_facts.append([("forward_collision_detected", "true" if self.forward_collision_detected else "false")])
+        
         scasp_facts.append([("facing_direction", self.direction)])
-
-        # Last Move
         scasp_facts.append(self.last_move)
 
         return scasp_facts
 
-    def take_action(self, action):
-        velocity = 5
-        self.client.confirmConnection()
-        self.client.enableApiControl(True)
+    async def take_action(self, action):
+        self.timestamp += 1 
+        velocity = 5.0
+        
+        kinematics = self.drone.get_ground_truth_kinematics()
+        pose = kinematics.get('pose', {})
+        pos = pose.get('position', {'x': 0, 'y': 0, 'z': 0})
+
         if action[0] == "takeoff":
-            self.last_move = [("last_move", "takeoff")]
-            self.client.takeoffAsync().join()
-            position = self.client.getMultirotorState().kinematics_estimated.position
-            self.client.moveToPositionAsync(position.x_val, position.y_val, -10, velocity).join()
+            self.last_move = [("last_move", action[0])]
+            task = await self.drone.takeoff_async()
+            await task
+            
+            if self.collision_detected:
+                self.reset_collision() # mark collision as solved
+
         elif action[0] == "move" and "forward" in action[1]:
-            self.last_move = [("last_move", "move", "forward")]
-            position = self.client.getMultirotorState().kinematics_estimated.position
-            if self.direction == "posx":
-                self.client.moveToPositionAsync(position.x_val + 5, position.y_val, position.z_val, velocity).join()
-            elif self.direction == "negx":
-                self.client.moveToPositionAsync(position.x_val - 5, position.y_val, position.z_val, velocity).join()
-            elif self.direction == "posy":
-                self.client.moveToPositionAsync(position.x_val, position.y_val + 5, position.z_val, velocity).join()
-            elif self.direction == "negy":
-                self.client.moveToPositionAsync(position.x_val, position.y_val - 5, position.z_val, velocity).join()
-        elif action[0] == "rotate" and "right" in action[1]:
-            self.last_move = [("last_move", "rotate", "right")]
-            if self.direction == "posx":
-                self.client.rotateToYawAsync(90).join()
-                self.direction = "posy"
-            elif self.direction == "negx":
-                self.client.rotateToYawAsync(270).join()
-                self.direction = "negy"
-            elif self.direction == "posy":
-                self.client.rotateToYawAsync(180).join()
-                self.direction = "negx"
-            elif self.direction == "negy":
-                self.client.rotateToYawAsync(0).join()
-                self.direction = "posx"
-        elif action[0] == "rotate" and "left" in action[1]:
-            self.last_move = [("last_move", "rotate", "left")]
-            if self.direction == "posx":
-                self.client.rotateToYawAsync(270).join()
-                self.direction = "negy"
-            elif self.direction == "negx":
-                self.client.rotateToYawAsync(90).join()
-                self.direction = "posy"
-            elif self.direction == "posy":
-                self.client.rotateToYawAsync(0).join()
-                self.direction = "posx"
-            elif self.direction == "negy":
-                self.client.rotateToYawAsync(180).join()
-                self.direction = "negx"
+            self.last_move = [("last_move", action[0], action[1])]
+            dx, dy = 0, 0
+            if self.direction == "posx": dx = 5
+            elif self.direction == "negx": dx = -5
+            elif self.direction == "posy": dy = 5
+            elif self.direction == "negy": dy = -5
+            
+            # start the movement task
+            task = await self.drone.move_to_position_async(
+                pos['x'] + dx, pos['y'] + dy, pos['z'], velocity
+            )
+            
+            # polling loop
+            while not task.done():
+                if self.collision_detected:
+                    logging.info("Collision! Cancelling movement and backing up.")
+                    
+                    # stop current velocity and move back a bit
+                    await self.drone.move_by_velocity_async(0, 0, 0, 0.1)
+                    back_x = pos['x'] - (dx * 0.1)
+                    back_y = pos['y'] - (dy * 0.1)
+                    back_vel = velocity * 0.5
+                    
+                    task = await self.drone.move_to_position_async(
+                        back_x, back_y, pos['z'], back_vel
+                    )
+                    await task
+                    
+                    break
+                await asyncio.sleep(0.1)
+                
+            if not task.done():
+                task.cancel() # Clean up the task if we broke early
+
+        elif action[0] == "rotate":
+            side = action[1] # "right" or "left"
+            self.last_move = [("last_move", "rotate", side)]
+            
+            # yaw | 0 = North (+X), pi/2 = East (+Y), pi = South (-X), 3pi/2 = West (-Y)
+            yaw_map = {"posx": 0.0, "posy": math.pi/2, "negx": math.pi, "negy": 3*math.pi/2}
+            dirs = ["posx", "posy", "negx", "negy"]
+            curr_idx = dirs.index(self.direction)
+            
+            if "right" in side:
+                new_idx = (curr_idx + 1) % 4
+            else:
+                new_idx = (curr_idx - 1) % 4
+                
+            self.direction = dirs[new_idx]
+            # yaw_control_mode: 0 = Angle, 1 = Rate
+            # yaw_is_rate: False
+            task = await self.drone.rotate_to_yaw_async(
+                yaw=yaw_map[self.direction],
+                timeout_sec=10,
+                margin=0.1
+            )
+            await task
+            if self.collision_detected:
+                self.reset_collision() # mark collision as solved
         else:
             logging.warn("Invalid action taken.")
-        png, npng = self.get_images()
-        logging.info("Checking for collisions")
-        self.collision_detected = detected_front_collision(npng, num=self.imagenum)
+        
         if self.collision_detected:
             logging.info("Collision detected")
         else:
             logging.info("Collision not detected")
-        self.save_images(png, npng)
-
-    def get_images(self):
-        responses = self.client.simGetImages([
-            airsim.ImageRequest("1", airsim.ImageType.Scene),
-            airsim.ImageRequest("1", airsim.ImageType.Scene, False, False)])
-        png_image = responses[0].image_data_uint8
-        img1d = np.fromstring(responses[1].image_data_uint8, dtype=np.uint8)  # get numpy array
-        np_image = img1d.reshape(responses[1].height, responses[1].width, 3)
-        return png_image, np_image
-
-    def save_images(self, png_image, np_image=None):
-        airsim.write_file(os.path.normpath('airsim_images\\image' + str(self.imagenum) + '.png'), png_image)
-        if np_image is not None:
-            cv2.imwrite(os.path.normpath('airsim_images\\np_image' + str(self.imagenum) + '.png'), np_image)
-        self.imagenum = self.imagenum + 1
+            
+    async def detect_forward_collision(self):
+        # dummy test refering to what the old CV collision did
+        # can prob make this return the img too or use what it saved in the img folder
+        # TODO actual CV
+        await self.get_images() 
+        return False
+        
+    async def get_images(self):
+        """Capture image from Chase camera and save to images folder"""
+        try:
+            # get_state() is currently called more often / faster than take_action() so ignore if already captured
+            if self.last_image >= self.timestamp:
+                return
+            
+            # it returns extra data like file format w/h etc but we just need the img
+            response = list(self.drone.get_images(self.front_camera_name, [ImageType.SCENE]).values())[0]
+            filename = os.path.join(self.images_dir, f"image_{self.timestamp}.png")
+            img = unpack_image(response)
+            cv2.imwrite(filename, img)
+            logging.info(f"Saved image to {filename}")
+            self.last_image = self.timestamp
+            
+        except Exception as e:
+            logging.error(f"Failed to get image: {e}")
+    
+    @staticmethod
+    def which_simulator():
+        return "AirSim"
+    
+    def __del__(self):
+        self.client.disconnect()
+        

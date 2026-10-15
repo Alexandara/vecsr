@@ -393,6 +393,37 @@ type(lightswitch3258, lightswitch).
 has_switch(lightswitch3258).
 has_plug(lightswitch3258).
 electronics(lightswitch3258).
+% Test
+% coin
+type(coin3258, coin).
+grabbable(coin3258).
+movable(coin3258).
+% tape
+type(tape3259, tape).
+grabbable(tape3259).
+movable(tape3259).
+% lighter
+type(lighter3260, lighter).
+grabbable(lighter3260).
+movable(lighter3260).
+has_switch(lighter3260).
+% microphone
+type(microphone3261, microphone).
+grabbable(microphone3261).
+movable(microphone3261).
+has_switch(microphone3261).
+electronics(microphone3261).
+has_plug(microphone3261).
+% wallpictureframe that's not close
+type(wallpictureframe3262, wallpictureframe).
+grabbable(wallpictureframe3262).
+movable(wallpictureframe3262).
+% toothbrush
+type(toothbrush3263, toothbrush).
+grabbable(toothbrush3263).
+recipient(toothbrush3263).
+movable(toothbrush3263).
+props(toothbrush3263).
 
 % Inside and ontopof for added predicates
 extra_inside([[vacuum0, bedroom74],
@@ -454,7 +485,13 @@ extra_inside([[vacuum0, bedroom74],
 [shower3240,bathroom11],
 [mirror3242,bathroom11],
 [dryer3254,bathroom11],
-[razor3257,bathroom11]
+[razor3257,bathroom11],
+[coin3258,livingroom336],
+[tape3259,livingroom336],
+[lighter3260,livingroom336],
+[microphone3261,livingroom336],
+[wallpictureframe3262,livingroom336],
+[toothbrush3263, bedroom74]
 ]).
 
 extra_ontopof([[vacuum, floor75],
@@ -515,7 +552,13 @@ extra_ontopof([[vacuum, floor75],
 [shower3240,bathroomcounter50],
 [mirror3242,bathroomcounter50],
 [dryer3254,bathroomcounter50],
-[razor3257,bathroomcounter50]
+[razor3257,bathroomcounter50],
+[coin3258,coffeetable372],
+[tape3259,coffeetable372],
+[lighter3260,coffeetable372],
+[microphone3261,coffeetable372],
+[wallpictureframe3262,coffeetable372],
+[toothpaste3263, coffeetable113]
 ]).
 
 % Constraints

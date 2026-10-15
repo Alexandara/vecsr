@@ -9,8 +9,10 @@ def run(task, program, answer=None, take_actions=True):
     start_time = time.time()
     logging.info("Task received: %s seconds" % start_time)
     if not answer:
-        results = program.run_query([("complete_task", task, "P")])
-        logging.info("s(CASP) Query Run: %s seconds" % (time.time() - start_time))
+        before_time = time.time()
+        results = program.run_query([("complete_task", task, "P")], task=task)
+        run_time = (time.time() - before_time)
+        logging.info("s(CASP) Query Run: %s seconds" % run_time)
         if results:
             results = results[0]
         else:

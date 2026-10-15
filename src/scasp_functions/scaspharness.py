@@ -1,8 +1,7 @@
 import logging
-import socket
 import subprocess
 from copy import deepcopy
-from time import sleep
+import time
 
 
 class ScaspHarness():
@@ -109,7 +108,7 @@ class ScaspHarness():
 				final_rules += string_rule
 		return final_rules
 
-	def run_query(self, query):
+	def run_query(self, query, task=""):
 		"""
 		This method runs a passed in query and returns the results from s(CASP)
 		:param query: query to run, in the format of a list of tuples
@@ -124,7 +123,7 @@ class ScaspHarness():
 		f.write("\n\n?- ")
 		f.write(str_query)
 		f.close()
-		result, _ = self.run_generated_scasp(self.scasp_client)
+		result, _ = self.run_generated_scasp(self.scasp_client, task=task)
 		if result:
 			logging.info("Success!")
 			logging.debug(result)
@@ -157,7 +156,7 @@ class ScaspHarness():
 		string_rule = string_rule[0:-2] + ")"
 		return string_rule
 
-	def run_generated_scasp(self, scasp_client=None):
+	def run_generated_scasp(self, scasp_client=None, task=""):
 		"""
 		Runs the generated_scasp.pl file
 		:return: results of running the file
@@ -180,7 +179,12 @@ class ScaspHarness():
 			else:
 				return True, data
 		else:
+			before_time = time.time()
 			output = subprocess.run([self.scasp_runner], shell=True, capture_output=True, text=True)
+			run_time = (time.time() - before_time)
+			if task:
+				with open("execution_times.csv", "a") as f:
+					f.write(task + "," + str(run_time) + "\n")
 			out = output.stdout
 			err = output.stderr
 			if 'BINDINGS' in out and "BINDINGS: ?" not in out:

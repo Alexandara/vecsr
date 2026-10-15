@@ -6,10 +6,10 @@ complete_task(added_meat_to_freezer, P) :-
 	transform([close([]), holds([]), sat_on([]), on_top_of([[GROCERIES1, FREEZER1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([FREEZER1])], P).
 
 % Annoy your dog
-get_relevant(annoy_your_dog, [CHAIR1, LASERPOINTER1, DOG1]) :-
-	type(CHAIR1, chair), type(LASERPOINTER1, laserpointer), type(DOG1, dog).
+get_relevant(annoy_your_dog, [CHAIR1, LASERPOINTER1]) :-
+	type(CHAIR1, chair), type(LASERPOINTER1, laserpointer).
 complete_task(annoy_your_dog, P) :-
-	type(CHAIR1, chair), type(LASERPOINTER1, laserpointer), type(DOG1, dog),
+	type(CHAIR1, chair), type(LASERPOINTER1, laserpointer),
 	transform([close([]), holds([]), sat_on([CHAIR1]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), off([LASERPOINTER1]), shake([LASERPOINTER1]), standup([character1])], P).
 
 % Answer door
@@ -27,10 +27,10 @@ complete_task(apply_lotion, P) :-
 	transform([close([]), holds([]), sat_on([BED1]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), push([BED1]), wash([BED1])], P).
 
 % Arrange bookshelf
-get_relevant(arrange_bookshelf, [RAG1, BOOKSHELF1, BOOK1, BOOK3, DESK1, BOOK2]) :-
-	type(RAG1, rag), type(BOOKSHELF1, bookshelf), type(BOOK1, book), type(BOOK3, book), type(DESK1, desk), type(BOOK2, book).
+get_relevant(arrange_bookshelf, [BOOKSHELF1, BOOK1, BOOK3, DESK1, BOOK2]) :-
+	type(BOOKSHELF1, bookshelf), type(BOOK1, book), type(BOOK3, book), type(DESK1, desk), type(BOOK2, book).
 complete_task(arrange_bookshelf, P) :-
-	type(RAG1, rag), type(BOOKSHELF1, bookshelf), type(BOOK1, book), type(BOOK3, book), type(DESK1, desk), type(BOOK2, book),
+	type(BOOKSHELF1, bookshelf), type(BOOK1, book), type(BOOK3, book), type(DESK1, desk), type(BOOK2, book),
 	transform([close([]), holds([]), sat_on([]), on_top_of([[BOOK1, BOOKSHELF1], [BOOK3, BOOKSHELF1], [BOOK2, BOOKSHELF1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), open([BOOKSHELF1, DESK1]), wipe([BOOKSHELF1])], P).
 
 % Arrange folders
@@ -48,17 +48,17 @@ complete_task(bake, P) :-
 	transform([close([]), holds([TRAY1]), sat_on([]), on_top_of([[DOUGH1, TRAY1]]), inside([]), on([OVEN1]), laid_on([]), used([]), eaten([]), closed([OVEN1]), putin([TRAY1])], P).
 
 % Bathe
-get_relevant(bathe, [SOAP1, FAUCET1, ARMSBOTH1, BATHTUB1, LEGSBOTH1, SPONGE1, CLOTHESDRESS1]) :-
-	type(SOAP1, soap), type(FAUCET1, faucet), type(ARMSBOTH1, armsboth), type(BATHTUB1, bathtub), type(LEGSBOTH1, legsboth), type(SPONGE1, sponge), type(CLOTHESDRESS1, clothesdress).
+get_relevant(bathe, [SOAP1, FAUCET1, ARMSBOTH1, BATHTUB1, LEGSBOTH1]) :-
+	type(SOAP1, soap), type(FAUCET1, faucet), type(ARMSBOTH1, armsboth), type(BATHTUB1, bathtub), type(LEGSBOTH1, legsboth).
 complete_task(bathe, P) :-
-	type(SOAP1, soap), type(FAUCET1, faucet), type(ARMSBOTH1, armsboth), type(BATHTUB1, bathtub), type(LEGSBOTH1, legsboth), type(SPONGE1, sponge), type(CLOTHESDRESS1, clothesdress),
+	type(SOAP1, soap), type(FAUCET1, faucet), type(ARMSBOTH1, armsboth), type(BATHTUB1, bathtub), type(LEGSBOTH1, legsboth),
 	transform([close([]), holds([]), sat_on([BATHTUB1]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), enter([BATHTUB1]), leave([BATHTUB1]), off([FAUCET1]), pour([SOAP1]), rinse([ARMSBOTH1, LEGSBOTH1]), scrub([ARMSBOTH1, LEGSBOTH1]), standup([character1])], P).
 
 % Break table
-get_relevant(break_table, [CHAIR1, TABLE1]) :-
-	type(CHAIR1, chair), type(TABLE1, tabl).
+get_relevant(break_table, [CHAIR1]) :-
+	type(CHAIR1, chair).
 complete_task(break_table, P) :-
-	type(CHAIR1, chair), type(TABLE1, tabl),
+	type(CHAIR1, chair),
 	transform([close([]), holds([]), sat_on([CHAIR1]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), pull([CHAIR1])], P).
 
 % Breakfast
@@ -69,31 +69,31 @@ complete_task(breakfast, P) :-
 	transform([close([]), holds([FOODFOOD1]), sat_on([]), on_top_of([]), inside([]), on([TELEVISION1]), laid_on([BED1]), used([]), eaten([FOODFOOD1]), watch([TELEVISION1])], P).
 
 % Bring dirty plate to sink
-get_relevant(bring_dirty_plate_to_sink, [TABLE1, PLATE1, SINK1]) :-
-	type(TABLE1, tabl), type(PLATE1, plate), type(SINK1, sink).
+get_relevant(bring_dirty_plate_to_sink, [PLATE1, SINK1]) :-
+    type(PLATE1, plate), type(SINK1, sink).
 complete_task(bring_dirty_plate_to_sink, P) :-
-	type(TABLE1, tabl), type(PLATE1, plate), type(SINK1, sink),
+	type(PLATE1, plate), type(SINK1, sink),
 	transform([close([]), holds([]), sat_on([]), on_top_of([[PLATE1, SINK1]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 
 % Bring food
-get_relevant(bring_food, [FOODFOOD1, PLATE1, BED1]) :-
-	type(FOODFOOD1, foodfood), type(PLATE1, plate), type(BED1, bed).
+get_relevant(bring_food, [FOODFOOD1, PLATE1]) :-
+	type(FOODFOOD1, foodfood), type(PLATE1, plate).
 complete_task(bring_food, P) :-
-	type(FOODFOOD1, foodfood), type(PLATE1, plate), type(BED1, bed),
+	type(FOODFOOD1, foodfood), type(PLATE1, plate),
 	transform([close([]), holds([PLATE1]), sat_on([]), on_top_of([[FOODFOOD1, PLATE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), sleep([character1]), wakeup([character1])], P).
 
 % Broom
-get_relevant(broom, [FLOOR1, DUSTPAN1]) :-
-	type(FLOOR1, floor), type(DUSTPAN1, dustpan).
+get_relevant(broom, [FLOOR1]) :-
+	type(FLOOR1, floor).
 complete_task(broom, P) :-
-	type(FLOOR1, floor), type(DUSTPAN1, dustpan),
+	type(FLOOR1, floor),
 	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), sweep([FLOOR1])], P).
 
 % Browse computer
-get_relevant(browse_computer, [KEYBOARD1, CHAIR1, MOUSE1, MAIL1, DESK1, COMPUTER1]) :-
-	type(KEYBOARD1, keyboard), type(CHAIR1, chair), type(MOUSE1, mouse), type(MAIL1, mail), type(DESK1, desk), type(COMPUTER1, computer).
+get_relevant(browse_computer, [KEYBOARD1, CHAIR1, MAIL1, COMPUTER1]) :-
+	type(KEYBOARD1, keyboard), type(CHAIR1, chair), type(MAIL1, mail), type(COMPUTER1, computer).
 complete_task(browse_computer, P) :-
-	type(KEYBOARD1, keyboard), type(CHAIR1, chair), type(MOUSE1, mouse), type(MAIL1, mail), type(DESK1, desk), type(COMPUTER1, computer),
+	type(KEYBOARD1, keyboard), type(CHAIR1, chair), type(MAIL1, mail), type(COMPUTER1, computer),
 	transform([close([]), holds([MAIL1]), sat_on([CHAIR1]), on_top_of([]), inside([]), on([COMPUTER1]), laid_on([]), used([]), eaten([]), read([MAIL1]), type([KEYBOARD1])], P).
 
 % Browse internet
@@ -104,31 +104,31 @@ complete_task(browse_internet, P) :-
 	transform([close([]), holds([]), sat_on([CHAIR1]), on_top_of([]), inside([]), on([COMPUTER1]), laid_on([]), used([]), eaten([]), type([KEYBOARD1])], P).
 
 % Brush hair
-get_relevant(brush_hair, [HAIRBRUSH1, HAIR1, MIRROR1]) :-
-	type(HAIRBRUSH1, hairbrush), type(HAIR1, hair), type(MIRROR1, mirror).
+get_relevant(brush_hair, [HAIR1]) :-
+	type(HAIR1, hair).
 complete_task(brush_hair, P) :-
-	type(HAIRBRUSH1, hairbrush), type(HAIR1, hair), type(MIRROR1, mirror),
+	type(HAIR1, hair),
 	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), brush([HAIR1])], P).
 
 % Brush teeth
-get_relevant(brush_teeth, [TOOTHBRUSH1, TEETH1, TOOTHPASTE1, TOOTHBRUSHHOLDER1]) :-
-	type(TOOTHBRUSH1, toothbrush), type(TEETH1, teeth), type(TOOTHPASTE1, toothpaste), type(TOOTHBRUSHHOLDER1, toothbrushholder).
+get_relevant(brush_teeth, [TOOTHBRUSH1, TEETH1, TOOTHPASTE1]) :-
+	type(TOOTHBRUSH1, toothbrush), type(TEETH1, teeth), type(TOOTHPASTE1, toothpaste).
 complete_task(brush_teeth, P) :-
-	type(TOOTHBRUSH1, toothbrush), type(TEETH1, teeth), type(TOOTHPASTE1, toothpaste), type(TOOTHBRUSHHOLDER1, toothbrushholder),
+	type(TOOTHBRUSH1, toothbrush), type(TEETH1, teeth), type(TOOTHPASTE1, toothpaste),
 	transform([close([]), holds([TOOTHBRUSH1, TOOTHPASTE1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), pour([TOOTHPASTE1]), scrub([TEETH1])], P).
 
 % Celebrate
-get_relevant(celebrate, [FOODFOOD1, WOMAN1, CHAIR1, PLATE1, WINEGLASS1, PLATE3, WOMAN2, PLATE2]) :-
-	type(FOODFOOD1, foodfood), type(WOMAN1, woman), type(CHAIR1, chair), type(PLATE1, plate), type(WINEGLASS1, wineglass), type(PLATE3, plate), type(WOMAN2, woman), type(PLATE2, plate).
+get_relevant(celebrate, [WOMAN1, PLATE1, WINEGLASS1, WOMAN2]) :-
+	type(WOMAN1, woman), type(PLATE1, plate), type(WINEGLASS1, wineglass), type(WOMAN2, woman).
 complete_task(celebrate, P) :-
-	type(FOODFOOD1, foodfood), type(WOMAN1, woman), type(CHAIR1, chair), type(PLATE1, plate), type(WINEGLASS1, wineglass), type(PLATE3, plate), type(WOMAN2, woman), type(PLATE2, plate),
+	type(WOMAN1, woman), type(PLATE1, plate), type(WINEGLASS1, wineglass), type(WOMAN2, woman),
 	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([PLATE1]), drink([WINEGLASS1]), greet([WOMAN1, WOMAN2])], P).
 
 % Celebrate birthday with nice meal
-get_relevant(celebrate_birthday_with_nice_meal, [FOODFOOD1, TABLE1, PLATE1, WINEGLASS1, CHAIR1]) :-
-	type(FOODFOOD1, foodfood), type(TABLE1, tabl), type(PLATE1, plate), type(WINEGLASS1, wineglass), type(CHAIR1, chair).
+get_relevant(celebrate_birthday_with_nice_meal, [PLATE1, WINEGLASS1]) :-
+	type(PLATE1, plate), type(WINEGLASS1, wineglass).
 complete_task(celebrate_birthday_with_nice_meal, P) :-
-	type(FOODFOOD1, foodfood), type(TABLE1, tabl), type(PLATE1, plate), type(WINEGLASS1, wineglass), type(CHAIR1, chair),
+	type(PLATE1, plate), type(WINEGLASS1, wineglass),
 	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([PLATE1]), drink([WINEGLASS1])], P).
 
 % Change TV channel
@@ -153,13 +153,13 @@ complete_task(change_curtains, P) :-
 	transform([close([]), holds([]), sat_on([]), on_top_of([[CURTAIN1, WINDOW1], [BASKETFORCLOTHES1, WINDOW1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([CLOSET1]), fold([CURTAIN1]), pull([CURTAIN1]), touch([CURTAIN1]), unfold([CURTAIN1])], P).
 
 % Change light
-get_relevant(change_light, [TRASHCAN1, LIGHTBULB1, LIGHTBULB2, CHAIR1, LIGHT1, CABINET1]) :-
-	type(TRASHCAN1, trashcan), type(LIGHTBULB1, lightbulb), type(LIGHTBULB2, lightbulb), type(CHAIR1, chair), type(LIGHT1, light), type(CABINET1, cabinet),
+get_relevant(change_light, [TRASHCAN1, LIGHTBULB1, LIGHTBULB2]) :-
+	type(TRASHCAN1, trashcan), type(LIGHTBULB1, lightbulb), type(LIGHTBULB2, lightbulb),
 	LIGHTBULB1 \= LIGHTBULB2.
 complete_task(change_light, P) :-
-	type(TRASHCAN1, trashcan), type(LIGHTBULB1, lightbulb), type(LIGHTBULB2, lightbulb), type(CHAIR1, chair), type(LIGHT1, light), type(CABINET1, cabinet),
+	type(TRASHCAN1, trashcan), type(LIGHTBULB1, lightbulb), type(LIGHTBULB2, lightbulb),
 	LIGHTBULB1 \= LIGHTBULB2,
-	transform([close([]), holds([LIGHTBULB2]), sat_on([]), on_top_of([[LIGHTBULB1, TRASHCAN1]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+	transform([close([]), holds([LIGHTBULB2]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), throw([LIGHTBULB1])], P).
 
 % Check email
 get_relevant(check_email, [LAPTOP1, CHAIR1]) :-
@@ -169,10 +169,10 @@ complete_task(check_email, P) :-
 	transform([close([]), holds([LAPTOP1]), sat_on([CHAIR1]), on_top_of([]), inside([]), on([LAPTOP1]), laid_on([]), used([]), eaten([]), touch([LAPTOP1])], P).
 
 % Check homework
-get_relevant(check_homework, [TABLE1, CHAIR1, CHILD1, HOMEWORK1]) :-
-	type(TABLE1, tabl), type(CHAIR1, chair), type(CHILD1, child), type(HOMEWORK1, homework).
+get_relevant(check_homework, [TABLE1, CHILD1, HOMEWORK1]) :-
+	type(TABLE1, tabl), type(CHILD1, child), type(HOMEWORK1, homework).
 complete_task(check_homework, P) :-
-	type(TABLE1, tabl), type(CHAIR1, chair), type(CHILD1, child), type(HOMEWORK1, homework),
+	type(TABLE1, tabl), type(CHILD1, child), type(HOMEWORK1, homework),
 	transform([close([]), holds([]), sat_on([]), on_top_of([[HOMEWORK1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), talk([CHILD1])], P).
 
 % Check self in mirror
@@ -201,13 +201,13 @@ get_relevant(clean_bathroom, [DETERGENT1, TOILET1, SHOWER1, BRUSH1]) :-
 	type(DETERGENT1, detergent), type(TOILET1, toilet), type(SHOWER1, shower), type(BRUSH1, brush).
 complete_task(clean_bathroom, P) :-
 	type(DETERGENT1, detergent), type(TOILET1, toilet), type(SHOWER1, shower), type(BRUSH1, brush),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[DETERGENT1, TOILET1], [BRUSH1, TOILET1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), rinse([TOILET1, SHOWER1]), scrub([TOILET1, SHOWER1])], P).
+	transform([close([]), holds([BRUSH1, DETERGENT1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), rinse([TOILET1, SHOWER1]), scrub([TOILET1, SHOWER1])], P).
 
 % Clean dishes
-get_relevant(clean_dishes, [DISHSOAP1, DRINKINGGLASS1, COFFEECUP1, FAUCET1, PLATE1, DETERGENT1, DISHWASHER1, SINK1]) :-
-	type(DISHSOAP1, dishsoap), type(DRINKINGGLASS1, drinkingglass), type(COFFEECUP1, coffeecup), type(FAUCET1, faucet), type(PLATE1, plate), type(DETERGENT1, detergent), type(DISHWASHER1, dishwasher), type(SINK1, sink).
+get_relevant(clean_dishes, [DISHSOAP1, DRINKINGGLASS1, COFFEECUP1, FAUCET1, PLATE1, DETERGENT1, DISHWASHER1]) :-
+	type(DISHSOAP1, dishsoap), type(DRINKINGGLASS1, drinkingglass), type(COFFEECUP1, coffeecup), type(FAUCET1, faucet), type(PLATE1, plate), type(DETERGENT1, detergent), type(DISHWASHER1, dishwasher).
 complete_task(clean_dishes, P) :-
-	type(DISHSOAP1, dishsoap), type(DRINKINGGLASS1, drinkingglass), type(COFFEECUP1, coffeecup), type(FAUCET1, faucet), type(PLATE1, plate), type(DETERGENT1, detergent), type(DISHWASHER1, dishwasher), type(SINK1, sink),
+	type(DISHSOAP1, dishsoap), type(DRINKINGGLASS1, drinkingglass), type(COFFEECUP1, coffeecup), type(FAUCET1, faucet), type(PLATE1, plate), type(DETERGENT1, detergent), type(DISHWASHER1, dishwasher),
 	transform([close([]), holds([]), sat_on([]), on_top_of([[DISHSOAP1, PLATE1], [DRINKINGGLASS1, DISHWASHER1], [COFFEECUP1, DISHWASHER1], [PLATE1, DISHWASHER1], [DETERGENT1, DISHWASHER1]]), inside([]), on([FAUCET1, DISHWASHER1]), laid_on([]), used([]), eaten([]), closed([DISHWASHER1]), wash([DRINKINGGLASS1, COFFEECUP1, PLATE1])], P).
 
 % Clean eggs from our chickens
@@ -215,7 +215,7 @@ get_relevant(clean_eggs_from_our_chickens, [RAG1, FAUCET1, BOX1, SPONGE1, SINK1,
 	type(RAG1, rag), type(FAUCET1, faucet), type(BOX1, box), type(SPONGE1, sponge), type(SINK1, sink), type(FRIDGE1, fridge), type(FOODEGG1, foodegg).
 complete_task(clean_eggs_from_our_chickens, P) :-
 	type(FAUCET1, faucet), type(BOX1, box), type(FRIDGE1, fridge), type(FOODEGG1, foodegg),
-	transform([close([]), holds([BOX1, FOODEGG1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([FRIDGE1]), off([FAUCET1]), putin([BOX1, FOODEGG1]), rinse([FOODEGG1]), scrub([FOODEGG1]), wipe([FOODEGG1])], P).
+	transform([close([]), holds([FOODEGG1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), rinse([FOODEGG1])], P).
 
 % Clean floor
 get_relevant(clean_floor, [CLEANINGBOTTLE1]) :-
@@ -232,24 +232,24 @@ complete_task(clean_floor, P) :-
 	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), wash([CLEANINGBOTTLE1])], P).
 
 % Clean floor
-get_relevant(clean_floor, [MOP1, CLEANINGSOLUTION1, MOPBUCKET1]) :-
-	type(MOP1, mop), type(CLEANINGSOLUTION1, cleaningsolution), type(MOPBUCKET1, mopbucket).
+get_relevant(clean_floor, [MOP1, CLEANINGSOLUTION1]) :-
+	type(MOP1, mop), type(CLEANINGSOLUTION1, cleaningsolution).
 complete_task(clean_floor, P) :-
-	type(MOP1, mop), type(CLEANINGSOLUTION1, cleaningsolution), type(MOPBUCKET1, mopbucket),
+	type(MOP1, mop), type(CLEANINGSOLUTION1, cleaningsolution),
 	transform([close([]), holds([MOP1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), pour([CLEANINGSOLUTION1]), soak([MOP1])], P).
 
 % Clean fridge
-get_relevant(clean_fridge, [TRASHCAN1, FOODFOOD1, RAG1, MILK1, FOODCHEESE1, TABLE1, FAUCET1, DISHSOAP1, BOWL1, SINK1, FRIDGE1, FOODBREAD1]) :-
-	type(TRASHCAN1, trashcan), type(FOODFOOD1, foodfood), type(RAG1, rag), type(MILK1, milk), type(FOODCHEESE1, foodcheese), type(TABLE1, tabl), type(FAUCET1, faucet), type(DISHSOAP1, dishsoap), type(BOWL1, bowl), type(SINK1, sink), type(FRIDGE1, fridge), type(FOODBREAD1, foodbread).
+get_relevant(clean_fridge, [TRASHCAN1, FOODFOOD1, RAG1, MILK1, FOODCHEESE1, FRIDGE1, FOODBREAD1]) :-
+	type(TRASHCAN1, trashcan), type(FOODFOOD1, foodfood), type(RAG1, rag), type(MILK1, milk), type(FOODCHEESE1, foodcheese), type(FRIDGE1, fridge), type(FOODBREAD1, foodbread).
 complete_task(clean_fridge, P) :-
-	type(TRASHCAN1, trashcan), type(FOODFOOD1, foodfood), type(RAG1, rag), type(MILK1, milk), type(FOODCHEESE1, foodcheese), type(TABLE1, tabl), type(FAUCET1, faucet), type(DISHSOAP1, dishsoap), type(BOWL1, bowl), type(SINK1, sink), type(FRIDGE1, fridge), type(FOODBREAD1, foodbread),
+	type(TRASHCAN1, trashcan), type(FOODFOOD1, foodfood), type(RAG1, rag), type(MILK1, milk), type(FOODCHEESE1, foodcheese), type(FRIDGE1, fridge), type(FOODBREAD1, foodbread),
 	transform([close([]), holds([]), sat_on([]), on_top_of([[FOODFOOD1, TRASHCAN1], [FOODCHEESE1, TRASHCAN1], [MILK1, FRIDGE1], [FOODBREAD1, FRIDGE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), soak([RAG1]), wipe([FRIDGE1])], P).
 
 % Clean kitchen
-get_relevant(clean_kitchen, [RAG1, FAUCET1, TABLE1, CLEANINGBOTTLE1, STOVE1, OVEN1, KITCHENCABINET1, CLEANINGSOLUTION1, SINK1]) :-
-	type(RAG1, rag), type(FAUCET1, faucet), type(TABLE1, tabl), type(CLEANINGBOTTLE1, cleaningbottle), type(STOVE1, stove), type(OVEN1, oven), type(KITCHENCABINET1, kitchencabinet), type(CLEANINGSOLUTION1, cleaningsolution), type(SINK1, sink).
+get_relevant(clean_kitchen, [RAG1, FAUCET1, STOVE1, OVEN1, KITCHENCABINET1, CLEANINGSOLUTION1, SINK1]) :-
+	type(RAG1, rag), type(FAUCET1, faucet), type(STOVE1, stove), type(OVEN1, oven), type(KITCHENCABINET1, kitchencabinet), type(CLEANINGSOLUTION1, cleaningsolution), type(SINK1, sink).
 complete_task(clean_kitchen, P) :-
-	type(RAG1, rag), type(FAUCET1, faucet), type(TABLE1, tabl), type(CLEANINGBOTTLE1, cleaningbottle), type(STOVE1, stove), type(OVEN1, oven), type(KITCHENCABINET1, kitchencabinet), type(CLEANINGSOLUTION1, cleaningsolution), type(SINK1, sink),
+	type(RAG1, rag), type(FAUCET1, faucet), type(STOVE1, stove), type(OVEN1, oven), type(KITCHENCABINET1, kitchencabinet), type(CLEANINGSOLUTION1, cleaningsolution),
 	transform([close([]), holds([CLEANINGSOLUTION1]), sat_on([]), on_top_of([]), inside([]), on([FAUCET1]), laid_on([]), used([]), eaten([]), pour([CLEANINGSOLUTION1]), rinse([RAG1]), wipe([STOVE1, OVEN1, KITCHENCABINET1])], P).
 
 % Clean mirror
@@ -327,7 +327,7 @@ get_relevant(cook_some_food, [COOKINGPOT1, FOODRICE1, FOODCARROT1, FOODSALT1, ST
 	type(COOKINGPOT1, cookingpot), type(FOODRICE1, foodrice), type(FOODCARROT1, foodcarrot), type(FOODSALT1, foodsalt), type(STOVE1, stove), type(FOODVEGETABLE1, foodvegetable), type(FOODFRUIT1, foodfruit).
 complete_task(cook_some_food, P) :-
 	type(COOKINGPOT1, cookingpot), type(FOODRICE1, foodrice), type(FOODCARROT1, foodcarrot), type(FOODSALT1, foodsalt), type(STOVE1, stove), type(FOODVEGETABLE1, foodvegetable), type(FOODFRUIT1, foodfruit),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[COOKINGPOT1, STOVE1], [FOODRICE1, STOVE1], [FOODCARROT1, STOVE1], [FOODSALT1, STOVE1], [FOODVEGETABLE1, STOVE1], [FOODFRUIT1, STOVE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), cut([FOODCARROT1, FOODVEGETABLE1, FOODFRUIT1]), off([STOVE1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[COOKINGPOT1, STOVE1], [FOODCARROT1, STOVE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), cut([FOODCARROT1])], P).
 
 % Curled hair
 get_relevant(curled_hair, [BLOWDRYER1, HAIR1]) :-
@@ -369,7 +369,7 @@ get_relevant(decorate, [WALL1, TABLE1, PAINTING1, TABLECLOTH1, CENTERPIECE1]) :-
 	type(WALL1, wall), type(TABLE1, tabl), type(PAINTING1, painting), type(TABLECLOTH1, tablecloth), type(CENTERPIECE1, centerpiece).
 complete_task(decorate, P) :-
 	type(WALL1, wall), type(TABLE1, tabl), type(PAINTING1, painting), type(TABLECLOTH1, tablecloth), type(CENTERPIECE1, centerpiece),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[PAINTING1, WALL1], [TABLECLOTH1, TABLE1], [CENTERPIECE1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[TABLECLOTH1, TABLE1], [CENTERPIECE1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 
 % Decorate it
 get_relevant(decorate_it, [WALL1, TABLE1, PAINTING1, CENTERPIECE1, PAINTING2]) :-
@@ -446,7 +446,7 @@ get_relevant(do_taxes, [DOCUMENT1, KEYBOARD1, CHAIR1, COMPUTER1]) :-
 	type(DOCUMENT1, document), type(KEYBOARD1, keyboard), type(CHAIR1, chair), type(COMPUTER1, computer).
 complete_task(do_taxes, P) :-
 	type(DOCUMENT1, document), type(KEYBOARD1, keyboard), type(CHAIR1, chair), type(COMPUTER1, computer),
-	transform([close([]), holds([DOCUMENT1]), sat_on([CHAIR1]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), off([COMPUTER1]), pull([CHAIR1]), read([DOCUMENT1]), type([KEYBOARD1])], P).
+	transform([close([]), holds([DOCUMENT1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), read([DOCUMENT1]), type([KEYBOARD1])], P).
 
 % Draft home
 get_relevant(draft_home, [KEYBOARD1, CHAIR1, MOUSE1, COMPUTER1]) :-
@@ -628,7 +628,7 @@ get_relevant(file_expense_reports, [KEYBOARD1, CHAIR1, FILINGCABINET1, MOUSE1, F
 	type(KEYBOARD1, keyboard), type(CHAIR1, chair), type(FILINGCABINET1, filingcabinet), type(MOUSE1, mouse), type(FOLDER1, folder), type(DESK1, desk), type(COMPUTER1, computer), type(RECEIPT1, receipt).
 complete_task(file_expense_reports, P) :-
 	type(KEYBOARD1, keyboard), type(CHAIR1, chair), type(FILINGCABINET1, filingcabinet), type(MOUSE1, mouse), type(FOLDER1, folder), type(DESK1, desk), type(COMPUTER1, computer), type(RECEIPT1, receipt),
-	transform([close([]), holds([]), sat_on([CHAIR1]), on_top_of([[MOUSE1, DESK1], [FOLDER1, DESK1], [RECEIPT1, DESK1]]), inside([]), on([COMPUTER1]), laid_on([]), used([]), eaten([]), closed([FILINGCABINET1]), open([FOLDER1, DESK1]), type([KEYBOARD1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[FOLDER1, DESK1], [RECEIPT1, DESK1]]), inside([]), on([COMPUTER1]), laid_on([]), used([]), eaten([]), type([KEYBOARD1])], P).
 
 % Fix broken toys
 get_relevant(fix_broken_toys, [CLOSET1, TOY1, TABLE1]) :-
@@ -670,7 +670,7 @@ get_relevant(get_drink, [WATER1, SINK1, KITCHENCABINET1, GLASS1, FRIDGE1]) :-
 	type(WATER1, water), type(SINK1, sink), type(KITCHENCABINET1, kitchencabinet), type(GLASS1, glass), type(FRIDGE1, fridge).
 complete_task(get_drink, P) :-
 	type(WATER1, water), type(SINK1, sink), type(KITCHENCABINET1, kitchencabinet), type(GLASS1, glass), type(FRIDGE1, fridge),
-	transform([close([]), holds([WATER1, GLASS1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([KITCHENCABINET1]), open([FRIDGE1]), pour([WATER1])], P).
+	transform([close([]), holds([WATER1, GLASS1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), pour([WATER1])], P).
 
 % Get glass of milk
 get_relevant(get_glass_of_milk, [FRIDGE1, MILK1, GLASS1]) :-
@@ -761,7 +761,7 @@ get_relevant(grading_papers, [PEN1, DOCUMENT1, CHAIR1, TEXTBOOK1, FOLDER1, DESK1
 	type(PEN1, pen), type(DOCUMENT1, document), type(CHAIR1, chair), type(TEXTBOOK1, textbook), type(FOLDER1, folder), type(DESK1, desk), type(COMPUTER1, computer).
 complete_task(grading_papers, P) :-
 	type(PEN1, pen), type(DOCUMENT1, document), type(CHAIR1, chair), type(TEXTBOOK1, textbook), type(FOLDER1, folder), type(DESK1, desk), type(COMPUTER1, computer),
-	transform([close([]), holds([PEN1, DOCUMENT1, TEXTBOOK1]), sat_on([CHAIR1]), on_top_of([[FOLDER1, DESK1]]), inside([]), on([COMPUTER1]), laid_on([]), used([]), eaten([]), open([FOLDER1, DESK1]), read([TEXTBOOK1]), write([DOCUMENT1])], P).
+	transform([close([]), holds([PEN1]), sat_on([]), on_top_of([[FOLDER1, DESK1]]), inside([]), on([COMPUTER1]), laid_on([]), used([]), eaten([]), read([TEXTBOOK1]), write([DOCUMENT1])], P).
 
 % Greet guests
 get_relevant(greet_guests, [WOMAN2, WOMAN1]) :-
@@ -1032,7 +1032,7 @@ get_relevant(make_sandwich, [FOODBREAD2, PLATE1, FOODVEGETABLE2, FOODVEGETABLE1,
 	type(FOODBREAD2, foodbread), type(PLATE1, plate), type(FOODVEGETABLE2, foodvegetable), type(FOODVEGETABLE1, foodvegetable), type(FOODBREAD1, foodbread), type(SAUCE1, sauce), type(FOODVEGETABLE3, foodvegetable).
 complete_task(make_sandwich, P) :-
 	type(FOODBREAD2, foodbread), type(PLATE1, plate), type(FOODVEGETABLE2, foodvegetable), type(FOODVEGETABLE1, foodvegetable), type(FOODBREAD1, foodbread), type(SAUCE1, sauce), type(FOODVEGETABLE3, foodvegetable),
-	transform([close([]), holds([FOODBREAD2]), sat_on([]), on_top_of([[PLATE1, FOODBREAD1], [FOODVEGETABLE2, FOODBREAD1], [FOODVEGETABLE1, FOODBREAD1], [FOODBREAD1, PLATE1], [SAUCE1, FOODVEGETABLE3], [FOODVEGETABLE3, FOODBREAD1]]), inside([]), on([]), laid_on([]), used([]), eaten([PLATE1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[FOODVEGETABLE2, FOODBREAD1]]), inside([]), on([]), laid_on([]), used([]), eaten([PLATE1])], P).
 
 % Make several copies on printer
 get_relevant(make_several_copies_on_printer, [DOCUMENT1, PAPER1, DESK1, PRINTER1]) :-
@@ -1046,7 +1046,7 @@ get_relevant(make_tea, [FAUCET1, TABLE1, TEABAG1, STOVE1, CUP1, POT1, TEA1, SINK
 	type(FAUCET1, faucet), type(TABLE1, tabl), type(TEABAG1, teabag), type(STOVE1, stove), type(CUP1, cup), type(POT1, pot), type(TEA1, tea), type(SINK1, sink), type(CUPBOARD1, cupboard).
 complete_task(make_tea, P) :-
 	type(FAUCET1, faucet), type(TABLE1, tabl), type(TEABAG1, teabag), type(STOVE1, stove), type(CUP1, cup), type(POT1, pot), type(TEA1, tea), type(SINK1, sink), type(CUPBOARD1, cupboard),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[TEABAG1, TABLE1], [CUP1, TABLE1], [TEA1, TABLE1]]), inside([]), on([FAUCET1]), laid_on([]), used([]), eaten([]), drop([TEABAG1]), off([STOVE1]), pour([TEA1]), wait([character1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[TEABAG1, CUP1]]), inside([]), on([FAUCET1]), laid_on([]), used([]), eaten([]), pour([TEA1])], P).
 
 % Make toast
 get_relevant(make_toast, [TOASTER1, FOODBREAD1]) :-
@@ -1081,7 +1081,7 @@ get_relevant(mop_floor, [FAUCET1, MOP1, CLEANINGSOLUTION1, SINK1, MOPBUCKET1, FL
 	type(FAUCET1, faucet), type(MOP1, mop), type(CLEANINGSOLUTION1, cleaningsolution), type(SINK1, sink), type(MOPBUCKET1, mopbucket), type(FLOOR1, floor).
 complete_task(mop_floor, P) :-
 	type(FAUCET1, faucet), type(MOP1, mop), type(CLEANINGSOLUTION1, cleaningsolution), type(SINK1, sink), type(MOPBUCKET1, mopbucket), type(FLOOR1, floor),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[CLEANINGSOLUTION1, FLOOR1], [MOP1, MOPBUCKET1], [MOPBUCKET1, FLOOR1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), scrub([MOP1])], P).
+	transform([close([]), holds([CLEANINGSOLUTION1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), scrub([MOP1])], P).
 
 % Movie
 get_relevant(movie, [CDPLAYER1, TELEVISION1]) :-
@@ -1196,7 +1196,7 @@ get_relevant(pick_up_obvious_trash, [TRASHCAN1, PAPER2, PAPER3, PAPER1]) :-
 	type(TRASHCAN1, trashcan), type(PAPER2, paper), type(PAPER3, paper), type(PAPER1, paper).
 complete_task(pick_up_obvious_trash, P) :-
 	type(TRASHCAN1, trashcan), type(PAPER2, paper), type(PAPER3, paper), type(PAPER1, paper),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[PAPER2, TRASHCAN1], [PAPER3, TRASHCAN1], [PAPER1, TRASHCAN1]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+	transform([close([]), holds([PAPER1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 
 % Pick up phone
 get_relevant(pick_up_phone, [COFFEETABLE1, PHONE1]) :-
@@ -1322,7 +1322,7 @@ get_relevant(prepare_sandwich, [FOODBREAD2, KNIFE1, TABLE1, PLATE1, FOODPEANUTBU
 	type(FOODBREAD2, foodbread), type(KNIFE1, knife), type(TABLE1, tabl), type(PLATE1, plate), type(FOODPEANUTBUTTER1, foodpeanutbutter), type(FRIDGE1, fridge), type(FOODBREAD1, foodbread).
 complete_task(prepare_sandwich, P) :-
 	type(FOODBREAD2, foodbread), type(KNIFE1, knife), type(TABLE1, tabl), type(PLATE1, plate), type(FOODPEANUTBUTTER1, foodpeanutbutter), type(FRIDGE1, fridge), type(FOODBREAD1, foodbread),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[FOODBREAD2, PLATE1], [PLATE1, TABLE1], [FOODPEANUTBUTTER1, KNIFE1], [FOODBREAD1, PLATE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([FRIDGE1]), open([FOODPEANUTBUTTER1]), spread([FOODPEANUTBUTTER1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[FOODBREAD2, PLATE1], [FOODPEANUTBUTTER1, KNIFE1], [FOODBREAD1, PLATE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), spread([FOODPEANUTBUTTER1])], P).
 
 % Pretend tea
 get_relevant(pretend_tea, [TABLE1, CHILD1, CUP1, CUP2, KETTLE1]) :-
@@ -1499,7 +1499,7 @@ get_relevant(put_up_decoration, [WALL1, TABLE1, PAINTING1, CENTERPIECE1]) :-
 	type(WALL1, wall), type(TABLE1, tabl), type(PAINTING1, painting), type(CENTERPIECE1, centerpiece).
 complete_task(put_up_decoration, P) :-
 	type(WALL1, wall), type(TABLE1, tabl), type(PAINTING1, painting), type(CENTERPIECE1, centerpiece),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[PAINTING1, WALL1], [CENTERPIECE1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[CENTERPIECE1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 
 % Put up jacket
 get_relevant(put_up_jacket, [CLOTHESSHIRT1, CLOSET1]) :-
@@ -1737,7 +1737,7 @@ get_relevant(shred_receipts, [FILINGCABINET1, SHREDDER1, RECEIPT1]) :-
 	type(FILINGCABINET1, filingcabinet), type(SHREDDER1, shredder), type(RECEIPT1, receipt).
 complete_task(shred_receipts, P) :-
 	type(FILINGCABINET1, filingcabinet), type(SHREDDER1, shredder), type(RECEIPT1, receipt),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[RECEIPT1, SHREDDER1]]), inside([]), on([SHREDDER1]), laid_on([]), used([]), eaten([]), closed([FILINGCABINET1]), plugin([SHREDDER1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([SHREDDER1]), laid_on([]), used([]), eaten([]), throw([RECEIPT1])], P).
 
 % Shut front door
 
@@ -2022,7 +2022,7 @@ get_relevant(tidy, [TRASHCAN1, TOY2, TOY1, TABLE1, COUCH1, REMOTECONTROL1, PAPER
 	type(TRASHCAN1, trashcan), type(TOY2, toy), type(TOY1, toy), type(TABLE1, tabl), type(COUCH1, couch), type(REMOTECONTROL1, remotecontrol), type(PAPERTOWEL1, papertowel), type(CABINET1, cabinet).
 complete_task(tidy, P) :-
 	type(TRASHCAN1, trashcan), type(TOY2, toy), type(TOY1, toy), type(TABLE1, tabl), type(COUCH1, couch), type(REMOTECONTROL1, remotecontrol), type(PAPERTOWEL1, papertowel), type(CABINET1, cabinet),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[TOY2, CABINET1], [TOY1, CABINET1], [REMOTECONTROL1, TABLE1], [PAPERTOWEL1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), open([CABINET1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[TOY1, CABINET1], [REMOTECONTROL1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 
 % Toilet
 get_relevant(toilet, [SOAP1, FAUCET1, HANDSBOTH1, TOILET1, SINK1, CLOTHESPANTS1]) :-
@@ -2113,7 +2113,7 @@ get_relevant(type_up_document, [COFFEECUP1, DOCUMENT1, KEYBOARD1, CHAIR1, COMPUT
 	type(COFFEECUP1, coffeecup), type(DOCUMENT1, document), type(KEYBOARD1, keyboard), type(CHAIR1, chair), type(COMPUTER1, computer).
 complete_task(type_up_document, P) :-
 	type(COFFEECUP1, coffeecup), type(DOCUMENT1, document), type(KEYBOARD1, keyboard), type(CHAIR1, chair), type(COMPUTER1, computer),
-	transform([close([]), holds([DOCUMENT1]), sat_on([CHAIR1]), on_top_of([]), inside([]), on([COMPUTER1]), laid_on([]), used([]), eaten([]), drink([COFFEECUP1]), read([DOCUMENT1]), type([KEYBOARD1])], P).
+	transform([close([]), holds([DOCUMENT1]), sat_on([]), on_top_of([]), inside([]), on([COMPUTER1]), laid_on([]), used([]), eaten([]), drink([COFFEECUP1]), read([DOCUMENT1]), type([KEYBOARD1])], P).
 
 % Unload dishwasher
 get_relevant(unload_dishwasher, [PLATE1, BOWL1, DISHWASHER1, SPOON1, FORK1]) :-
@@ -2418,18 +2418,18 @@ complete_task(complete_school_work, P) :-
 
 % Test set
 % Add paper to printer
-get_relevant(add_paper_to_printer, [DESK1, PRINTINGPAPER1, PRINTER1]) :-
-	type(DESK1, desk), type(PRINTINGPAPER1, printingpaper), type(PRINTER1, printer).
+get_relevant(add_paper_to_printer, [PRINTINGPAPER1, PRINTER1]) :-
+	type(PRINTINGPAPER1, printingpaper), type(PRINTER1, printer).
 complete_task(add_paper_to_printer, P) :-
-	type(DESK1, desk), type(PRINTINGPAPER1, printingpaper), type(PRINTER1, printer),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[PRINTINGPAPER1, PRINTER1]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+	type(PRINTINGPAPER1, printingpaper), type(PRINTER1, printer),
+	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([PRINTER1]), laid_on([]), used([]), eaten([]), puton([PRINTINGPAPER1])], P).
 
 % Admire art
-get_relevant(admire_art, [PAINTING2, PAINTING1]) :-
-	type(PAINTING2, painting), type(PAINTING1, painting).
+get_relevant(admire_art, [PAINTING1]) :-
+	type(PAINTING1, painting), close_character(Close), not_member(PAINTING1, Close).
 complete_task(admire_art, P) :-
-	type(PAINTING2, painting), type(PAINTING1, painting),
-	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+	type(PAINTING1, painting),
+	transform([close([PAINTING1]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 
 % Answer door
 get_relevant(answer_door, [MAN1]) :-
@@ -2443,7 +2443,7 @@ get_relevant(answer_emails, [CHAIR1, LAPTOP1, MAIL1, KEYBOARD1]) :-
 	type(CHAIR1, chair), type(LAPTOP1, laptop), type(MAIL1, mail), type(KEYBOARD1, keyboard).
 complete_task(answer_emails, P) :-
 	type(CHAIR1, chair), type(LAPTOP1, laptop), type(MAIL1, mail), type(KEYBOARD1, keyboard),
-	transform([close([]), holds([MAIL1]), sat_on([CHAIR1]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), off([LAPTOP1]), read([MAIL1]), type([KEYBOARD1])], P).
+	transform([close([]), holds([MAIL1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), off([LAPTOP1]), read([MAIL1]), type([KEYBOARD1])], P).
 
 % Answer phone
 get_relevant(answer_phone, [PHONE1, COUCH1]) :-
@@ -2464,21 +2464,21 @@ get_relevant(arrange_shoes, [SHOES4, SHOES2, SHOES3, SHOES1, SHOES5, SHOERACK1])
 	type(SHOES4, shoes), type(SHOES2, shoes), type(SHOES3, shoes), type(SHOES1, shoes), type(SHOES5, shoes), type(SHOERACK1, shoerack).
 complete_task(arrange_shoes, P) :-
 	type(SHOES4, shoes), type(SHOES2, shoes), type(SHOES3, shoes), type(SHOES1, shoes), type(SHOES5, shoes), type(SHOERACK1, shoerack),
-	transform([close([]), holds([SHOES4, SHOES2, SHOES3, SHOES1, SHOES5]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), crawl([SHOERACK1]), drop([SHOES4, SHOES2, SHOES3, SHOES1, SHOES5])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), crawl([SHOERACK1]), drop([SHOES4, SHOES2, SHOES3, SHOES1, SHOES5])], P).
 
 % Arrange sofa
 get_relevant(arrange_sofa, [PILLOW2, BLANKET1, PILLOW1, SOFA1]) :-
 	type(PILLOW2, pillow), type(BLANKET1, blanket), type(PILLOW1, pillow), type(SOFA1, sofa).
 complete_task(arrange_sofa, P) :-
 	type(PILLOW2, pillow), type(BLANKET1, blanket), type(PILLOW1, pillow), type(SOFA1, sofa),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[PILLOW2, SOFA1], [BLANKET1, SOFA1], [PILLOW1, SOFA1]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[BLANKET1, SOFA1]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 
 % Brew coffee
 get_relevant(brew_coffee, [TABLE1, GROUNDCOFFEE1, COFFEECUP1, KITCHENCABINET1, COFFEEFILTER1, COFFEE1, SINK1, FAUCET1, COFFEMAKER1]) :-
 	type(TABLE1, tabl), type(GROUNDCOFFEE1, groundcoffee), type(COFFEECUP1, coffeecup), type(KITCHENCABINET1, kitchencabinet), type(COFFEEFILTER1, coffeefilter), type(COFFEE1, coffee), type(SINK1, sink), type(FAUCET1, faucet), type(COFFEMAKER1, coffemaker).
 complete_task(brew_coffee, P) :-
 	type(TABLE1, tabl), type(GROUNDCOFFEE1, groundcoffee), type(COFFEECUP1, coffeecup), type(KITCHENCABINET1, kitchencabinet), type(COFFEEFILTER1, coffeefilter), type(COFFEE1, coffee), type(SINK1, sink), type(FAUCET1, faucet), type(COFFEMAKER1, coffemaker),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[COFFEECUP1, TABLE1], [COFFEEFILTER1, COFFEMAKER1], [COFFEE1, TABLE1], [COFFEMAKER1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([KITCHENCABINET1, COFFEMAKER1]), off([FAUCET1, COFFEMAKER1]), plugin([COFFEMAKER1]), pour([COFFEE1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[COFFEECUP1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), plugin([COFFEMAKER1]), pour([COFFEE1])], P).
 
 % Bring leftovers in kitchen
 get_relevant(bring_leftovers_in_kitchen, [BOWL2, TABLE1, FRIDGE1, BOWL1]) :-
@@ -2496,17 +2496,17 @@ complete_task(bring_me_red_cookbook, P) :-
 
 % Build lego house
 get_relevant(build_lego_house, [BOARDGAME1, BED1, CABINET1]) :-
-	type(BOARDGAME1, boardgame), type(BED1, bed), type(CABINET1, cabinet).
+	type(BOARDGAME1, boardgame), type(BED1, tabl), type(CABINET1, cabinet).
 complete_task(build_lego_house, P) :-
-	type(BOARDGAME1, boardgame), type(BED1, bed), type(CABINET1, cabinet),
-	transform([close([]), holds([]), sat_on([BED1]), on_top_of([[BOARDGAME1, BED1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([CABINET1]), play([character1])], P).
+	type(BOARDGAME1, boardgame), type(BED1, tabl), type(CABINET1, cabinet),
+	transform([close([]), holds([]), sat_on([]), on_top_of([[BOARDGAME1, BED1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), play([character1])], P).
 
 % Call client
-get_relevant(call_client, [ADDRESSBOOK1, DESK1, CHAIR1, TELEPHONE1]) :-
-	type(ADDRESSBOOK1, addressbook), type(DESK1, desk), type(CHAIR1, chair), type(TELEPHONE1, telephone).
+get_relevant(call_client, [DESK1, CHAIR1, TELEPHONE1]) :-
+	type(DESK1, desk), type(CHAIR1, chair), type(TELEPHONE1, telephone).
 complete_task(call_client, P) :-
-	type(ADDRESSBOOK1, addressbook), type(DESK1, desk), type(CHAIR1, chair), type(TELEPHONE1, telephone),
-	transform([close([]), holds([]), sat_on([CHAIR1]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), dial([TELEPHONE1]), open([DESK1]), speak([character1])], P).
+	type(DESK1, desk), type(CHAIR1, chair), type(TELEPHONE1, telephone),
+	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), dial([TELEPHONE1]), speak([character1])], P).
 
 % Call family member with skype application
 get_relevant(call_family_member_with_skype_application, [CHAIR1, COMPUTER1, KEYBOARD1, MOUSE1]) :-
@@ -2520,7 +2520,7 @@ get_relevant(call_mother, [CHAIR1, WOMAN1, TELEPHONE1]) :-
 	type(CHAIR1, chair), type(WOMAN1, woman), type(TELEPHONE1, telephone).
 complete_task(call_mother, P) :-
 	type(CHAIR1, chair), type(WOMAN1, woman), type(TELEPHONE1, telephone),
-	transform([close([]), holds([TELEPHONE1]), sat_on([CHAIR1]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), dial([TELEPHONE1]), greet([WOMAN1])], P).
+	transform([close([]), holds([TELEPHONE1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), dial([TELEPHONE1]), greet([WOMAN1])], P).
 
 % Card
 get_relevant(card, [TABLE1, CHAIR1, POT1, CARDS1, PEN1]) :-
@@ -2548,7 +2548,7 @@ get_relevant(change_tv_channels, [TELEVISION1, REMOTECONTROL1, COUCH1]) :-
 	type(TELEVISION1, television), type(REMOTECONTROL1, remotecontrol), type(COUCH1, couch).
 complete_task(change_tv_channels, P) :-
 	type(TELEVISION1, television), type(REMOTECONTROL1, remotecontrol), type(COUCH1, couch),
-	transform([close([REMOTECONTROL1, COUCH1]), holds([REMOTECONTROL1]), sat_on([COUCH1]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), touch([REMOTECONTROL1]), watch([TELEVISION1])], P).
+	transform([close([]), holds([REMOTECONTROL1]), sat_on([]), on_top_of([]), inside([]), on([TELEVISION1]), laid_on([]), used([]), eaten([])], P).
 
 % Change bedding
 get_relevant(change_bedding, [SHEETS2, BED1, BASKETFORCLOTHES1, CLOSET1, SHEETS1, BLANKET2, BLANKET1]) :-
@@ -2583,28 +2583,30 @@ get_relevant(change_toilet_paper_roll, [TRASHCAN1, TOILETPAPER2, TOILETPAPER1]) 
 	type(TRASHCAN1, trashcan), type(TOILETPAPER2, toiletpaper), type(TOILETPAPER1, toiletpaper).
 complete_task(change_toilet_paper_roll, P) :-
 	type(TRASHCAN1, trashcan), type(TOILETPAPER2, toiletpaper), type(TOILETPAPER1, toiletpaper),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[TOILETPAPER2, TRASHCAN1], [TOILETPAPER1, TRASHCAN1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), throw([TOILETPAPER1])], P).
 
 % Change toothbrush
 get_relevant(change_toothbrush, [TRASHCAN1, TOOTHBRUSH1, TOOTHBRUSH2, TOOTHBRUSHHOLDER1]) :-
-	type(TRASHCAN1, trashcan), type(TOOTHBRUSH1, toothbrush), type(TOOTHBRUSH2, toothbrush), type(TOOTHBRUSHHOLDER1, toothbrushholder).
+	type(TRASHCAN1, trashcan), type(TOOTHBRUSH1, toothbrush), type(TOOTHBRUSH2, toothbrush), type(TOOTHBRUSHHOLDER1, toothbrushholder),
+	TOOTHBRUSH1 \= TOOTHBRUSH2.
 complete_task(change_toothbrush, P) :-
 	type(TRASHCAN1, trashcan), type(TOOTHBRUSH1, toothbrush), type(TOOTHBRUSH2, toothbrush), type(TOOTHBRUSHHOLDER1, toothbrushholder),
+	TOOTHBRUSH1 \= TOOTHBRUSH2,
 	transform([close([]), holds([]), sat_on([]), on_top_of([[TOOTHBRUSH1, TRASHCAN1], [TOOTHBRUSH2, TOOTHBRUSHHOLDER1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([]), unwrap([TOOTHBRUSH2])], P).
 
 % Check appearance in mirror
-get_relevant(check_appearance_in_mirror, [HAIR1, CLOTHESDRESS1, FACE1, MIRROR1]) :-
-	type(HAIR1, hair), type(CLOTHESDRESS1, clothesdress), type(FACE1, face), type(MIRROR1, mirror).
+get_relevant(check_appearance_in_mirror, [MIRROR1]) :-
+	type(MIRROR1, mirror).
 complete_task(check_appearance_in_mirror, P) :-
-	type(HAIR1, hair), type(CLOTHESDRESS1, clothesdress), type(FACE1, face), type(MIRROR1, mirror),
-	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+	type(MIRROR1, mirror),
+	transform([close([MIRROR1]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 
 % Clean glasses
 get_relevant(clean_glasses, [DISHSOAP1, DISHRACK1, WINEGLASS2, SINK1, FAUCET1, SPONGE1, WINEGLASS1]) :-
 	type(DISHSOAP1, dishsoap), type(DISHRACK1, dishrack), type(WINEGLASS2, wineglass), type(SINK1, sink), type(FAUCET1, faucet), type(SPONGE1, sponge), type(WINEGLASS1, wineglass).
 complete_task(clean_glasses, P) :-
 	type(DISHSOAP1, dishsoap), type(DISHRACK1, dishrack), type(WINEGLASS2, wineglass), type(SINK1, sink), type(FAUCET1, faucet), type(SPONGE1, sponge), type(WINEGLASS1, wineglass),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[WINEGLASS2, DISHRACK1], [WINEGLASS1, DISHRACK1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), off([FAUCET1]), pour([DISHSOAP1]), rinse([WINEGLASS2, WINEGLASS1]), wash([WINEGLASS2, WINEGLASS1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), pour([DISHSOAP1]), wash([WINEGLASS2, WINEGLASS1])], P).
 
 % Clean large jacuzzi tub
 get_relevant(clean_large_jacuzzi_tub, [BATHTUB1, BRUSH1, FAUCET1, CLEANINGSOLUTION1]) :-
@@ -2625,7 +2627,7 @@ get_relevant(close_curtains, [CURTAIN2, CURTAIN1, COUCH1, CURTAIN3]) :-
 	type(CURTAIN2, curtain), type(CURTAIN1, curtain), type(COUCH1, couch), type(CURTAIN3, curtain).
 complete_task(close_curtains, P) :-
 	type(CURTAIN2, curtain), type(CURTAIN1, curtain), type(COUCH1, couch), type(CURTAIN3, curtain),
-	transform([close([]), holds([]), sat_on([COUCH1]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([CURTAIN2, CURTAIN1, CURTAIN3]), pull([CURTAIN2, CURTAIN1, CURTAIN3])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([CURTAIN2, CURTAIN1, CURTAIN3]), pull([CURTAIN2, CURTAIN1, CURTAIN3])], P).
 
 % Close shower curtain
 get_relevant(close_shower_curtain, [CURTAIN1, SHOWER1]) :-
@@ -2653,7 +2655,7 @@ get_relevant(come_home, [SHOES1]) :-
 	type(SHOES1, shoes).
 complete_task(come_home, P) :-
 	type(SHOES1, shoes),
-	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+	transform([close([]), holds([SHOES1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 
 % Complete surveys on amazon turk
 get_relevant(complete_surveys_on_amazon_turk, [CHAIR1, COMPUTER1, DOCUMENT1, KEYBOARD1, MOUSE1]) :-
@@ -2681,7 +2683,7 @@ get_relevant(cut_bread, [FOODBREAD1, PLATE1, KNIFE1, TABLE1, KITCHENCABINET1, FR
 	type(FOODBREAD1, foodbread), type(PLATE1, plate), type(KNIFE1, knife), type(TABLE1, tabl), type(KITCHENCABINET1, kitchencabinet), type(FRIDGE1, fridge).
 complete_task(cut_bread, P) :-
 	type(FOODBREAD1, foodbread), type(PLATE1, plate), type(KNIFE1, knife), type(TABLE1, tabl), type(KITCHENCABINET1, kitchencabinet), type(FRIDGE1, fridge),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[FOODBREAD1, PLATE1], [PLATE1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([KITCHENCABINET1, FRIDGE1]), cut([FOODBREAD1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), cut([FOODBREAD1])], P).
 
 % Cut toenails
 get_relevant(cut_toenails, [TRASHCAN1, BED1, DRESSER1, FEETBOTH1, TOWEL1]) :-
@@ -2695,7 +2697,7 @@ get_relevant(cutting, [FOODVEGETABLE1, FOODVEGETABLE2, CUTTINGBOARD1, TABLE1, CH
 	type(FOODVEGETABLE1, foodvegetable), type(FOODVEGETABLE2, foodvegetable), type(CUTTINGBOARD1, cuttingboard), type(TABLE1, tabl), type(CHEFKNIFE1, chefknife), type(FRIDGE1, fridge), type(CUPBOARD1, cupboard).
 complete_task(cutting, P) :-
 	type(FOODVEGETABLE1, foodvegetable), type(FOODVEGETABLE2, foodvegetable), type(CUTTINGBOARD1, cuttingboard), type(TABLE1, tabl), type(CHEFKNIFE1, chefknife), type(FRIDGE1, fridge), type(CUPBOARD1, cupboard),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[FOODVEGETABLE1, CUTTINGBOARD1], [FOODVEGETABLE2, CUTTINGBOARD1], [CUTTINGBOARD1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([FRIDGE1, CUPBOARD1]), cut([FOODVEGETABLE1, FOODVEGETABLE2])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[FOODVEGETABLE1, CUTTINGBOARD1], [FOODVEGETABLE2, CUTTINGBOARD1], [CUTTINGBOARD1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), cut([FOODVEGETABLE1, FOODVEGETABLE2])], P).
 
 % Dance for table as we eat
 get_relevant(dance_for_table_as_we_eat, [RADIO1, TABLE1]) :-
@@ -2716,14 +2718,14 @@ get_relevant(designing_crafts_with_family, [CHILD2, CRAYON1, TABLE1, CHAIR1, DRA
 	type(CHILD2, child), type(CRAYON1, crayon), type(TABLE1, tabl), type(CHAIR1, chair), type(DRAWING1, drawing), type(CHILD1, child), type(SCISSORS1, scissors), type(CABINET1, cabinet).
 complete_task(designing_crafts_with_family, P) :-
 	type(CHILD2, child), type(CRAYON1, crayon), type(TABLE1, tabl), type(CHAIR1, chair), type(DRAWING1, drawing), type(CHILD1, child), type(SCISSORS1, scissors), type(CABINET1, cabinet),
-	transform([close([]), holds([]), sat_on([CHAIR1]), on_top_of([[DRAWING1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([CABINET1]), cut([DRAWING1]), fold([DRAWING1]), greet([CHILD2, CHILD1]), unfold([DRAWING1]), unwrap([CRAYON1]), write([DRAWING1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[DRAWING1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([CABINET1]), cut([DRAWING1]), fold([DRAWING1]), greet([CHILD2, CHILD1]), unfold([DRAWING1]), unwrap([CRAYON1]), write([DRAWING1])], P).
 
 % Do free-style dance routine
-get_relevant(do_freestyle_dance_routine, [COUCH1, TABLE1, RADIO1]) :-
-	type(COUCH1, couch), type(TABLE1, tabl), type(RADIO1, radio).
+get_relevant(do_freestyle_dance_routine, [RADIO1]) :-
+	type(RADIO1, radio).
 complete_task(do_freestyle_dance_routine, P) :-
-	type(COUCH1, couch), type(TABLE1, tabl), type(RADIO1, radio),
-	transform([close([RADIO1]), holds([RADIO1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), climb([COUCH1]), dance([character1]), jump([character1]), off([RADIO1]), plugin([RADIO1]), run([COUCH1, RADIO1])], P).
+	type(RADIO1, radio),
+	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), dance([character1]), plugin([RADIO1])], P).
 
 % Do work
 get_relevant(do_work, [BOOK1]) :-
@@ -2737,14 +2739,14 @@ get_relevant(do_work_on_computer, [CHAIR1, COMPUTER1, KEYBOARD1]) :-
 	type(CHAIR1, chair), type(COMPUTER1, computer), type(KEYBOARD1, keyboard).
 complete_task(do_work_on_computer, P) :-
 	type(CHAIR1, chair), type(COMPUTER1, computer), type(KEYBOARD1, keyboard),
-	transform([close([]), holds([]), sat_on([CHAIR1]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), off([COMPUTER1]), standup([character1]), type([KEYBOARD1])], P).
+	transform([close([]), holds([]), sat_on([CHAIR1]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), type([KEYBOARD1])], P).
 
 % Do yoga
 get_relevant(do_yoga, [CARPET1, ARMSBOTH1, LEGSBOTH1, RADIO1, MAT1]) :-
 	type(CARPET1, carpet), type(ARMSBOTH1, armsboth), type(LEGSBOTH1, legsboth), type(RADIO1, radio), type(MAT1, mat).
 complete_task(do_yoga, P) :-
 	type(CARPET1, carpet), type(ARMSBOTH1, armsboth), type(LEGSBOTH1, legsboth), type(RADIO1, radio), type(MAT1, mat),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[MAT1, CARPET1]]), inside([]), on([RADIO1]), laid_on([MAT1]), used([]), eaten([]), stretch([ARMSBOTH1, LEGSBOTH1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([RADIO1]), laid_on([CARPET1]), used([]), eaten([]), stretch([ARMSBOTH1, LEGSBOTH1])], P).
 
 % Dry soap bottles
 get_relevant(dry_soap_bottles, [SHAMPOO1, SHAMPOO2, SOAP1, TOWEL1]) :-
@@ -2758,7 +2760,7 @@ get_relevant(eat_ice_cream, [SPOON1, TABLE1, FOODICECREAM1, CHAIR1, KITCHENCABIN
 	type(SPOON1, spoon), type(TABLE1, tabl), type(FOODICECREAM1, foodicecream), type(CHAIR1, chair), type(KITCHENCABINET1, kitchencabinet), type(BOWL1, bowl), type(FREEZER1, freezer).
 complete_task(eat_ice_cream, P) :-
 	type(SPOON1, spoon), type(TABLE1, tabl), type(FOODICECREAM1, foodicecream), type(CHAIR1, chair), type(KITCHENCABINET1, kitchencabinet), type(BOWL1, bowl), type(FREEZER1, freezer),
-	transform([close([]), holds([]), sat_on([CHAIR1]), on_top_of([[SPOON1, TABLE1], [BOWL1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([BOWL1]), closed([FOODICECREAM1, KITCHENCABINET1, FREEZER1])], P).
+	transform([close([]), holds([]), sat_on([CHAIR1]), on_top_of([[SPOON1, TABLE1], [BOWL1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([BOWL1])], P).
 
 % Eat while watching TV
 get_relevant(eat_while_watching_tv, [PLATE1, FOODFOOD1, COOKINGPOT1, TELEVISION1, COUCH1, STOVE1, CUPBOARD1, REMOTECONTROL1]) :-
@@ -2786,7 +2788,7 @@ get_relevant(feed_dog, [FLOOR1, DOG1, FOODFOOD1, BOWL1]) :-
 	type(FLOOR1, floor), type(DOG1, dog), type(FOODFOOD1, foodfood), type(BOWL1, bowl).
 complete_task(feed_dog, P) :-
 	type(FLOOR1, floor), type(DOG1, dog), type(FOODFOOD1, foodfood), type(BOWL1, bowl),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[FOODFOOD1, FLOOR1], [BOWL1, FLOOR1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), pour([FOODFOOD1]), touch([DOG1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[FOODFOOD1, FLOOR1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), pour([FOODFOOD1]), touch([DOG1])], P).
 
 % Find dictionary
 get_relevant(find_dictionary, [BOOKSHELF1, BOOK1]) :-
@@ -2800,21 +2802,21 @@ get_relevant(fix_bowl_of_cereal, [TABLE1, MILK1, FOODCEREAL1, FRIDGE1, BOWL1, CU
 	type(TABLE1, tabl), type(MILK1, milk), type(FOODCEREAL1, foodcereal), type(FRIDGE1, fridge), type(BOWL1, bowl), type(CUPBOARD1, cupboard).
 complete_task(fix_bowl_of_cereal, P) :-
 	type(TABLE1, tabl), type(MILK1, milk), type(FOODCEREAL1, foodcereal), type(FRIDGE1, fridge), type(BOWL1, bowl), type(CUPBOARD1, cupboard),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[BOWL1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([FRIDGE1, CUPBOARD1]), pour([MILK1, FOODCEREAL1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[BOWL1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), pour([MILK1, FOODCEREAL1])], P).
 
 % Fix sandwich
 get_relevant(fix_sandwich, [FOODBREAD1, PLATE1, TABLE1, KITCHENCABINET1, FRIDGE1, FOODCHEESE1, FOODBREAD2]) :-
 	type(FOODBREAD1, foodbread), type(PLATE1, plate), type(TABLE1, tabl), type(KITCHENCABINET1, kitchencabinet), type(FRIDGE1, fridge), type(FOODCHEESE1, foodcheese), type(FOODBREAD2, foodbread).
 complete_task(fix_sandwich, P) :-
 	type(FOODBREAD1, foodbread), type(PLATE1, plate), type(TABLE1, tabl), type(KITCHENCABINET1, kitchencabinet), type(FRIDGE1, fridge), type(FOODCHEESE1, foodcheese), type(FOODBREAD2, foodbread),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[FOODBREAD1, PLATE1], [PLATE1, TABLE1], [FOODCHEESE1, PLATE1], [FOODBREAD2, PLATE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([KITCHENCABINET1, FRIDGE1]), spread([FOODCHEESE1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[FOODBREAD1, PLATE1], [FOODCHEESE1, PLATE1], [FOODBREAD2, PLATE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), spread([FOODCHEESE1])], P).
 
 % Fix snack
 get_relevant(fix_snack, [PLATE1, FOODVEGETABLE1, TABLE1, KITCHENCABINET1, FRIDGE1, FOODCARROT1]) :-
 	type(PLATE1, plate), type(FOODVEGETABLE1, foodvegetable), type(TABLE1, tabl), type(KITCHENCABINET1, kitchencabinet), type(FRIDGE1, fridge), type(FOODCARROT1, foodcarrot).
 complete_task(fix_snack, P) :-
 	type(PLATE1, plate), type(FOODVEGETABLE1, foodvegetable), type(TABLE1, tabl), type(KITCHENCABINET1, kitchencabinet), type(FRIDGE1, fridge), type(FOODCARROT1, foodcarrot),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[PLATE1, TABLE1], [FOODVEGETABLE1, PLATE1], [FOODCARROT1, PLATE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([KITCHENCABINET1, FRIDGE1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[FOODVEGETABLE1, PLATE1], [FOODCARROT1, PLATE1]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 
 % Gaze out window
 get_relevant(gaze_out_window, [WINDOW1]) :-
@@ -2842,7 +2844,7 @@ get_relevant(get_ready_for_bed, [LIGHT1, BED1, BASKETFORCLOTHES1, CLOSET1, CLOTH
 	type(LIGHT1, light), type(BED1, bed), type(BASKETFORCLOTHES1, basketforclothes), type(CLOSET1, closet), type(CLOTHESDRESS1, clothesdress), type(PAJAMAS1, pajamas).
 complete_task(get_ready_for_bed, P) :-
 	type(LIGHT1, light), type(BED1, bed), type(BASKETFORCLOTHES1, basketforclothes), type(CLOSET1, closet), type(CLOTHESDRESS1, clothesdress), type(PAJAMAS1, pajamas),
-	transform([close([]), holds([PAJAMAS1]), sat_on([]), on_top_of([[CLOTHESDRESS1, BASKETFORCLOTHES1]]), inside([]), on([]), laid_on([BED1]), used([]), eaten([]), climb([BED1]), closed([CLOSET1]), off([LIGHT1]), puton([PAJAMAS1]), uncover([BED1])], P).
+	transform([close([]), holds([PAJAMAS1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([BED1]), used([]), eaten([]), off([LIGHT1]), puton([PAJAMAS1])], P).
 
 % Get ready for day
 get_relevant(get_ready_for_day, [CLOSET1, CLOTHESDRESS1, PURSE1, SHOES1]) :-
@@ -2870,14 +2872,14 @@ get_relevant(get_something_to_drink, [MILK1, GLASS1, FRIDGE1, CUPBOARD1]) :-
 	type(MILK1, milk), type(GLASS1, glass), type(FRIDGE1, fridge), type(CUPBOARD1, cupboard).
 complete_task(get_something_to_drink, P) :-
 	type(MILK1, milk), type(GLASS1, glass), type(FRIDGE1, fridge), type(CUPBOARD1, cupboard),
-	transform([close([]), holds([MILK1, GLASS1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([FRIDGE1, CUPBOARD1]), drink([GLASS1]), pour([MILK1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), drink([GLASS1]), pour([MILK1])], P).
 
 % Give children bath
-get_relevant(give_children_bath, [CHILD2, BED2, BED1, BATHTUB1, TOWEL2, CHILD1, FAUCET1, TOWEL1]) :-
-	type(CHILD2, child), type(BED2, bed), type(BED1, bed), type(BATHTUB1, bathtub), type(TOWEL2, towel), type(CHILD1, child), type(FAUCET1, faucet), type(TOWEL1, towel).
+get_relevant(give_children_bath, [BED1, CHILD1, TOWEL1]) :-
+	type(BED1, bed), type(CHILD1, child), type(TOWEL1, towel).
 complete_task(give_children_bath, P) :-
-	type(CHILD2, child), type(BED2, bed), type(BED1, bed), type(BATHTUB1, bathtub), type(TOWEL2, towel), type(CHILD1, child), type(FAUCET1, faucet), type(TOWEL1, towel),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[CHILD2, BED2], [TOWEL2, BED2], [CHILD1, BED1], [TOWEL1, BED1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), cover([CHILD2, CHILD1]), off([FAUCET1]), wash([CHILD2, CHILD1])], P).
+	type(BED1, bed), type(CHILD1, child), type(TOWEL1, towel),
+	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), cover([CHILD1]), wash([CHILD1])], P).
 
 % Give me bath
 get_relevant(give_me_bath, [ARMSBOTH1, LEGSBOTH1, SOAP1, FACE1, FEETBOTH1, FAUCET1, SHOWER1, TOWEL1]) :-
@@ -2891,21 +2893,21 @@ get_relevant(give_your_child_bath, [BATHTUB1, FLOOR1, SOAP1, CHILD1, FAUCET1, TO
 	type(BATHTUB1, bathtub), type(FLOOR1, floor), type(SOAP1, soap), type(CHILD1, child), type(FAUCET1, faucet), type(TOWEL1, towel).
 complete_task(give_your_child_bath, P) :-
 	type(BATHTUB1, bathtub), type(FLOOR1, floor), type(SOAP1, soap), type(CHILD1, child), type(FAUCET1, faucet), type(TOWEL1, towel),
-	transform([close([]), holds([TOWEL1]), sat_on([]), on_top_of([[CHILD1, FLOOR1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), off([FAUCET1]), rinse([CHILD1]), scrub([CHILD1]), wipe([CHILD1]), wrap([CHILD1])], P).
+	transform([close([]), holds([TOWEL1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), scrub([CHILD1])], P).
 
 % Go to bathroom
 get_relevant(go_to_bathroom, [TOILET1, SOAP1, HANDSBOTH1, CLOTHESDRESS1, SINK1, TOILETPAPER1, FAUCET1]) :-
 	type(TOILET1, toilet), type(SOAP1, soap), type(HANDSBOTH1, handsboth), type(CLOTHESDRESS1, clothesdress), type(SINK1, sink), type(TOILETPAPER1, toiletpaper), type(FAUCET1, faucet).
 complete_task(go_to_bathroom, P) :-
 	type(TOILET1, toilet), type(SOAP1, soap), type(HANDSBOTH1, handsboth), type(CLOTHESDRESS1, clothesdress), type(SINK1, sink), type(TOILETPAPER1, toiletpaper), type(FAUCET1, faucet),
-	transform([close([]), holds([]), sat_on([TOILET1]), on_top_of([[CLOTHESDRESS1, TOILET1], [TOILETPAPER1, TOILET1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), drop([CLOTHESDRESS1]), flush([TOILET1]), off([FAUCET1]), standup([character1]), wash([HANDSBOTH1])], P).
+	transform([close([]), holds([]), sat_on([TOILET1]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), flush([TOILET1]), wash([HANDSBOTH1])], P).
 
 % Grab some juice
 get_relevant(grab_some_juice, [TABLE1, GLASS1, FRIDGE1, JUICE1, CUPBOARD1]) :-
 	type(TABLE1, tabl), type(GLASS1, glass), type(FRIDGE1, fridge), type(JUICE1, juice), type(CUPBOARD1, cupboard).
 complete_task(grab_some_juice, P) :-
 	type(TABLE1, tabl), type(GLASS1, glass), type(FRIDGE1, fridge), type(JUICE1, juice), type(CUPBOARD1, cupboard),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[GLASS1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([FRIDGE1, CUPBOARD1]), pour([JUICE1])], P).
+	transform([close([]), holds([JUICE1, GLASS1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), pour([JUICE1])], P).
 
 % Grab things
 get_relevant(grab_things, [BOOK1]) :-
@@ -2933,7 +2935,7 @@ get_relevant(hang_pictures, [WALL1, DRAWING1, PAINTING1]) :-
 	type(WALL1, wall), type(DRAWING1, drawing), type(PAINTING1, painting).
 complete_task(hang_pictures, P) :-
 	type(WALL1, wall), type(DRAWING1, drawing), type(PAINTING1, painting),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[DRAWING1, WALL1], [PAINTING1, WALL1]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[PAINTING1, WALL1]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 
 % Hang up car keys
 get_relevant(hang_up_car_keys, [PURSE1, KEYS1]) :-
@@ -2961,7 +2963,7 @@ get_relevant(have_ice_coffee, [CUP1, SPOON1, TABLE1, CHAIR1, COFFEEPOT1, KITCHEN
 	type(CUP1, cup), type(SPOON1, spoon), type(TABLE1, tabl), type(CHAIR1, chair), type(COFFEEPOT1, coffeepot), type(KITCHENCABINET1, kitchencabinet), type(COFFEE1, coffee), type(FRIDGE1, fridge), type(COFFEMAKER1, coffemaker), type(ICE1, ice).
 complete_task(have_ice_coffee, P) :-
 	type(CUP1, cup), type(SPOON1, spoon), type(TABLE1, tabl), type(CHAIR1, chair), type(COFFEEPOT1, coffeepot), type(KITCHENCABINET1, kitchencabinet), type(COFFEE1, coffee), type(FRIDGE1, fridge), type(COFFEMAKER1, coffemaker), type(ICE1, ice),
-	transform([close([]), holds([]), sat_on([CHAIR1]), on_top_of([[CUP1, TABLE1], [SPOON1, TABLE1], [COFFEE1, TABLE1], [ICE1, CUP1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([KITCHENCABINET1, FRIDGE1]), drink([CUP1]), pour([COFFEE1]), stir([COFFEE1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[CUP1, TABLE1], [SPOON1, TABLE1], [ICE1, CUP1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), drink([CUP1]), pour([COFFEE1]), stir([COFFEE1])], P).
 
 % Have party
 get_relevant(have_party, [MAN1, MAN2, RADIO1, WOMAN1, WINEGLASS1, WOMAN2]) :-
@@ -2989,7 +2991,7 @@ get_relevant(help_with_quiz_shows, [PAPER1]) :-
 	type(PAPER1, paper).
 complete_task(help_with_quiz_shows, P) :-
 	type(PAPER1, paper),
-	transform([close([]), holds([PAPER1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), drop([PAPER1])], P).
+	transform([close([]), holds([PAPER1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 
 % Hold coats and umbrellas
 get_relevant(hold_coats_and_umbrellas, [MAN1, WOMAN1, CLOTHESJACKET2, CLOTHESJACKET1]) :-
@@ -3052,14 +3054,14 @@ get_relevant(make_banana_bread, [TABLE1, FOODBANANA1, TRAY1, KITCHENCABINET1, FR
 	type(TABLE1, tabl), type(FOODBANANA1, foodbanana), type(TRAY1, tray), type(KITCHENCABINET1, kitchencabinet), type(FRIDGE1, fridge), type(BOWL1, bowl), type(DOUGH1, dough), type(OVEN1, oven).
 complete_task(make_banana_bread, P) :-
 	type(TABLE1, tabl), type(FOODBANANA1, foodbanana), type(TRAY1, tray), type(KITCHENCABINET1, kitchencabinet), type(FRIDGE1, fridge), type(BOWL1, bowl), type(DOUGH1, dough), type(OVEN1, oven),
-	transform([close([]), holds([TRAY1]), sat_on([]), on_top_of([[FOODBANANA1, BOWL1], [BOWL1, TABLE1], [DOUGH1, TRAY1]]), inside([]), on([OVEN1]), laid_on([]), used([]), eaten([]), closed([KITCHENCABINET1, FRIDGE1]), open([OVEN1]), putin([TRAY1]), spread([DOUGH1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[FOODBANANA1, BOWL1], [BOWL1, TABLE1], [DOUGH1, TRAY1]]), inside([]), on([OVEN1]), laid_on([]), used([]), eaten([]), open([OVEN1]), putin([TRAY1]), spread([DOUGH1])], P).
 
 % Make iced coffee
 get_relevant(make_iced_coffee, [SPOON1, TABLE1, MILK1, COFFEE1, GLASS1, FOODSUGAR1, ICE1]) :-
 	type(SPOON1, spoon), type(TABLE1, tabl), type(MILK1, milk), type(COFFEE1, coffee), type(GLASS1, glass), type(FOODSUGAR1, foodsugar), type(ICE1, ice).
 complete_task(make_iced_coffee, P) :-
 	type(SPOON1, spoon), type(TABLE1, tabl), type(MILK1, milk), type(COFFEE1, coffee), type(GLASS1, glass), type(FOODSUGAR1, foodsugar), type(ICE1, ice),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[SPOON1, GLASS1], [MILK1, TABLE1], [COFFEE1, GLASS1], [GLASS1, TABLE1], [FOODSUGAR1, GLASS1], [ICE1, GLASS1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), pour([MILK1, COFFEE1, FOODSUGAR1]), stir([COFFEE1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[SPOON1, GLASS1], [COFFEE1, GLASS1], [FOODSUGAR1, GLASS1], [ICE1, GLASS1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), pour([MILK1, COFFEE1, FOODSUGAR1]), stir([COFFEE1])], P).
 
 % Make kid's bed
 get_relevant(make_kids_bed, [BED1, COMFORTER1, PILLOW2, CLOSET1, SHEETS1, PILLOW1]) :-
@@ -3080,14 +3082,14 @@ get_relevant(make_phone_call, [CHAIR1, TELEPHONE1]) :-
 	type(CHAIR1, chair), type(TELEPHONE1, telephone).
 complete_task(make_phone_call, P) :-
 	type(CHAIR1, chair), type(TELEPHONE1, telephone),
-	transform([close([]), holds([]), sat_on([CHAIR1]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), dial([TELEPHONE1]), talk([TELEPHONE1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), dial([TELEPHONE1]), talk([TELEPHONE1])], P).
 
 % Make place cards
 get_relevant(make_place_cards, [TABLE1, CHAIR1, PAPER2, PAPER1, PEN1, PAPER3, CABINET1]) :-
 	type(TABLE1, tabl), type(CHAIR1, chair), type(PAPER2, paper), type(PAPER1, paper), type(PEN1, pen), type(PAPER3, paper), type(CABINET1, cabinet).
 complete_task(make_place_cards, P) :-
 	type(TABLE1, tabl), type(CHAIR1, chair), type(PAPER2, paper), type(PAPER1, paper), type(PEN1, pen), type(PAPER3, paper), type(CABINET1, cabinet),
-	transform([close([]), holds([]), sat_on([CHAIR1]), on_top_of([[PAPER2, TABLE1], [PAPER1, TABLE1], [PEN1, TABLE1], [PAPER3, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([CABINET1]), fold([PAPER2, PAPER1, PAPER3]), pull([CHAIR1]), standup([character1]), write([PAPER2, PAPER1, PAPER3])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[PAPER2, TABLE1], [PAPER1, TABLE1], [PEN1, TABLE1], [PAPER3, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), write([PAPER2, PAPER1, PAPER3])], P).
 
 % Make popcorn
 get_relevant(make_popcorn, [FOODFOOD1, MICROWAVE1]) :-
@@ -3101,21 +3103,21 @@ get_relevant(make_tomato_sauce, [SPOON1, KITCHENCABINET1, FRIDGE1, COOKINGPOT1, 
 	type(SPOON1, spoon), type(KITCHENCABINET1, kitchencabinet), type(FRIDGE1, fridge), type(COOKINGPOT1, cookingpot), type(FOODFOOD1, foodfood), type(STOVE1, stove).
 complete_task(make_tomato_sauce, P) :-
 	type(SPOON1, spoon), type(KITCHENCABINET1, kitchencabinet), type(FRIDGE1, fridge), type(COOKINGPOT1, cookingpot), type(FOODFOOD1, foodfood), type(STOVE1, stove),
-	transform([close([]), holds([SPOON1]), sat_on([]), on_top_of([[COOKINGPOT1, STOVE1], [FOODFOOD1, COOKINGPOT1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([KITCHENCABINET1, FRIDGE1]), off([STOVE1]), squeeze([FOODFOOD1])], P).
+	transform([close([]), holds([SPOON1]), sat_on([]), on_top_of([[COOKINGPOT1, STOVE1]]), inside([]), on([STOVE1]), laid_on([]), used([]), eaten([])], P).
 
 % Make tutu
 get_relevant(make_tutu, [GLUE1, BED1, CABINET1, PAPER1, SCISSORS1]) :-
 	type(GLUE1, glue), type(BED1, bed), type(CABINET1, cabinet), type(PAPER1, paper), type(SCISSORS1, scissors).
 complete_task(make_tutu, P) :-
 	type(GLUE1, glue), type(BED1, bed), type(CABINET1, cabinet), type(PAPER1, paper), type(SCISSORS1, scissors),
-	transform([close([]), holds([]), sat_on([BED1]), on_top_of([[PAPER1, BED1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([CABINET1]), cut([PAPER1]), fold([PAPER1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), cut([PAPER1]), fold([PAPER1])], P).
 
 % Make up bed for guest on couch
 get_relevant(make_up_bed_for_guest_on_couch, [CLOSET1, SHEETS1, BLANKET1, COUCH1, PILLOW1]) :-
 	type(CLOSET1, closet), type(SHEETS1, sheets), type(BLANKET1, blanket), type(COUCH1, couch), type(PILLOW1, pillow).
 complete_task(make_up_bed_for_guest_on_couch, P) :-
 	type(CLOSET1, closet), type(SHEETS1, sheets), type(BLANKET1, blanket), type(COUCH1, couch), type(PILLOW1, pillow),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[SHEETS1, COUCH1], [BLANKET1, COUCH1], [PILLOW1, COUCH1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([CLOSET1]), cover([COUCH1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[SHEETS1, COUCH1], [BLANKET1, COUCH1], [PILLOW1, COUCH1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), cover([COUCH1])], P).
 
 % Manage documents
 get_relevant(manage_documents, [DOCUMENT1, FOLDER1, FOLDER2, FOLDER3, DOCUMENT2, FILINGCABINET1, DOCUMENT3]) :-
@@ -3129,7 +3131,7 @@ get_relevant(manage_emails, [DESK1, CHAIR1, COMPUTER1, MAIL1, KEYBOARD1]) :-
 	type(DESK1, desk), type(CHAIR1, chair), type(COMPUTER1, computer), type(MAIL1, mail), type(KEYBOARD1, keyboard).
 complete_task(manage_emails, P) :-
 	type(DESK1, desk), type(CHAIR1, chair), type(COMPUTER1, computer), type(MAIL1, mail), type(KEYBOARD1, keyboard),
-	transform([close([]), holds([MAIL1]), sat_on([CHAIR1]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), off([COMPUTER1]), read([MAIL1]), type([KEYBOARD1])], P).
+	transform([close([]), holds([MAIL1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), off([COMPUTER1]), read([MAIL1]), type([KEYBOARD1])], P).
 
 % Oil dining room
 get_relevant(oil_dining_room, [TABLE1, CHAIR1, RAG1, CLEANINGSOLUTION1, CABINET1]) :-
@@ -3178,7 +3180,7 @@ get_relevant(organize_pantry, [PANTRY1, DRYPASTA1, FOODVEGETABLE1, GARBAGECAN1, 
 	type(PANTRY1, pantry), type(DRYPASTA1, drypasta), type(FOODVEGETABLE1, foodvegetable), type(GARBAGECAN1, garbagecan), type(FOODFOOD1, foodfood), type(FOODNOODLES1, foodnoodles), type(CRACKERS1, crackers).
 complete_task(organize_pantry, P) :-
 	type(PANTRY1, pantry), type(DRYPASTA1, drypasta), type(FOODVEGETABLE1, foodvegetable), type(GARBAGECAN1, garbagecan), type(FOODFOOD1, foodfood), type(FOODNOODLES1, foodnoodles), type(CRACKERS1, crackers),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[FOODVEGETABLE1, GARBAGECAN1], [FOODFOOD1, GARBAGECAN1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), push([CRACKERS1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[FOODVEGETABLE1, PANTRY1]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 
 % Paint ceiling
 get_relevant(paint_ceiling, [PAINTING1]) :-
@@ -3192,14 +3194,14 @@ get_relevant(peel_kiwi, [KNIFE1, CUTTINGBOARD1, TABLE1, KITCHENCABINET1, FRIDGE1
 	type(KNIFE1, knife), type(CUTTINGBOARD1, cuttingboard), type(TABLE1, tabl), type(KITCHENCABINET1, kitchencabinet), type(FRIDGE1, fridge), type(FOODKIWI1, foodkiwi).
 complete_task(peel_kiwi, P) :-
 	type(KNIFE1, knife), type(CUTTINGBOARD1, cuttingboard), type(TABLE1, tabl), type(KITCHENCABINET1, kitchencabinet), type(FRIDGE1, fridge), type(FOODKIWI1, foodkiwi),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[KNIFE1, TABLE1], [CUTTINGBOARD1, TABLE1], [FOODKIWI1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([KITCHENCABINET1, FRIDGE1]), cut([FOODKIWI1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[KNIFE1, TABLE1], [CUTTINGBOARD1, TABLE1], [FOODKIWI1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), cut([FOODKIWI1])], P).
 
 % Peel potatoes
 get_relevant(peel_potatoes, [KNIFE1, TABLE1, FOODPOTATO2, FRIDGE1, FOODPOTATO1, BOWL1, CUPBOARD1]) :-
 	type(KNIFE1, knife), type(TABLE1, tabl), type(FOODPOTATO2, foodpotato), type(FRIDGE1, fridge), type(FOODPOTATO1, foodpotato), type(BOWL1, bowl), type(CUPBOARD1, cupboard).
 complete_task(peel_potatoes, P) :-
 	type(KNIFE1, knife), type(TABLE1, tabl), type(FOODPOTATO2, foodpotato), type(FRIDGE1, fridge), type(FOODPOTATO1, foodpotato), type(BOWL1, bowl), type(CUPBOARD1, cupboard),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[KNIFE1, BOWL1], [FOODPOTATO1, BOWL1], [BOWL1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([FRIDGE1, CUPBOARD1]), cut([FOODPOTATO2])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[KNIFE1, BOWL1], [FOODPOTATO1, BOWL1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), cut([FOODPOTATO2])], P).
 
 % Pick toys
 get_relevant(pick_toys, [TOY2, TOY1, TOY3, CLOSET1, TOY4]) :-
@@ -3227,7 +3229,7 @@ get_relevant(pick_up_dishes, [PLATE1, TABLE1, GLASS2, PLATE2, GLASS1, SINK1]) :-
 	type(PLATE1, plate), type(TABLE1, tabl), type(GLASS2, glass), type(PLATE2, plate), type(GLASS1, glass), type(SINK1, sink).
 complete_task(pick_up_dishes, P) :-
 	type(PLATE1, plate), type(TABLE1, tabl), type(GLASS2, glass), type(PLATE2, plate), type(GLASS1, glass), type(SINK1, sink),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[PLATE1, SINK1], [GLASS2, SINK1], [PLATE2, SINK1], [GLASS1, SINK1]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+	transform([close([]), holds([PLATE1, GLASS1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 
 % Pick up spare change on dresser
 get_relevant(pick_up_spare_change_on_dresser, [CUP1, COIN1, DRESSER1, COIN3, COIN2]) :-
@@ -3290,13 +3292,13 @@ get_relevant(playtime_lunch_with_dolls, [MUG2, PLATE1, TABLE1, CHAIR1, TOY1, MUG
 	type(MUG2, mug), type(PLATE1, plate), type(TABLE1, tabl), type(CHAIR1, chair), type(TOY1, toy), type(MUG3, mug), type(PLATE3, plate), type(TOY2, toy), type(PLATE2, plate), type(CHAIR3, chair), type(MUG1, mug), type(FOODFOOD1, foodfood), type(POT1, pot), type(CHAIR2, chair).
 complete_task(playtime_lunch_with_dolls, P) :-
 	type(MUG2, mug), type(PLATE1, plate), type(TABLE1, tabl), type(CHAIR1, chair), type(TOY1, toy), type(MUG3, mug), type(PLATE3, plate), type(TOY2, toy), type(PLATE2, plate), type(CHAIR3, chair), type(MUG1, mug), type(FOODFOOD1, foodfood), type(POT1, pot), type(CHAIR2, chair),
-	transform([close([]), holds([]), sat_on([CHAIR3]), on_top_of([[MUG2, TABLE1], [PLATE1, TABLE1], [TOY1, CHAIR1], [MUG3, TABLE1], [PLATE3, TABLE1], [TOY2, CHAIR2], [PLATE2, TABLE1], [MUG1, TABLE1], [FOODFOOD1, TABLE1], [POT1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[MUG1, TABLE1], [PLATE1, TABLE1], [TOY1, CHAIR1]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 
 % Plug in nightlight
-get_relevant(plug_in_nightlight, [ELECTRICALOUTLET1, LIGHT1, DRESSER1]) :-
-	type(ELECTRICALOUTLET1, electricaloutlet), type(LIGHT1, light), type(DRESSER1, dresser).
+get_relevant(plug_in_nightlight, [LIGHT1, DRESSER1]) :-
+	type(LIGHT1, light), type(DRESSER1, dresser).
 complete_task(plug_in_nightlight, P) :-
-	type(ELECTRICALOUTLET1, electricaloutlet), type(LIGHT1, light), type(DRESSER1, dresser),
+	type(LIGHT1, light), type(DRESSER1, dresser),
 	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), plugin([LIGHT1])], P).
 
 % Polish table
@@ -3318,7 +3320,7 @@ get_relevant(pour_cup_of_coffee, [COFFEEPOT1, COFFEECUP1, COFFEE1]) :-
 	type(COFFEEPOT1, coffeepot), type(COFFEECUP1, coffeecup), type(COFFEE1, coffee).
 complete_task(pour_cup_of_coffee, P) :-
 	type(COFFEEPOT1, coffeepot), type(COFFEECUP1, coffeecup), type(COFFEE1, coffee),
-	transform([close([]), holds([COFFEEPOT1, COFFEECUP1, COFFEE1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), pour([COFFEE1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), pour([COFFEE1])], P).
 
 % Praying
 get_relevant(praying, [EYESBOTH1, MAN1, CHILD1]) :-
@@ -3381,7 +3383,7 @@ get_relevant(put_away_dishes, [PLATE1, CUP1, PLATE2, DISHWASHER1, KITCHENCABINET
 	type(PLATE1, plate), type(CUP1, cup), type(PLATE2, plate), type(DISHWASHER1, dishwasher), type(KITCHENCABINET1, kitchencabinet), type(BOWL1, bowl).
 complete_task(put_away_dishes, P) :-
 	type(PLATE1, plate), type(CUP1, cup), type(PLATE2, plate), type(DISHWASHER1, dishwasher), type(KITCHENCABINET1, kitchencabinet), type(BOWL1, bowl),
-	transform([close([]), holds([PLATE1, CUP1, PLATE2, BOWL1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([DISHWASHER1, KITCHENCABINET1]), putin([PLATE1, CUP1, PLATE2, BOWL1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([DISHWASHER1, KITCHENCABINET1]), putin([PLATE1, CUP1, PLATE2, BOWL1])], P).
 
 % Put away jackets
 get_relevant(put_away_jackets, [HANGER1, CLOTHESJACKET1, CLOSET1]) :-
@@ -3504,9 +3506,11 @@ complete_task(recycle_items, P) :-
 
 % Replace toothpaste
 get_relevant(replace_toothpaste, [TRASHCAN1, TOOTHPASTE2, TOOTHPASTE1, TOOTHBRUSHHOLDER1]) :-
-	type(TRASHCAN1, trashcan), type(TOOTHPASTE2, toothpaste), type(TOOTHPASTE1, toothpaste), type(TOOTHBRUSHHOLDER1, toothbrushholder).
+	type(TRASHCAN1, trashcan), type(TOOTHPASTE2, toothpaste), type(TOOTHPASTE1, toothpaste), type(TOOTHBRUSHHOLDER1, toothbrushholder),
+	TOOTHPASTE2 \= TOOTHPASTE1.
 complete_task(replace_toothpaste, P) :-
 	type(TRASHCAN1, trashcan), type(TOOTHPASTE2, toothpaste), type(TOOTHPASTE1, toothpaste), type(TOOTHBRUSHHOLDER1, toothbrushholder),
+	TOOTHPASTE2 \= TOOTHPASTE1,
 	transform([close([]), holds([]), sat_on([]), on_top_of([[TOOTHPASTE2, TOOTHBRUSHHOLDER1], [TOOTHPASTE1, TRASHCAN1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([])], P).
 
 % Replace towel
@@ -3514,7 +3518,7 @@ get_relevant(replace_towel, [BASKETFORCLOTHES1, TOWEL1]) :-
 	type(BASKETFORCLOTHES1, basketforclothes), type(TOWEL1, towel).
 complete_task(replace_towel, P) :-
 	type(BASKETFORCLOTHES1, basketforclothes), type(TOWEL1, towel),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[TOWEL1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), drop([TOWEL1]), open([])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[TOWEL1, BASKETFORCLOTHES1]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 
 % Restock
 get_relevant(restock, [BATHTUB1]) :-
@@ -3528,7 +3532,7 @@ get_relevant(return_from_store, [HANGER1, CLOTHESHAT1, TABLE1, PURSE1, KEYS1, CL
 	type(HANGER1, hanger), type(CLOTHESHAT1, clotheshat), type(TABLE1, tabl), type(PURSE1, purse), type(KEYS1, keys), type(CLOTHESJACKET1, clothesjacket).
 complete_task(return_from_store, P) :-
 	type(HANGER1, hanger), type(CLOTHESHAT1, clotheshat), type(TABLE1, tabl), type(PURSE1, purse), type(KEYS1, keys), type(CLOTHESJACKET1, clothesjacket),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[CLOTHESHAT1, HANGER1], [PURSE1, TABLE1], [KEYS1, TABLE1], [CLOTHESJACKET1, HANGER1]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[KEYS1, TABLE1], [CLOTHESJACKET1, HANGER1]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 
 % Return phone calls
 get_relevant(return_phone_calls, [TELEPHONE1]) :-
@@ -3542,14 +3546,14 @@ get_relevant(rotate_stock_in_refrigerator, [FOODBREAD1, FOODVEGETABLE1, FOODCHEE
 	type(FOODBREAD1, foodbread), type(FOODVEGETABLE1, foodvegetable), type(FOODCHEESE2, foodcheese), type(FOODDESSERT1, fooddessert), type(MILK1, milk), type(GARBAGECAN1, garbagecan), type(FRIDGE1, fridge), type(FOODCHEESE1, foodcheese).
 complete_task(rotate_stock_in_refrigerator, P) :-
 	type(FOODBREAD1, foodbread), type(FOODVEGETABLE1, foodvegetable), type(FOODCHEESE2, foodcheese), type(FOODDESSERT1, fooddessert), type(MILK1, milk), type(GARBAGECAN1, garbagecan), type(FRIDGE1, fridge), type(FOODCHEESE1, foodcheese),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[FOODVEGETABLE1, GARBAGECAN1], [FOODCHEESE1, GARBAGECAN1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([FRIDGE1]), push([FOODDESSERT1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[FOODVEGETABLE1, GARBAGECAN1]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 
 % Say goodbye
-get_relevant(say_goodbye, [CHILD2, MAN1, CHILD1]) :-
-	type(CHILD2, child), type(MAN1, man), type(CHILD1, child).
+get_relevant(say_goodbye, [MAN1]) :-
+	type(MAN1, man).
 complete_task(say_goodbye, P) :-
-	type(CHILD2, child), type(MAN1, man), type(CHILD1, child),
-	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), leave([]), touch([CHILD2, MAN1, CHILD1])], P).
+	type(MAN1, man),
+	transform([close([MAN1]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), leave([]), touch([MAN1])], P).
 
 % Say goodbye to guests leaving
 get_relevant(say_goodbye_to_guests_leaving, [MAN1, WOMAN1, CHILD1]) :-
@@ -3594,11 +3598,11 @@ complete_task(serve_meal, P) :-
 	transform([close([]), holds([]), sat_on([]), on_top_of([[PLATE1, TABLE1], [FOODFOOD3, PLATE3], [PLATE3, TABLE1], [PLATE2, TABLE1], [FOODFOOD1, PLATE3], [FOODFOOD2, PLATE3]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 
 % Set up TV
-get_relevant(set_up_tv, [TABLE1, ELECTRICALOUTLET1, COUCH1, TELEVISION1, REMOTECONTROL1]) :-
-	type(TABLE1, tabl), type(ELECTRICALOUTLET1, electricaloutlet), type(COUCH1, couch), type(TELEVISION1, television), type(REMOTECONTROL1, remotecontrol).
+get_relevant(set_up_tv, [TABLE1, COUCH1, TELEVISION1, REMOTECONTROL1]) :-
+	type(TABLE1, tabl), type(COUCH1, couch), type(TELEVISION1, television), type(REMOTECONTROL1, remotecontrol).
 complete_task(set_up_tv, P) :-
-	type(TABLE1, tabl), type(ELECTRICALOUTLET1, electricaloutlet), type(COUCH1, couch), type(TELEVISION1, television), type(REMOTECONTROL1, remotecontrol),
-	transform([close([]), holds([]), sat_on([COUCH1]), on_top_of([[REMOTECONTROL1, TABLE1]]), inside([]), on([ELECTRICALOUTLET1, TELEVISION1]), laid_on([]), used([]), eaten([]), plugin([TELEVISION1]), unwrap([TELEVISION1])], P).
+	type(TABLE1, tabl), type(COUCH1, couch), type(TELEVISION1, television), type(REMOTECONTROL1, remotecontrol),
+	transform([close([]), holds([]), sat_on([]), on_top_of([[REMOTECONTROL1, TABLE1]]), inside([]), on([TELEVISION1]), laid_on([]), used([]), eaten([]), unwrap([TELEVISION1])], P).
 
 % Shredding
 get_relevant(shredding, [SHREDDER1, DOCUMENT1, FILINGCABINET1]) :-
@@ -3619,7 +3623,7 @@ get_relevant(sing_karaoke, [MICROPHONE1, TELEVISION1, CONSOLE1]) :-
 	type(MICROPHONE1, microphone), type(TELEVISION1, television), type(CONSOLE1, console).
 complete_task(sing_karaoke, P) :-
 	type(MICROPHONE1, microphone), type(TELEVISION1, television), type(CONSOLE1, console),
-	transform([close([]), holds([MICROPHONE1, CONSOLE1]), sat_on([]), on_top_of([]), inside([]), on([TELEVISION1, CONSOLE1]), laid_on([]), used([]), eaten([]), plugin([MICROPHONE1, CONSOLE1]), sing([character1])], P).
+	transform([close([]), holds([MICROPHONE1]), sat_on([]), on_top_of([]), inside([]), on([TELEVISION1, CONSOLE1]), laid_on([]), used([]), eaten([]), sing([character1])], P).
 
 % Sing song
 get_relevant(sing_song, [CHILD2, MICROPHONE1, CHILD1]) :-
@@ -3640,7 +3644,7 @@ get_relevant(slice_apple, [PLATE1, KNIFE1, CUTTINGBOARD1, TABLE1, FOODAPPLE1, KI
 	type(PLATE1, plate), type(KNIFE1, knife), type(CUTTINGBOARD1, cuttingboard), type(TABLE1, tabl), type(FOODAPPLE1, foodapple), type(KITCHENCABINET1, kitchencabinet), type(FRIDGE1, fridge).
 complete_task(slice_apple, P) :-
 	type(PLATE1, plate), type(KNIFE1, knife), type(CUTTINGBOARD1, cuttingboard), type(TABLE1, tabl), type(FOODAPPLE1, foodapple), type(KITCHENCABINET1, kitchencabinet), type(FRIDGE1, fridge),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[PLATE1, TABLE1], [KNIFE1, TABLE1], [CUTTINGBOARD1, TABLE1], [FOODAPPLE1, PLATE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([KITCHENCABINET1, FRIDGE1]), cut([FOODAPPLE1])], P).
+	transform([close([]), holds([KNIFE1]), sat_on([]), on_top_of([[FOODAPPLE1, PLATE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), cut([FOODAPPLE1])], P).
 
 % Sort and fold laundry
 get_relevant(sort_and_fold_laundry, [CLOTHESDRESS1]) :-
@@ -3668,14 +3672,14 @@ get_relevant(spend_family_time_playing_games, [MAN1, TABLE1, CHAIR1, MAN2, CLOSE
 	type(MAN1, man), type(TABLE1, tabl), type(CHAIR1, chair), type(MAN2, man), type(CLOSET1, closet), type(FRIDGE1, fridge), type(FOODSNACK1, foodsnack), type(CARDS1, cards), type(DECKOFCARDS1, deckofcards).
 complete_task(spend_family_time_playing_games, P) :-
 	type(MAN1, man), type(TABLE1, tabl), type(CHAIR1, chair), type(MAN2, man), type(CLOSET1, closet), type(FRIDGE1, fridge), type(FOODSNACK1, foodsnack), type(CARDS1, cards), type(DECKOFCARDS1, deckofcards),
-	transform([close([]), holds([CARDS1]), sat_on([CHAIR1]), on_top_of([[FOODSNACK1, TABLE1], [DECKOFCARDS1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([CLOSET1, FRIDGE1]), fold([CARDS1]), unwrap([DECKOFCARDS1])], P).
+	transform([close([]), holds([CARDS1]), sat_on([]), on_top_of([[FOODSNACK1, TABLE1]]), inside([]), on([]), laid_on([]), used([]), eaten([])], P).
 
 % Squeeze lemon
 get_relevant(squeeze_lemon, [CUTTINGBOARD1, TABLE1, CHEFKNIFE1, FOODLEMON1, GARBAGECAN1, FRIDGE1, BOWL1, JUICE1]) :-
 	type(CUTTINGBOARD1, cuttingboard), type(TABLE1, tabl), type(CHEFKNIFE1, chefknife), type(FOODLEMON1, foodlemon), type(GARBAGECAN1, garbagecan), type(FRIDGE1, fridge), type(BOWL1, bowl), type(JUICE1, juice).
 complete_task(squeeze_lemon, P) :-
 	type(CUTTINGBOARD1, cuttingboard), type(TABLE1, tabl), type(CHEFKNIFE1, chefknife), type(FOODLEMON1, foodlemon), type(GARBAGECAN1, garbagecan), type(FRIDGE1, fridge), type(BOWL1, bowl), type(JUICE1, juice),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[CUTTINGBOARD1, TABLE1], [CHEFKNIFE1, CUTTINGBOARD1], [FOODLEMON1, GARBAGECAN1], [BOWL1, TABLE1], [JUICE1, GARBAGECAN1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([FRIDGE1]), cut([FOODLEMON1]), pour([JUICE1]), squeeze([FOODLEMON1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), squeeze([FOODLEMON1])], P).
 
 % Straighten bookshelf
 get_relevant(straighten_bookshelf, [DESK1, BOOK3, BOOK2, BOOK4, BOOKSHELF1, BOOK1]) :-
@@ -3717,7 +3721,7 @@ get_relevant(sweep_hallway_please, [VACUUMCLEANER1, CLOSET1]) :-
 	type(VACUUMCLEANER1, vacuumcleaner), type(CLOSET1, closet).
 complete_task(sweep_hallway_please, P) :-
 	type(VACUUMCLEANER1, vacuumcleaner), type(CLOSET1, closet),
-	transform([close([]), holds([VACUUMCLEANER1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([CLOSET1]), off([VACUUMCLEANER1]), plugin([VACUUMCLEANER1]), plugout([VACUUMCLEANER1]), pull([VACUUMCLEANER1]), push([VACUUMCLEANER1]), putin([VACUUMCLEANER1])], P).
+	transform([close([]), holds([VACUUMCLEANER1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([CLOSET1]), off([VACUUMCLEANER1]), plugin([VACUUMCLEANER1]), pull([VACUUMCLEANER1]), push([VACUUMCLEANER1]), putin([VACUUMCLEANER1])], P).
 
 % Switch on lamp
 get_relevant(switch_on_lamp, [LAMP1]) :-
@@ -3745,14 +3749,14 @@ get_relevant(tax_filing, [DESK1, CHAIR1, COMPUTER1, BILLS1, CHECK1, KEYBOARD1, P
 	type(DESK1, desk), type(CHAIR1, chair), type(COMPUTER1, computer), type(BILLS1, bills), type(CHECK1, check), type(KEYBOARD1, keyboard), type(PEN1, pen).
 complete_task(tax_filing, P) :-
 	type(DESK1, desk), type(CHAIR1, chair), type(COMPUTER1, computer), type(BILLS1, bills), type(CHECK1, check), type(KEYBOARD1, keyboard), type(PEN1, pen),
-	transform([close([]), holds([CHECK1]), sat_on([CHAIR1]), on_top_of([[BILLS1, DESK1]]), inside([]), on([COMPUTER1]), laid_on([]), used([]), eaten([]), open([DESK1]), type([KEYBOARD1]), write([CHECK1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), write([CHECK1])], P).
 
 % Text friend
 get_relevant(text_friend, [BED1, CELLPHONE1]) :-
 	type(BED1, bed), type(CELLPHONE1, cellphone).
 complete_task(text_friend, P) :-
 	type(BED1, bed), type(CELLPHONE1, cellphone),
-	transform([close([]), holds([CELLPHONE1]), sat_on([BED1]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), text([CELLPHONE1])], P).
+	transform([close([]), holds([CELLPHONE1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), text([CELLPHONE1])], P).
 
 % Throw away newspaper
 get_relevant(throw_away_newspaper, [NEWSPAPER1, TRASHCAN1, TABLE1]) :-
@@ -3766,14 +3770,14 @@ get_relevant(throw_away_paper, [TRASHCAN1, DESK1, CHAIR1, PAPER1]) :-
 	type(TRASHCAN1, trashcan), type(DESK1, desk), type(CHAIR1, chair), type(PAPER1, paper).
 complete_task(throw_away_paper, P) :-
 	type(TRASHCAN1, trashcan), type(DESK1, desk), type(CHAIR1, chair), type(PAPER1, paper),
-	transform([close([]), holds([]), sat_on([CHAIR1]), on_top_of([[PAPER1, TRASHCAN1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), squeeze([PAPER1]), standup([character1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), throw([PAPER1])], P).
 
 % Toast bread
 get_relevant(toast_bread, [FOODBREAD1, TOASTER1, ELECTRICALOUTLET1, FRIDGE1]) :-
-	type(FOODBREAD1, foodbread), type(TOASTER1, toaster), type(ELECTRICALOUTLET1, electricaloutlet), type(FRIDGE1, fridge).
+	type(FOODBREAD1, foodbread), type(TOASTER1, toaster), type(FRIDGE1, fridge).
 complete_task(toast_bread, P) :-
-	type(FOODBREAD1, foodbread), type(TOASTER1, toaster), type(ELECTRICALOUTLET1, electricaloutlet), type(FRIDGE1, fridge),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[FOODBREAD1, TOASTER1]]), inside([]), on([TOASTER1, ELECTRICALOUTLET1]), laid_on([]), used([]), eaten([]), closed([FRIDGE1]), plugin([TOASTER1])], P).
+	type(FOODBREAD1, foodbread), type(TOASTER1, toaster), type(FRIDGE1, fridge),
+	transform([close([]), holds([]), sat_on([]), on_top_of([[FOODBREAD1, TOASTER1]]), inside([]), on([TOASTER1]), laid_on([]), used([]), eaten([]), closed([FRIDGE1]), plugin([TOASTER1])], P).
 
 % Turn off TV
 get_relevant(turn_off_tv, [TELEVISION1]) :-
@@ -3808,7 +3812,7 @@ get_relevant(wash_and_clean_all_crystal_in_china_cabinet, [DISHRACK1, GLASS2, WI
 	type(DISHRACK1, dishrack), type(GLASS2, glass), type(WINEGLASS2, wineglass), type(GLASS1, glass), type(TOWEL1, towel), type(SINK1, sink), type(WINEGLASS1, wineglass), type(FAUCET1, faucet), type(RAG1, rag), type(CABINET1, cabinet).
 complete_task(wash_and_clean_all_crystal_in_china_cabinet, P) :-
 	type(DISHRACK1, dishrack), type(GLASS2, glass), type(WINEGLASS2, wineglass), type(GLASS1, glass), type(TOWEL1, towel), type(SINK1, sink), type(WINEGLASS1, wineglass), type(FAUCET1, faucet), type(RAG1, rag), type(CABINET1, cabinet),
-	transform([close([]), holds([]), sat_on([]), on_top_of([[GLASS2, CABINET1], [WINEGLASS2, CABINET1], [GLASS1, CABINET1], [TOWEL1, CABINET1], [SINK1, DISHRACK1], [WINEGLASS1, CABINET1]]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([CABINET1]), off([FAUCET1]), rinse([GLASS2, WINEGLASS2, GLASS1, WINEGLASS1, RAG1]), soak([RAG1]), squeeze([RAG1]), wash([GLASS2, WINEGLASS2, GLASS1, WINEGLASS1]), wipe([GLASS2, WINEGLASS2, GLASS1, WINEGLASS1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), wash([GLASS1, WINEGLASS1])], P).
 
 % Wash back
 get_relevant(wash_back, [SHOWER1, SPONGE1]) :-
@@ -3878,7 +3882,7 @@ get_relevant(practice_own_singing, [INSTRUMENTPIANO1, MICROPHONE1, BOOK1, CDPLAY
 	type(INSTRUMENTPIANO1, instrumentpiano), type(MICROPHONE1, microphone), type(BOOK1, book), type(CDPLAYER1, cdplayer), type(MUSICSTAND1, musicstand), type(BENCH1, bench).
 complete_task(practice_own_singing, P) :-
 	type(INSTRUMENTPIANO1, instrumentpiano), type(MICROPHONE1, microphone), type(BOOK1, book), type(CDPLAYER1, cdplayer), type(MUSICSTAND1, musicstand), type(BENCH1, bench),
-	transform([close([]), holds([]), sat_on([BENCH1]), on_top_of([[MICROPHONE1, MUSICSTAND1], [BOOK1, MUSICSTAND1], [CDPLAYER1, MUSICSTAND1]]), inside([]), on([MICROPHONE1, CDPLAYER1]), laid_on([]), used([]), eaten([]), plugin([MICROPHONE1, CDPLAYER1]), pull([BENCH1]), sing([character1])], P).
+	transform([close([]), holds([]), sat_on([]), on_top_of([[MICROPHONE1, MUSICSTAND1], [BOOK1, MUSICSTAND1], [CDPLAYER1, MUSICSTAND1]]), inside([]), on([MICROPHONE1, CDPLAYER1]), laid_on([]), used([]), eaten([]), plugin([MICROPHONE1, CDPLAYER1]), pull([BENCH1]), sing([character1])], P).
 
 % use bathroom
 get_relevant(use_bathroom, [CLOTHESPANTS1, TOILET1]) :-
@@ -3892,4 +3896,4 @@ get_relevant(vacuum_carpet, [VACUUMCLEANER1, CLOSET1]) :-
 	type(VACUUMCLEANER1, vacuumcleaner), type(CLOSET1, closet).
 complete_task(vacuum_carpet, P) :-
 	type(VACUUMCLEANER1, vacuumcleaner), type(CLOSET1, closet),
-	transform([close([]), holds([VACUUMCLEANER1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([CLOSET1]), off([VACUUMCLEANER1]), plugin([VACUUMCLEANER1]), plugout([VACUUMCLEANER1]), pull([VACUUMCLEANER1]), push([VACUUMCLEANER1]), putin([VACUUMCLEANER1])], P).
+	transform([close([]), holds([VACUUMCLEANER1]), sat_on([]), on_top_of([]), inside([]), on([]), laid_on([]), used([]), eaten([]), closed([CLOSET1]), off([VACUUMCLEANER1]), plugin([VACUUMCLEANER1]), pull([VACUUMCLEANER1]), push([VACUUMCLEANER1]), putin([VACUUMCLEANER1])], P).

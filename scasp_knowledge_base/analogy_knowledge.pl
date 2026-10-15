@@ -400,6 +400,54 @@ type(W, waterglass) :- drinkable(W).
 % Eatable
 eatable(X) :- type(X, plate).
 eatable(X) :- type(X, bowl).
+% TEST SET
+% foodlemon
+type(FOODLEMON, foodlemon) :- type(FOODLEMON, lime).
+% coin
+%type(COIN, coin) :- type(COIN, CHANGEX).
+% foodkiwi
+type(FOODKIWI, foodkiwi) :- type(FOODKIWI, plum).
+type(FOODKIWI, foodkiwi) :- type(FOODKIWI, bananas).
+type(FOODKIWI, foodkiwi) :- type(FOODKIWI, apple).
+type(FOODKIWI, foodkiwi) :- type(FOODKIWI, peach).
+% shoerack
+type(SHOERACK, shoerack) :- type(SHOERACK, rug).
+% card
+type(CARD, card) :- type(CARD, cards).
+% foodnoodles
+type(FOODNOODLES, foodnoodles) :- food(FOODNOODLES).
+% foodsugar
+type(FOODSUGAR, foodsugar) :- food(FOODSUGAR).
+% tape
+%type(TAPE, tape) :- type(TAPE, CHANGEX).
+% alarmclock
+type(ALARMCLOCK, alarmclock) :- type(ALARMCLOCK, clock).
+% check
+type(CHECK, check) :- type(CHECK, paper).
+% lighter
+%type(LIGHTER, lighter) :- type(LIGHTER, CHANGEX).
+% foodpotato
+type(FOODPOTATO, foodpotato) :- type(FOODPOTATO, bellpepper).
+% foodicecream
+type(FOODICECREAM, foodicecream) :- type(FOODICECREAM, whippedcream).
+% drypasta
+type(DRYPASTA, drypasta) :- food(DRYPASTA).
+% pianobench
+type(PIANOBENCH, pianobench) :- type(PIANOBENCH, chair).
+% pantry
+type(PANTRY, pantry) :- type(PANTRY, cabinet).
+% instrumentpiano
+type(INSTRUMENTPIANO, instrumentpiano) :- type(INSTRUMENTPIANO, violin).
+% comforter
+type(COMFORTER, comforter) :- type(COMFORTER, sheets).
+% pajamas
+type(PAJAMAS, pajamas) :- clothes(PAJAMAS).
+% console
+type(CONSOLE, console) :- type(CONSOLE, diskplayer).
+% foodapple
+type(FOODAPPLE, foodapple) :- type(FOODAPPLE, apple).
+% microphone
+%type(MICROPHONE, microphone) :- type(MICROPHONE, CHANGEX).
 
 
 get_data(walk(X), X).
@@ -634,6 +682,27 @@ similar_action(drink(_), use(_)).
 get_data(standup(X), X).
 get_action(standup(_), X, standup(X)).
 similar_action(standup(_), standup).
+% Test
+% unwrap
+get_data(unwrap(X), X).
+get_action(unwrap(_), X, unwrap(X)).
+similar_action(unwrap(_), use(_)).
+% break
+get_data(break(X), X).
+get_action(break(_), X, break(X)).
+similar_action(break(_), use(_)).
+% text
+get_data(text(X), X).
+get_action(text(_), X, text(X)).
+similar_action(text(_), use(_)).
+% sing
+get_data(sing(X), X).
+get_action(sing(_), X, sing(X)).
+similar_action(sing(_), use(_)).
+% stir
+get_data(stir(X), X).
+get_action(stir(_), X, stir(X)).
+similar_action(stir(_), use(_)).
 
 
 %check_close(_, C, C).
